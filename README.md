@@ -1,146 +1,113 @@
-# OTML Lab - Optimization & Machine Learning Experiments
+# OTML Lab
 
-## 📚 Overview
+OTML Lab is a static educational website for Optimization Techniques and Machine Learning laboratory experiments. The project is organized for easy browsing on the web and is now ready for deployment and hosting on Vercel.
 
-This website provides a comprehensive, educational resource for understanding optimization algorithms and machine learning techniques. Each experiment includes:
+## Overview
 
-- **Aim**: Learning objectives
-- **Description**: Conceptual explanation  
-- **Algorithm**: Step-by-step procedure
-- **Formulas**: Mathematical equations
-- **Mathematical Procedure**: Detailed calculations
-- **Simple Python Program**: Easy-to-read, well-commented code
-- **Expected Output**: Sample results
+The website contains 19 experiment pages grouped into 5 course outcomes:
 
-## 🎯 Experiments by Course Outcome
+- CO1: Gradient Descent and optimization fundamentals
+- CO2: Convex optimization and linear programming
+- CO3: Sub-gradient and interior point methods
+- CO4: Mini-batch and distributed gradient descent
+- CO5: Regularization and advanced optimization methods
 
-### CO1: Gradient Descent & Optimization Fundamentals (Exp 1-3)
-- **Experiment 1**: Gradient Descent for f(x) = x²
-- **Experiment 2**: Newton's Method for f(x) = x⁴ - 3x² + 2
-- **Experiment 3**: Stochastic Gradient Descent (SGD)
+Each experiment page includes:
 
-### CO2: Convex Optimization & Linear Programming (Exp 4-7)
-- **Experiment 4**: Quadratic Optimization with CVXPY
-- **Experiment 5**: Linear Optimization with CVXPY
-- **Experiment 6**: Quadratic with Linear Constraints
-- **Experiment 7**: Linear Programming with PuLP (with and without library)
+- Aim
+- Description
+- Algorithm
+- Formula section
+- Mathematical procedure
+- Python program
+- Expected output
 
-### CO3: Sub-gradient & Interior Point Methods (Exp 8-11)
-- **Experiment 8**: Sub-gradient Method with L1-Regularization (Dataset 1)
-- **Experiment 9**: Sub-gradient Method with L1-Regularization (Dataset 2)
-- **Experiment 10**: Interior Point Method (1D constraint)
-- **Experiment 11**: Interior Point Method (2D constraints)
+## Included Pages
 
-### CO4: Mini-batch & Distributed Gradient Descent (Exp 12-15)
-- **Experiment 12**: Mini-batch Gradient Descent (Dataset 1)
-- **Experiment 13**: Distributed Gradient Descent (larger dataset)
-- **Experiment 14**: Mini-batch Gradient Descent (Dataset 2)
-- **Experiment 15**: Distributed Gradient Descent (Dataset 2)
+- `index.html` - landing page with all experiments
+- `guide.html` - quick learning guide
+- `reference.html` - glossary and concept reference
+- `experiments/exp1.html` to `experiments/exp19.html` - individual experiment pages
 
-### CO5: Regularization & Advanced Optimization (Exp 16-19)
-- **Experiment 16**: L1/L2 and Elastic Net Regularization
-- **Experiment 17**: Group Lasso for Grouped Sparsity
-- **Experiment 18**: Conjugate Gradient Method
-- **Experiment 19**: Quasi-Newton Method (BFGS)
+## Tech Stack
 
-## 🚀 Getting Started
+- HTML5
+- CSS3
+- Static site hosting on Vercel
+- Python code samples embedded in the content
 
-1. Open `index.html` in a web browser
-2. Navigate using the organized course outcome sections
-3. Click on any experiment card to view details
-4. Read through the complete experiment including:
-   - Problem definition
-   - Step-by-step mathematical procedure
-   - Python implementation
-   - Expected output
+No frontend framework or build pipeline is required for this project.
 
-## 💻 Running the Code
+## Run Locally
 
-Each experiment includes Python code that you can:
+You can use the project in either of these ways:
 
-1. **Copy and run directly**: All code is self-contained and executable
-2. **Install dependencies as needed**:
-   ```bash
-   pip install numpy scipy scikit-learn cvxpy pulp
-   ```
+1. Open `index.html` directly in a browser.
+2. Serve the folder locally with a simple static server:
 
-3. **Learn from the implementation**: Code is intentionally written to be easy to understand
-
-## 📊 Key Concepts Covered
-
-- **Gradient Descent**: Fundamental optimization algorithm
-- **Convex Optimization**: Using professional libraries (CVXPY, PuLP)
-- **Constraints**: Handling inequality and equality constraints
-- **Regularization**: L1 (Lasso), L2 (Ridge), Elastic Net, Group Lasso
-- **Advanced Methods**: Interior point, conjugate gradient, quasi-Newton
-- **Distributed Computing**: Parallel gradient descent simulation
-- **Sparsity**: Promoting sparse solutions in machine learning
-
-## 🎓 Learning Path Recommendations
-
-### Beginners
-Start with CO1 (Experiments 1-3) to understand basic optimization concepts.
-
-### Intermediate
-Progress to CO2 (Experiments 4-7) to learn about constrained optimization.
-
-### Advanced
-Explore CO3-CO5 (Experiments 8-19) for specialized techniques.
-
-## 📝 File Structure
-
-```
-website/
-├── index.html              # Main landing page
-├── css/
-│   └── style.css          # Styling for all pages
-├── experiments/
-│   ├── exp1.html to exp19.html  # Individual experiment pages
-└── README.md              # This file
+```bash
+python -m http.server 8000
 ```
 
-## 🔗 Features
+Then open `http://localhost:8000`.
 
-- **Responsive Design**: Works on desktop and mobile
-- **Easy Navigation**: Breadcrumb navigation and next/previous buttons
-- **Code Highlighting**: Syntax highlighting for Python code
-- **Mathematical Notation**: Clear formula display
-- **Step-by-Step Procedures**: Detailed mathematical examples
+## Vercel Deployment
 
-## 💡 Tips for Learning
+This project works as a zero-build static website on Vercel.
 
-1. **Read the Aim first**: Understand what problem you're solving
-2. **Study the Algorithm**: Follow the step-by-step procedure
-3. **Work through the Math**: Manually calculate example values
-4. **Run the Code**: Copy and execute to see results
-5. **Modify and Experiment**: Change parameters and observe effects
+- Deployment status: ready and deployed on Vercel
+- Build command: not required
+- Output directory: not required for plain static hosting
+- Entry page: `index.html`
 
-## 🎨 Color Scheme
+If you redeploy later, Vercel can host the project directly without additional framework configuration.
 
-- **Purple/Indigo**: Primary color for headers and emphasis
-- **Light Gray**: Background for code and formulas
-- **Green**: Output and successful results
-- **Yellow**: Important formulas and highlighted information
+## Python Libraries Used In Experiments
 
-## 📚 Additional Resources
+The website itself does not need Python to run. Python is only needed if you want to execute the sample programs shown in the experiment pages.
 
-For deeper understanding:
-- Understand gradients and derivatives
-- Linear algebra fundamentals
-- Python NumPy and SciPy libraries
-- Optimization theory and constraints
+Install the common libraries with:
 
-## ✨ About This Website
+```bash
+pip install numpy scipy scikit-learn cvxpy pulp matplotlib
+```
 
-This educational website was created to make optimization algorithms and machine learning techniques accessible to students. Each experiment is carefully designed to:
+## Project Structure
 
-- Explain complex concepts clearly
-- Provide working Python code
-- Include realistic examples with actual calculations
-- Support hands-on learning
+```text
+.
+|-- index.html
+|-- guide.html
+|-- reference.html
+|-- README.md
+|-- GETTING-STARTED.md
+|-- WEBSITE-SUMMARY.md
+|-- css/
+|   `-- style.css
+|-- experiments/
+|   |-- exp1.html
+|   |-- exp2.html
+|   |-- ...
+|   `-- exp19.html
+`-- js/
+```
 
----
+## Learning Flow
 
-**Last Updated**: 2024  
-**Course**: Optimization Techniques & Machine Learning (OTML)  
-**Educational Resource**
+Recommended order:
+
+1. Start from `index.html`
+2. Open `guide.html` for the study path
+3. Work through experiments in order from CO1 to CO5
+4. Use `reference.html` whenever you need quick definitions or concept refreshers
+
+## Notes
+
+- The site is fully static and lightweight.
+- It can be opened offline or hosted online.
+- The experiment code is designed for learning and demonstration.
+- The layout is responsive for desktop and mobile browsing.
+
+## Last Updated
+
+March 27, 2026
