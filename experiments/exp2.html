@@ -16,21 +16,24 @@
             <h1 class="experiment-title">Experiment 2: Newton's Method for Optimization</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
-                    <p>To implement Newton's method (also called Newton-Raphson method) to find the minimum of f(x) = x⁴ - 3x² + 2. This method uses second-order derivatives and converges faster than gradient descent.</p>
+                    <p>To implement Newton's method (also called Newton-Raphson method) to find the minimum of f(x) = xâ´ - 3xÂ² + 2. This method uses second-order derivatives and converges faster than gradient descent.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>Newton's method is a root-finding algorithm that uses both first and second derivatives (Hessian). It's faster than gradient descent because it has quadratic convergence. Each iteration updates using the Newton step formula which considers the curvature of the function.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Initialize x to a starting point</div>
                     <div class="step"><strong>Step 2:</strong> Calculate first derivative: f'(x)</div>
@@ -41,19 +44,19 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Objective Function:</strong><br>
-                        f(x) = x⁴ - 3x² + 2
+                        f(x) = xâ´ - 3xÂ² + 2
                     </div>
                     <div class="formula">
                         <strong>First Derivative:</strong><br>
-                        f'(x) = 4x³ - 6x
+                        f'(x) = 4xÂ³ - 6x
                     </div>
                     <div class="formula">
                         <strong>Second Derivative:</strong><br>
-                        f''(x) = 12x² - 6
+                        f''(x) = 12xÂ² - 6
                     </div>
                     <div class="formula">
                         <strong>Newton Update Rule:</strong><br>
@@ -63,26 +66,26 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">ðŸ“Š Mathematical Procedure</div>
                 <div class="section-content">
-                    <p><strong>Example with x₀ = 2.0:</strong></p>
+                    <p><strong>Example with xâ‚€ = 2.0:</strong></p>
                     
                     <div class="step">
                         <strong>Iteration 0:</strong><br>
-                        x₀ = 2.0<br>
+                        xâ‚€ = 2.0<br>
                         f(2) = 16 - 12 + 2 = 6<br>
                         f'(2) = 4(8) - 6(2) = 32 - 12 = 20<br>
                         f''(2) = 12(4) - 6 = 48 - 6 = 42<br>
-                        x₁ = 2.0 - 20/42 = 2.0 - 0.476 = 1.524
+                        xâ‚ = 2.0 - 20/42 = 2.0 - 0.476 = 1.524
                     </div>
 
                     <div class="step">
                         <strong>Iteration 1:</strong><br>
-                        x₁ = 1.524<br>
-                        f(1.524) ≈ 5.42<br>
-                        f'(1.524) ≈ 14.05<br>
-                        f''(1.524) ≈ 21.86<br>
-                        x₂ = 1.524 - 14.05/21.86 ≈ 0.880
+                        xâ‚ = 1.524<br>
+                        f(1.524) â‰ˆ 5.42<br>
+                        f'(1.524) â‰ˆ 14.05<br>
+                        f''(1.524) â‰ˆ 21.86<br>
+                        xâ‚‚ = 1.524 - 14.05/21.86 â‰ˆ 0.880
                     </div>
 
                     <p style="margin-top: 15px;">... (continuing iterations converge to a critical point)</p>
@@ -90,10 +93,10 @@
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
-<span class="comment"># Newton's Method for f(x) = x⁴ - 3x² + 2</span>
+<span class="comment"># Newton's Method for f(x) = xâ´ - 3xÂ² + 2</span>
 
 <span class="keyword">def</span> <span class="function">function</span>(x):
     <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">3</span>*x**<span class="number">2</span> + <span class="number">2</span>
@@ -131,7 +134,7 @@ final_x = <span class="function">newtons_method</span>(<span class="number">2.0<
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Iteration 0: x = 1.523810, f(x) = 5.419755<br>
@@ -144,10 +147,11 @@ Final f(x) = -0.570755
             </div>
 
             <div class="nav-buttons">
-                <a href="exp1.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp3.html" class="btn">Next →</a>
+                <a href="exp1.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp3.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

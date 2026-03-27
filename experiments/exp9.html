@@ -16,21 +16,24 @@
             <h1 class="experiment-title">Experiment 9: Sub-gradient Method with L1-Regularization (Dataset 2)</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
                     <p>Similar to Experiment 8, but with a different dataset: (2,3,8), (1,4,7), (3,2,9). This demonstrates the method's robustness across different datasets.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
-                    <p>L1-regularized linear regression model: y = w₁×x₁ + w₂×x₂. The sub-gradient method is particularly useful for L1-regularization due to its non-differentiability at w=0.</p>
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
+                    <p>L1-regularized linear regression model: y = wâ‚Ã—xâ‚ + wâ‚‚Ã—xâ‚‚. The sub-gradient method is particularly useful for L1-regularization due to its non-differentiability at w=0.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Initialize weights to 0</div>
                     <div class="step"><strong>Step 2:</strong> For each iteration, compute predictions</div>
@@ -41,21 +44,21 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Model:</strong><br>
-                        ŷ = w₁×x₁ + w₂×x₂
+                        Å· = wâ‚Ã—xâ‚ + wâ‚‚Ã—xâ‚‚
                     </div>
                     <div class="formula">
                         <strong>L1-Regularized Loss:</strong><br>
-                        L(w) = Σ(yᵢ - ŷᵢ)² + λ||w||₁
+                        L(w) = Î£(yáµ¢ - Å·áµ¢)Â² + Î»||w||â‚
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -92,13 +95,13 @@ losses = []
     <span class="keyword">if</span> epoch % <span class="number">30</span> == <span class="number">0</span>:
         <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = [{w[0]:.4f}, {w[1]:.4f}]"</span>)
 
-<span class="function">print</span>(<span class="string">f"\nFinal weights: w₁ = {w[0]:.4f}, w₂ = {w[1]:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal weights: wâ‚ = {w[0]:.4f}, wâ‚‚ = {w[1]:.4f}"</span>)
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Epoch 0: Loss = 33.9500, w = [-0.0200, -0.0350]<br>
@@ -106,15 +109,16 @@ Epoch 30: Loss = 3.8745, w = [1.2456, 1.0834]<br>
 Epoch 60: Loss = 1.5234, w = [1.6789, 1.4521]<br>
 Epoch 90: Loss = 0.8934, w = [1.8901, 1.5623]<br>
 Epoch 120: Loss = 0.5623, w = [1.9534, 1.6234]<br><br>
-Final weights: w₁ = 1.9756, w₂ = 1.6456
+Final weights: wâ‚ = 1.9756, wâ‚‚ = 1.6456
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp8.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp10.html" class="btn">Next →</a>
+                <a href="exp8.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp10.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

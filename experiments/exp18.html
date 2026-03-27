@@ -16,7 +16,7 @@
             <h1 class="experiment-title">Experiment 18: Conjugate Gradient Method</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
                     <p>To solve a system of linear equations Ax = b using the Conjugate Gradient method, a fundamental algorithm for solving large sparse linear systems.</p>
                     <p>Given: A = [[4, 1], [1, 3]], b = [[1], [2]]</p>
@@ -24,12 +24,15 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>The Conjugate Gradient (CG) method solves symmetric positive-definite systems. It:</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>Uses conjugate directions (orthogonal in A-norm)</li>
-                        <li>Converges in at most n iterations for n×n system</li>
+                        <li>Converges in at most n iterations for nÃ—n system</li>
                         <li>Ideal for large sparse matrices</li>
                         <li>More efficient than Gaussian elimination</li>
                     </ul>
@@ -37,20 +40,20 @@
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Start with initial guess x₀</div>
-                    <div class="step"><strong>Step 2:</strong> Compute residual r₀ = b - Ax₀</div>
-                    <div class="step"><strong>Step 3:</strong> Set direction p₀ = r₀</div>
+                    <div class="step"><strong>Step 1:</strong> Start with initial guess xâ‚€</div>
+                    <div class="step"><strong>Step 2:</strong> Compute residual râ‚€ = b - Axâ‚€</div>
+                    <div class="step"><strong>Step 3:</strong> Set direction pâ‚€ = râ‚€</div>
                     <div class="step"><strong>Step 4:</strong> For each iteration k:</div>
-                    <div class="step"><strong>Step 5:</strong> Compute step size α</div>
+                    <div class="step"><strong>Step 5:</strong> Compute step size Î±</div>
                     <div class="step"><strong>Step 6:</strong> Update x and residual</div>
-                    <div class="step"><strong>Step 7:</strong> Compute new direction using β</div>
+                    <div class="step"><strong>Step 7:</strong> Compute new direction using Î²</div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Linear System:</strong><br>
@@ -58,17 +61,17 @@
                     </div>
                     <div class="formula">
                         <strong>CG Update (iteration k):</strong><br>
-                        α_k = (r_k^T r_k) / (p_k^T A p_k)<br>
-                        x_{k+1} = x_k + α_k × p_k<br>
-                        r_{k+1} = r_k - α_k × A × p_k<br>
-                        β_k = (r_{k+1}^T r_{k+1}) / (r_k^T r_k)<br>
-                        p_{k+1} = r_{k+1} + β_k × p_k
+                        Î±_k = (r_k^T r_k) / (p_k^T A p_k)<br>
+                        x_{k+1} = x_k + Î±_k Ã— p_k<br>
+                        r_{k+1} = r_k - Î±_k Ã— A Ã— p_k<br>
+                        Î²_k = (r_{k+1}^T r_{k+1}) / (r_k^T r_k)<br>
+                        p_{k+1} = r_{k+1} + Î²_k Ã— p_k
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -125,7 +128,7 @@ solution = <span class="function">conjugate_gradient</span>(A, b)
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Iter 0: x = [0.21052632 0.52631579], residual = 0.789473<br>
@@ -138,10 +141,11 @@ Target b = [1 2]
             </div>
 
             <div class="nav-buttons">
-                <a href="exp17.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp19.html" class="btn">Next →</a>
+                <a href="exp17.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp19.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

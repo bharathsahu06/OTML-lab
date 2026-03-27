@@ -16,25 +16,28 @@
             <h1 class="experiment-title">Experiment 4: Quadratic Programming with CVXPY</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
-                    <p>To solve a constrained quadratic optimization problem using CVXPY: minimize f(x,y) = x² + y² subject to constraints x+y ≥ 1, x ≥ 0, y ≥ 0. This demonstrates convex optimization using a professional library.</p>
+                    <p>To solve a constrained quadratic optimization problem using CVXPY: minimize f(x,y) = xÂ² + yÂ² subject to constraints x+y â‰¥ 1, x â‰¥ 0, y â‰¥ 0. This demonstrates convex optimization using a professional library.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>CVXPY is a Python library for convex optimization. It allows defining optimization problems in a user-friendly way and automatically solves them using appropriate algorithms. This problem minimizes a quadratic objective function while satisfying linear inequality constraints.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Define decision variables x and y</div>
-                    <div class="step"><strong>Step 2:</strong> Define objective function: minimize x² + y²</div>
-                    <div class="step"><strong>Step 3:</strong> Add constraints: x+y ≥ 1, x ≥ 0, y ≥ 0</div>
+                    <div class="step"><strong>Step 2:</strong> Define objective function: minimize xÂ² + yÂ²</div>
+                    <div class="step"><strong>Step 3:</strong> Add constraints: x+y â‰¥ 1, x â‰¥ 0, y â‰¥ 0</div>
                     <div class="step"><strong>Step 4:</strong> Create optimization problem</div>
                     <div class="step"><strong>Step 5:</strong> Solve the problem</div>
                     <div class="step"><strong>Step 6:</strong> Extract and display results</div>
@@ -42,23 +45,23 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Objective (Minimize):</strong><br>
-                        f(x,y) = x² + y²
+                        f(x,y) = xÂ² + yÂ²
                     </div>
                     <div class="formula">
                         <strong>Subject to (Constraints):</strong><br>
-                        x + y ≥ 1<br>
-                        x ≥ 0<br>
-                        y ≥ 0
+                        x + y â‰¥ 1<br>
+                        x â‰¥ 0<br>
+                        y â‰¥ 0
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">ðŸ“Š Mathematical Procedure</div>
                 <div class="section-content">
                     <p><strong>Optimal Solution Analysis:</strong></p>
                     
@@ -75,14 +78,14 @@
 
                     <div class="step">
                         <strong>Verification:</strong><br>
-                        f(0.5, 0.5) = 0.5² + 0.5² = 0.25 + 0.25 = 0.5<br>
-                        Constraint check: 0.5 + 0.5 = 1 ✓ (satisfies ≥ 1)
+                        f(0.5, 0.5) = 0.5Â² + 0.5Â² = 0.25 + 0.25 = 0.5<br>
+                        Constraint check: 0.5 + 0.5 = 1 âœ“ (satisfies â‰¥ 1)
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <p><strong>Install CVXPY first: pip install cvxpy</strong></p>
                     <div class="code-block">
@@ -92,7 +95,7 @@
 x = cp.<span class="function">Variable</span>()
 y = cp.<span class="function">Variable</span>()
 
-<span class="comment"># Define objective: minimize x² + y²</span>
+<span class="comment"># Define objective: minimize xÂ² + yÂ²</span>
 objective = cp.<span class="function">Minimize</span>(x**<span class="number">2</span> + y**<span class="number">2</span>)
 
 <span class="comment"># Define constraints</span>
@@ -116,7 +119,7 @@ problem.<span class="function">solve</span>()
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Optimal x = 0.500000<br>
@@ -127,10 +130,11 @@ Status: optimal
             </div>
 
             <div class="nav-buttons">
-                <a href="exp3.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp5.html" class="btn">Next →</a>
+                <a href="exp3.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp5.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

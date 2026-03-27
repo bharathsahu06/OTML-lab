@@ -16,21 +16,24 @@
             <h1 class="experiment-title">Experiment 14: Mini-batch Gradient Descent (Dataset 2)</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
                     <p>Similar to Experiment 12 but with different data: x=[1,2,3,4], y=[5,7,9,11]. Demonstrates that mini-batch GD works consistently across different datasets.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>This is a variant of Experiment 12 using a different linear relationship. The model should learn y = 2x + 3 instead of y = 2x + 1.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Initialize weights w and bias b</div>
                     <div class="step"><strong>Step 2:</strong> Create mini-batches from data</div>
@@ -41,7 +44,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -83,7 +86,7 @@ epochs = <span class="number">50</span>
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Epoch 0: Loss=35.2145, w=0.1234, b=0.0567<br>
@@ -96,10 +99,11 @@ Final: y = 2.0000x + 3.0000
             </div>
 
             <div class="nav-buttons">
-                <a href="exp13.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp15.html" class="btn">Next →</a>
+                <a href="exp13.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp15.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

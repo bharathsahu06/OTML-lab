@@ -16,23 +16,26 @@
             <h1 class="experiment-title">Experiment 17: Group Lasso for Grouped Sparsity</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
                     <p>To demonstrate grouped sparsity using Group Lasso regularization. Group Lasso encourages entire groups of features to be selected/eliminated together.</p>
-                    <p>Dataset: x₁=[1,2], x₂=[2,1], x₃=[1,1], x₄=[1,1], y=[9,10]</p>
+                    <p>Dataset: xâ‚=[1,2], xâ‚‚=[2,1], xâ‚ƒ=[1,1], xâ‚„=[1,1], y=[9,10]</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>Group Lasso extends L1 regularization to feature groups. Instead of penalizing individual weights, it penalizes the L2 norm of weight groups. This causes entire feature groups to be eliminated simultaneously.</p>
                     <p><strong>Applications:</strong> Feature selection, categorical variables, multi-task learning</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Define feature groups</div>
                     <div class="step"><strong>Step 2:</strong> Apply Group Lasso penalty</div>
@@ -42,11 +45,11 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Group Lasso Objective:</strong><br>
-                        L(w) = MSE + λ × Σ||w_g||₂<br>
+                        L(w) = MSE + Î» Ã— Î£||w_g||â‚‚<br>
                         where g indexes feature groups
                     </div>
                     <div class="formula">
@@ -57,7 +60,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -107,7 +110,7 @@ lambda_reg = <span class="number">0</span>.<span class="number">1</span>
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Epoch 0: Loss=82.5000, Total=82.6234, w=[0.0234 0.0156 0.0089 0.0067]<br>
@@ -120,10 +123,11 @@ Selected features: [0 1 2 3]
             </div>
 
             <div class="nav-buttons">
-                <a href="exp16.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp18.html" class="btn">Next →</a>
+                <a href="exp16.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp18.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

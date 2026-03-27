@@ -16,21 +16,24 @@
             <h1 class="experiment-title">Experiment 5: Linear Programming with CVXPY</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
-                    <p>To solve a linear programming problem using CVXPY: minimize f(x,y) = 3x + 2y subject to constraints x+y ≥ 4, x ≥ 0, y ≥ 0. This demonstrates standard linear optimization.</p>
+                    <p>To solve a linear programming problem using CVXPY: minimize f(x,y) = 3x + 2y subject to constraints x+y â‰¥ 4, x â‰¥ 0, y â‰¥ 0. This demonstrates standard linear optimization.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>Linear programming involves optimizing a linear objective function subject to linear constraints. This is one of the most common optimization problems in operations research and business applications.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Define decision variables</div>
                     <div class="step"><strong>Step 2:</strong> Define linear objective function</div>
@@ -41,7 +44,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Minimize:</strong><br>
@@ -49,24 +52,24 @@
                     </div>
                     <div class="formula">
                         <strong>Subject to:</strong><br>
-                        x + y ≥ 4<br>
-                        x ≥ 0<br>
-                        y ≥ 0
+                        x + y â‰¥ 4<br>
+                        x â‰¥ 0<br>
+                        y â‰¥ 0
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">ðŸ“Š Mathematical Procedure</div>
                 <div class="section-content">
                     <p><strong>Graphical Solution:</strong></p>
                     
                     <div class="step">
                         <strong>Constraint Analysis:</strong><br>
                         The feasible region is bounded by:<br>
-                        - x + y ≥ 4 (above the line from (0,4) to (4,0))<br>
-                        - x ≥ 0 (right of y-axis)<br>
-                        - y ≥ 0 (above x-axis)
+                        - x + y â‰¥ 4 (above the line from (0,4) to (4,0))<br>
+                        - x â‰¥ 0 (right of y-axis)<br>
+                        - y â‰¥ 0 (above x-axis)
                     </div>
 
                     <div class="step">
@@ -85,7 +88,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
@@ -118,7 +121,7 @@ problem.<span class="function">solve</span>()
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Optimal x = 0.000000<br>
@@ -129,10 +132,11 @@ Status: optimal
             </div>
 
             <div class="nav-buttons">
-                <a href="exp4.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp6.html" class="btn">Next →</a>
+                <a href="exp4.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp6.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+

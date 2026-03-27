@@ -16,15 +16,18 @@
             <h1 class="experiment-title">Experiment 3: Stochastic Gradient Descent (SGD)</h1>
 
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">ðŸ“Œ Aim</div>
                 <div class="section-content">
-                    <p>To implement Stochastic Gradient Descent (SGD) for minimizing f(x) = x². Unlike standard gradient descent that uses all data at once, SGD updates using one random sample at a time, making it faster for large datasets.</p>
+                    <p>To implement Stochastic Gradient Descent (SGD) for minimizing f(x) = xÂ². Unlike standard gradient descent that uses all data at once, SGD updates using one random sample at a time, making it faster for large datasets.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">Description</div>
                 <div class="section-content">
+<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
+                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
+                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>Stochastic Gradient Descent is a variant of gradient descent that:</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>Updates parameters using one data point at a time</li>
@@ -36,7 +39,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">ðŸ”§ Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Start with random x</div>
                     <div class="step"><strong>Step 2:</strong> For each epoch (pass through data):</div>
@@ -47,53 +50,53 @@
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">ðŸ“ Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Objective Function:</strong><br>
-                        f(x) = x²
+                        f(x) = xÂ²
                     </div>
                     <div class="formula">
                         <strong>Gradient:</strong><br>
-                        ∂f/∂x = 2x
+                        âˆ‚f/âˆ‚x = 2x
                     </div>
                     <div class="formula">
                         <strong>SGD Update (per sample):</strong><br>
-                        x(n+1) = x(n) - α × ∇f(x(n), sample)
+                        x(n+1) = x(n) - Î± Ã— âˆ‡f(x(n), sample)
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">ðŸ“Š Mathematical Procedure</div>
                 <div class="section-content">
                     <p>SGD works similarly to gradient descent, but processes one random sample at a time:</p>
                     
                     <div class="step">
-                        <strong>Initialization:</strong> x = 5.0, α = 0.01
+                        <strong>Initialization:</strong> x = 5.0, Î± = 0.01
                     </div>
 
                     <div class="step">
                         <strong>Random update 1:</strong><br>
-                        Gradient = 2 × 5 = 10<br>
-                        x = 5 - 0.01 × 10 = 4.9
+                        Gradient = 2 Ã— 5 = 10<br>
+                        x = 5 - 0.01 Ã— 10 = 4.9
                     </div>
 
                     <div class="step">
                         <strong>Random update 2:</strong><br>
-                        Gradient = 2 × 4.9 = 9.8<br>
-                        x = 4.9 - 0.01 × 9.8 = 4.81
+                        Gradient = 2 Ã— 4.9 = 9.8<br>
+                        x = 4.9 - 0.01 Ã— 9.8 = 4.81
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">ðŸ’» Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> random
 
-<span class="comment"># Stochastic Gradient Descent for f(x) = x²</span>
+<span class="comment"># Stochastic Gradient Descent for f(x) = xÂ²</span>
 
 <span class="keyword">def</span> <span class="function">sgd</span>(x_start, learning_rate, epochs, batch_size=<span class="number">1</span>):
     x = x_start
@@ -118,7 +121,7 @@ final_x = <span class="function">sgd</span>(<span class="number">5.0</span>, <sp
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">ðŸ“¤ Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Epoch 0: x = 5.000000, Loss = 25.000000<br>
@@ -137,10 +140,11 @@ Final Loss = 0.004338
             </div>
 
             <div class="nav-buttons">
-                <a href="exp2.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp4.html" class="btn">Next →</a>
+                <a href="exp2.html" class="btn btn-secondary">â† Previous</a>
+                <a href="exp4.html" class="btn">Next â†’</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+
