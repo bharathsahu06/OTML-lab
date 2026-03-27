@@ -16,27 +16,24 @@
             <h1 class="experiment-title">Experiment 10: Interior Point Method</h1>
 
             <div class="section">
-                <div class="section-title">ðŸ“Œ Aim</div>
+                <div class="section-title">📌 Aim</div>
                 <div class="section-content">
-                    <p>To solve a non-linear constrained optimization problem using the interior point method: minimize f(x) = xÂ² subject to x â‰¥ 1. The interior point method is a powerful technique for constrained optimization.</p>
+                    <p>To solve a non-linear constrained optimization problem using the interior point method: minimize f(x) = x² subject to x ≥ 1. The interior point method is a powerful technique for constrained optimization.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Description</div>
+                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
-                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
-                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>The interior point method (also called barrier method) solves constrained problems by converting them to unconstrained problems with a barrier function. It works by adding a penalty term that prevents violations of constraints.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ”§ Algorithm</div>
+                <div class="section-title">🔧 Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Start with feasible point inside constraint region (x=2)</div>
-                    <div class="step"><strong>Step 2:</strong> Add barrier function: f(x) + (1/t)Ã—log(x-1)</div>
+                    <div class="step"><strong>Step 2:</strong> Add barrier function: f(x) + (1/t)×log(x-1)</div>
                     <div class="step"><strong>Step 3:</strong> Minimize modified objective</div>
                     <div class="step"><strong>Step 4:</strong> Increase t (reduce barrier weight)</div>
                     <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
@@ -44,27 +41,27 @@
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“ Formulas</div>
+                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>Original Problem:</strong><br>
-                        minimize f(x) = xÂ²<br>
-                        subject to x â‰¥ 1
+                        minimize f(x) = x²<br>
+                        subject to x ≥ 1
                     </div>
                     <div class="formula">
                         <strong>Barrier Problem:</strong><br>
-                        minimize f(x) + (1/t)Ã—log(x-1)<br>
-                        where t â†’ âˆž (penalty weight decreases)
+                        minimize f(x) + (1/t)×log(x-1)<br>
+                        where t → ∞ (penalty weight decreases)
                     </div>
                     <div class="formula">
                         <strong>Barrier Gradient:</strong><br>
-                        âˆ‡f_barrier = 2x - (1/t)Ã—1/(x-1)
+                        ∇f_barrier = 2x - (1/t)×1/(x-1)
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“Š Mathematical Procedure</div>
+                <div class="section-title">📊 Mathematical Procedure</div>
                 <div class="section-content">
                     <div class="step">
                         <strong>Optimal Solution:</strong><br>
@@ -75,13 +72,13 @@
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ’» Simple Python Program</div>
+                <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
 <span class="comment"># Interior Point Method</span>
-<span class="comment"># Minimize: f(x) = xÂ²</span>
+<span class="comment"># Minimize: f(x) = x²</span>
 <span class="comment"># Subject to: x >= 1</span>
 
 <span class="keyword">def</span> <span class="function">objective</span>(x):
@@ -116,14 +113,14 @@ lr = <span class="number">0</span>.<span class="number">01</span>
     
     t *= <span class="number">10</span>  <span class="comment"># Increase t</span>
 
-<span class="function">print</span>(<span class="string">f"\nOptimal x â‰ˆ {x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal f(x) â‰ˆ {objective(x):.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nOptimal x ≈ {x:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal f(x) ≈ {objective(x):.6f}"</span>)
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“¤ Expected Output</div>
+                <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Iteration 0: x = 1.789234, f(x) = 3.201567, t = 1.0<br>
@@ -132,17 +129,16 @@ Iteration 2: x = 1.234567, f(x) = 1.524123, t = 100.0<br>
 Iteration 3: x = 1.089876, f(x) = 1.187943, t = 1000.0<br>
 Iteration 4: x = 1.020345, f(x) = 1.041076, t = 10000.0<br>
 Iteration 5: x = 1.002134, f(x) = 1.004279, t = 100000.0<br><br>
-Optimal x â‰ˆ 1.000981<br>
-Optimal f(x) â‰ˆ 1.001962
+Optimal x ≈ 1.000981<br>
+Optimal f(x) ≈ 1.001962
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp9.html" class="btn btn-secondary">â† Previous</a>
-                <a href="exp11.html" class="btn">Next â†’</a>
+                <a href="exp9.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp11.html" class="btn">Next →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

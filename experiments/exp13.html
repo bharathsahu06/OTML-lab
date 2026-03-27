@@ -16,18 +16,15 @@
             <h1 class="experiment-title">Experiment 13: Distributed Gradient Descent</h1>
 
             <div class="section">
-                <div class="section-title">ðŸ“Œ Aim</div>
+                <div class="section-title">📌 Aim</div>
                 <div class="section-content">
                     <p>To simulate a distributed gradient descent algorithm where data is split across multiple workers. Dataset: x=[1,2,3,4,5,6], y=[3,5,7,9,11,13]. Each worker processes a subset and contributes to parameter updates.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Description</div>
+                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
-                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
-                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p>Distributed GD divides data among multiple processors/machines. Each processor:</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>Computes local gradients on its data subset</li>
@@ -39,7 +36,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ”§ Algorithm</div>
+                <div class="section-title">🔧 Algorithm</div>
                 <div class="section-content">
                     <div class="step"><strong>Step 1:</strong> Initialize global weights</div>
                     <div class="step"><strong>Step 2:</strong> Split data among workers</div>
@@ -52,7 +49,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ’» Simple Python Program</div>
+                <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -118,7 +115,7 @@ workers_data = <span class="function">split_data</span>(X, y, num_workers)
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“¤ Expected Output</div>
+                <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Epoch 0: Loss = 31.2345, w = 0.1234<br>
@@ -130,11 +127,10 @@ Final: w = 2.0001, b = 1.0012
             </div>
 
             <div class="nav-buttons">
-                <a href="exp12.html" class="btn btn-secondary">â† Previous</a>
-                <a href="exp14.html" class="btn">Next â†’</a>
+                <a href="exp12.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp14.html" class="btn">Next →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

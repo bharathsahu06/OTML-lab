@@ -16,23 +16,20 @@
             <h1 class="experiment-title">Experiment 16: L1/L2 and Elastic Net Regularization</h1>
 
             <div class="section">
-                <div class="section-title">ðŸ“Œ Aim</div>
+                <div class="section-title">📌 Aim</div>
                 <div class="section-content">
                     <p>To implement linear regression with different regularization techniques:</p>
                     <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>L1 regularization (Lasso): Î» = 0.1</li>
-                        <li>L2 regularization (Ridge): Î» = 0.1</li>
-                        <li>Elastic Net (combination): Î»â‚ = 0.05, Î»â‚‚ = 0.05</li>
+                        <li>L1 regularization (Lasso): λ = 0.1</li>
+                        <li>L2 regularization (Ridge): λ = 0.1</li>
+                        <li>Elastic Net (combination): λ₁ = 0.05, λ₂ = 0.05</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Description</div>
+                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-<p class="long-description-note">This experiment is documented in detailed lab-record style so that you can explain it clearly during observation, viva, and record submission. The objective is not only to get the final answer, but also to understand why each update step works, how the method moves toward the optimum, and how design choices like initialization, learning rate, tolerance, and iteration count affect the quality and speed of convergence.</p>
-                    <p class="long-description-note">When performing this in a Jupyter Notebook, execute the workflow exactly in stages: define the objective, initialize variables, run iterative updates, inspect intermediate values, and interpret the trend of loss or objective value over iterations. If the method converges slowly, overshoots, or oscillates, note the reason and tune hyperparameters systematically. For constrained problems, also verify feasibility of the solution with respect to each constraint at every major stage.</p>
-                    <p class="long-description-note">The code and output sections are intentionally presented in notebook-like format so the page resembles actual hands-on lab execution. You can copy each program into notebook cells, run it directly, and compare with expected output. In your final observation, include practical notes such as convergence behavior, final optimum obtained, parameter sensitivity, and the main learning outcome from this experiment.</p>
                     <p><strong>Regularization Types:</strong></p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li><strong>L1 (Lasso):</strong> Promotes sparsity (some weights become exactly 0)</li>
@@ -43,25 +40,25 @@
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“ Formulas</div>
+                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
                     <div class="formula">
                         <strong>L1 Regularization (Lasso):</strong><br>
-                        L(w) = MSE + Î»||w||â‚
+                        L(w) = MSE + λ||w||₁
                     </div>
                     <div class="formula">
                         <strong>L2 Regularization (Ridge):</strong><br>
-                        L(w) = MSE + Î»||w||â‚‚Â²
+                        L(w) = MSE + λ||w||₂²
                     </div>
                     <div class="formula">
                         <strong>Elastic Net:</strong><br>
-                        L(w) = MSE + Î»â‚||w||â‚ + Î»â‚‚||w||â‚‚Â²
+                        L(w) = MSE + λ₁||w||₁ + λ₂||w||₂²
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ’» Simple Python Program</div>
+                <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
@@ -100,7 +97,7 @@ elastic_net.<span class="function">fit</span>(X, y)
             </div>
 
             <div class="section">
-                <div class="section-title">ðŸ“¤ Expected Output</div>
+                <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 L1 (Lasso):<br>
@@ -116,11 +113,10 @@ Elastic Net:<br>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp15.html" class="btn btn-secondary">â† Previous</a>
-                <a href="exp17.html" class="btn">Next â†’</a>
+                <a href="exp15.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp17.html" class="btn">Next →</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-
