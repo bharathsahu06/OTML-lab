@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 5 - Linear Optimization with CVXPY | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 5
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 5: Linear Programming with CVXPY</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To solve a linear programming problem using CVXPY: minimize f(x,y) = 3x + 2y subject to constraints x+y ≥ 4, x ≥ 0, y ≥ 0. This demonstrates standard linear optimization.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Linear programming involves optimizing a linear objective function subject to linear constraints. This is one of the most common optimization problems in operations research and business applications.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Define decision variables</div>
+                    <div class="step"><strong>Step 2:</strong> Define linear objective function</div>
+                    <div class="step"><strong>Step 3:</strong> Add linear constraints</div>
+                    <div class="step"><strong>Step 4:</strong> Solve using CVXPY</div>
+                    <div class="step"><strong>Step 5:</strong> Extract optimal solution</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Minimize:</strong><br>
+                        f(x,y) = 3x + 2y
+                    </div>
+                    <div class="formula">
+                        <strong>Subject to:</strong><br>
+                        x + y ≥ 4<br>
+                        x ≥ 0<br>
+                        y ≥ 0
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Graphical Solution:</strong></p>
+                    
+                    <div class="step">
+                        <strong>Constraint Analysis:</strong><br>
+                        The feasible region is bounded by:<br>
+                        - x + y ≥ 4 (above the line from (0,4) to (4,0))<br>
+                        - x ≥ 0 (right of y-axis)<br>
+                        - y ≥ 0 (above x-axis)
+                    </div>
+
+                    <div class="step">
+                        <strong>Corner points (vertices):</strong><br>
+                        (0, 4): f = 3(0) + 2(4) = 8<br>
+                        (4, 0): f = 3(4) + 2(0) = 12<br>
+                        Optimal is at (0, 4) with minimum value = 8
+                    </div>
+
+                    <div class="step">
+                        <strong>Optimal Solution:</strong><br>
+                        x* = 0, y* = 4<br>
+                        Minimum value = 8
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
+
+<span class="comment"># Define variables</span>
+x = cp.<span class="function">Variable</span>()
+y = cp.<span class="function">Variable</span>()
+
+<span class="comment"># Define objective: minimize 3x + 2y</span>
+objective = cp.<span class="function">Minimize</span>(<span class="number">3</span>*x + <span class="number">2</span>*y)
+
+<span class="comment"># Define constraints</span>
+constraints = [
+    x + y >= <span class="number">4</span>,    <span class="comment"># x + y >= 4</span>
+    x >= <span class="number">0</span>,         <span class="comment"># x >= 0</span>
+    y >= <span class="number">0</span>          <span class="comment"># y >= 0</span>
+]
+
+<span class="comment"># Create and solve</span>
+problem = cp.<span class="function">Problem</span>(objective, constraints)
+problem.<span class="function">solve</span>()
+
+<span class="comment"># Results</span>
+<span class="function">print</span>(<span class="string">f"Optimal x = {x.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal y = {y.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum value = {objective.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Status: {problem.status}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Optimal x = 0.000000<br>
+Optimal y = 4.000000<br>
+Minimum value = 8.000000<br>
+Status: optimal
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp4.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp6.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

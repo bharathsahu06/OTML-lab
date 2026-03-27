@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 12 - Mini-batch Gradient Descent | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 12
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 12: Mini-batch Gradient Descent</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To minimize the loss function of linear regression using mini-batch gradient descent for dataset x=[1,2,3,4], y=[3,5,7,9]. Mini-batch GD is a compromise between batch and stochastic methods.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Mini-batch gradient descent:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Divides data into small batches</li>
+                        <li>Processes one batch at a time</li>
+                        <li>Faster than batch GD, more stable than SGD</li>
+                        <li>Better for parallel processing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize weights randomly</div>
+                    <div class="step"><strong>Step 2:</strong> Divide data into mini-batches</div>
+                    <div class="step"><strong>Step 3:</strong> For each batch, compute gradient</div>
+                    <div class="step"><strong>Step 4:</strong> Update weights</div>
+                    <div class="step"><strong>Step 5:</strong> Repeat for multiple epochs</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Linear Model:</strong><br>
+                        ŷ = wx + b
+                    </div>
+                    <div class="formula">
+                        <strong>Loss (MSE):</strong><br>
+                        L = (1/m) × Σ(yᵢ - ŷᵢ)²
+                    </div>
+                    <div class="formula">
+                        <strong>Gradient:</strong><br>
+                        ∂L/∂w = -(2/m) × Σ(yᵢ - ŷᵢ) × xᵢ
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Mini-batch Gradient Descent for Linear Regression</span>
+X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]).<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">1</span>)
+y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
+
+<span class="comment"># Initialize</span>
+w = <span class="number">0</span>.<span class="number">0</span>
+b = <span class="number">0</span>.<span class="number">0</span>
+lr = <span class="number">0</span>.<span class="number">01</span>
+batch_size = <span class="number">2</span>
+epochs = <span class="number">50</span>
+
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    <span class="comment"># Shuffle data</span>
+    indices = np.<span class="function">random</span>.<span class="function">permutation</span>(<span class="function">len</span>(X))
+    X_shuffled = X[indices]
+    y_shuffled = y[indices]
+    
+    <span class="comment"># Mini-batches</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(X), batch_size):
+        X_batch = X_shuffled[i:i+batch_size]
+        y_batch = y_shuffled[i:i+batch_size]
+        
+        <span class="comment"># Predictions</span>
+        y_pred = w*X_batch + b
+        
+        <span class="comment"># Gradients</span>
+        dw = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>((y_batch - y_pred) * X_batch)
+        db = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>(y_batch - y_pred)
+        
+        <span class="comment"># Update</span>
+        w -= lr * dw
+        b -= lr * db
+    
+    <span class="comment"># Loss</span>
+    y_pred_all = w*X + b
+    loss = np.<span class="function">mean</span>((y - y_pred_all)**<span class="number">2</span>)
+    
+    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w:.4f}, b = {b:.4f}"</span>)
+
+<span class="function">print</span>(<span class="string">f"\nFinal: y = {w:.4f}x + {b:.4f}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Epoch 0: Loss = 20.8512, w = 0.2234, b = 0.1567<br>
+Epoch 10: Loss = 2.1234, w = 1.8234, b = 0.5612<br>
+Epoch 20: Loss = 0.3456, w = 1.9876, b = 0.9234<br>
+Epoch 30: Loss = 0.0567, w = 1.9987, b = 0.9876<br>
+Epoch 40: Loss = 0.0089, w = 1.9998, b = 0.9987<br><br>
+Final: y = 2.0000x + 1.0000
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp11.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp13.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

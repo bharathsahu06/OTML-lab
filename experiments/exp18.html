@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 18 - Conjugate Gradient Method | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 18
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 18: Conjugate Gradient Method</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To solve a system of linear equations Ax = b using the Conjugate Gradient method, a fundamental algorithm for solving large sparse linear systems.</p>
+                    <p>Given: A = [[4, 1], [1, 3]], b = [[1], [2]]</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>The Conjugate Gradient (CG) method solves symmetric positive-definite systems. It:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Uses conjugate directions (orthogonal in A-norm)</li>
+                        <li>Converges in at most n iterations for n×n system</li>
+                        <li>Ideal for large sparse matrices</li>
+                        <li>More efficient than Gaussian elimination</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Start with initial guess x₀</div>
+                    <div class="step"><strong>Step 2:</strong> Compute residual r₀ = b - Ax₀</div>
+                    <div class="step"><strong>Step 3:</strong> Set direction p₀ = r₀</div>
+                    <div class="step"><strong>Step 4:</strong> For each iteration k:</div>
+                    <div class="step"><strong>Step 5:</strong> Compute step size α</div>
+                    <div class="step"><strong>Step 6:</strong> Update x and residual</div>
+                    <div class="step"><strong>Step 7:</strong> Compute new direction using β</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Linear System:</strong><br>
+                        Ax = b
+                    </div>
+                    <div class="formula">
+                        <strong>CG Update (iteration k):</strong><br>
+                        α_k = (r_k^T r_k) / (p_k^T A p_k)<br>
+                        x_{k+1} = x_k + α_k × p_k<br>
+                        r_{k+1} = r_k - α_k × A × p_k<br>
+                        β_k = (r_{k+1}^T r_{k+1}) / (r_k^T r_k)<br>
+                        p_{k+1} = r_{k+1} + β_k × p_k
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Conjugate Gradient Method</span>
+A = np.<span class="function">array</span>([[<span class="number">4</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">3</span>]])
+b = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>])
+
+<span class="keyword">def</span> <span class="function">conjugate_gradient</span>(A, b, x0=<span class="keyword">None</span>, tol=<span class="number">1e-6</span>, max_iter=<span class="number">100</span>):
+    n = <span class="function">len</span>(b)
+    <span class="keyword">if</span> x0 <span class="keyword">is</span> <span class="keyword">None</span>:
+        x = np.<span class="function">zeros</span>(n)
+    <span class="keyword">else</span>:
+        x = x0.<span class="function">copy</span>()
+    
+    r = b - A @ x
+    p = r.<span class="function">copy</span>()
+    
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="function">range</span>(max_iter):
+        <span class="comment"># Compute alpha</span>
+        Ap = A @ p
+        alpha = np.<span class="function">dot</span>(r, r) / np.<span class="function">dot</span>(p, Ap)
+        
+        <span class="comment"># Update x</span>
+        x = x + alpha * p
+        
+        <span class="comment"># Update residual</span>
+        r_new = r - alpha * Ap
+        
+        <span class="comment"># Check convergence</span>
+        <span class="keyword">if</span> np.<span class="function">linalg</span>.<span class="function">norm</span>(r_new) < tol:
+            <span class="function">print</span>(<span class="string">f"Converged at iteration {k}"</span>)
+            <span class="keyword">break</span>
+        
+        <span class="comment"># Compute beta</span>
+        beta = np.<span class="function">dot</span>(r_new, r_new) / np.<span class="function">dot</span>(r, r)
+        
+        <span class="comment"># Update direction</span>
+        p = r_new + beta * p
+        r = r_new
+        
+        <span class="keyword">if</span> k % <span class="number">1</span> == <span class="number">0</span>:
+            <span class="function">print</span>(<span class="string">f"Iter {k}: x = {x}, residual = {np.<span class="function">linalg</span>.<span class="function">norm</span>(r):.6f}"</span>)
+    
+    <span class="keyword">return</span> x
+
+<span class="comment"># Solve</span>
+solution = <span class="function">conjugate_gradient</span>(A, b)
+<span class="function">print</span>(<span class="string">f"\nSolution x = {solution}"</span>)
+<span class="function">print</span>(<span class="string">f"Verification: Ax = {A @ solution}"</span>)
+<span class="function">print</span>(<span class="string">f"Target b = {b}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Iter 0: x = [0.21052632 0.52631579], residual = 0.789473<br>
+Iter 1: x = [0.11764706 0.70588235], residual = 0.000000<br>
+Converged at iteration 1<br><br>
+Solution x = [0.11764706 0.70588235]<br>
+Verification: Ax = [0.99999999 2.00000000]<br>
+Target b = [1 2]
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp17.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp19.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

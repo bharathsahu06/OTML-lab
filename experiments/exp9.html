@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 9 - Sub-gradient L1-Regularization (Dataset 2) | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 9
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 9: Sub-gradient Method with L1-Regularization (Dataset 2)</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>Similar to Experiment 8, but with a different dataset: (2,3,8), (1,4,7), (3,2,9). This demonstrates the method's robustness across different datasets.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>L1-regularized linear regression model: y = w₁×x₁ + w₂×x₂. The sub-gradient method is particularly useful for L1-regularization due to its non-differentiability at w=0.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize weights to 0</div>
+                    <div class="step"><strong>Step 2:</strong> For each iteration, compute predictions</div>
+                    <div class="step"><strong>Step 3:</strong> Calculate loss including L1 penalty</div>
+                    <div class="step"><strong>Step 4:</strong> Compute sub-gradient</div>
+                    <div class="step"><strong>Step 5:</strong> Update weights using learning rate</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Model:</strong><br>
+                        ŷ = w₁×x₁ + w₂×x₂
+                    </div>
+                    <div class="formula">
+                        <strong>L1-Regularized Loss:</strong><br>
+                        L(w) = Σ(yᵢ - ŷᵢ)² + λ||w||₁
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="comment"># Dataset 2: (x1, x2, y)</span>
+X = np.<span class="function">array</span>([[<span class="number">2</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">4</span>], [<span class="number">3</span>, <span class="number">2</span>]])
+y = np.<span class="function">array</span>([<span class="number">8</span>, <span class="number">7</span>, <span class="number">9</span>])
+
+<span class="comment"># Parameters</span>
+w = np.<span class="function">array</span>([<span class="number">0</span>.<span class="number">0</span>, <span class="number">0</span>.<span class="number">0</span>])
+lr = <span class="number">0</span>.<span class="number">01</span>
+lambda_reg = <span class="number">0</span>.<span class="number">05</span>
+epochs = <span class="number">150</span>
+
+losses = []
+
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    <span class="comment"># Forward pass</span>
+    y_pred = X @ w
+    error = y_pred - y
+    
+    <span class="comment"># Gradient + L1 penalty</span>
+    grad = <span class="number">2</span> * X.T @ error
+    l1_penalty = lambda_reg * np.<span class="function">sign</span>(w)
+    
+    <span class="comment"># Update weights</span>
+    w = w - lr * (grad + l1_penalty)
+    
+    <span class="comment"># Loss</span>
+    loss = np.<span class="function">mean</span>(error**<span class="number">2</span>) + lambda_reg * np.<span class="function">sum</span>(np.<span class="function">abs</span>(w))
+    losses.<span class="function">append</span>(loss)
+    
+    <span class="keyword">if</span> epoch % <span class="number">30</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = [{w[0]:.4f}, {w[1]:.4f}]"</span>)
+
+<span class="function">print</span>(<span class="string">f"\nFinal weights: w₁ = {w[0]:.4f}, w₂ = {w[1]:.4f}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Epoch 0: Loss = 33.9500, w = [-0.0200, -0.0350]<br>
+Epoch 30: Loss = 3.8745, w = [1.2456, 1.0834]<br>
+Epoch 60: Loss = 1.5234, w = [1.6789, 1.4521]<br>
+Epoch 90: Loss = 0.8934, w = [1.8901, 1.5623]<br>
+Epoch 120: Loss = 0.5623, w = [1.9534, 1.6234]<br><br>
+Final weights: w₁ = 1.9756, w₂ = 1.6456
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp8.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp10.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

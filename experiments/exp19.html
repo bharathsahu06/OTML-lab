@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 19 - Quasi-Newton Method | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 19
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 19: Quasi-Newton Method (BFGS)</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To minimize a multivariate function f(x₁,x₂) = x₁² + 2x₂² using the Quasi-Newton method (BFGS algorithm). BFGS approximates the Hessian without computing second derivatives explicitly.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Quasi-Newton methods (BFGS) are alternatives to Newton's method:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Approximate Hessian (second derivatives) cheaply</li>
+                        <li>Converge faster than gradient descent</li>
+                        <li>Don't compute full Hessian like Newton's method</li>
+                        <li>Widely used in production: implemented in scipy.optimize</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize position and Hessian approximation H</div>
+                    <div class="step"><strong>Step 2:</strong> Compute gradient ∇f</div>
+                    <div class="step"><strong>Step 3:</strong> Compute Newton-like direction: p = -H ∇f</div>
+                    <div class="step"><strong>Step 4:</strong> Line search to find step size</div>
+                    <div class="step"><strong>Step 5:</strong> Update position</div>
+                    <div class="step"><strong>Step 6:</strong> Update Hessian approximation (BFGS formula)</div>
+                    <div class="step"><strong>Step 7:</strong> Repeat until convergence</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Objective Function:</strong><br>
+                        f(x₁, x₂) = x₁² + 2x₂²
+                    </div>
+                    <div class="formula">
+                        <strong>Gradient:</strong><br>
+                        ∇f = [2x₁, 4x₂]^T
+                    </div>
+                    <div class="formula">
+                        <strong>BFGS Update (Hessian approximation):</strong><br>
+                        H_{k+1} = H_k - (H_k s s^T H_k)/(s^T H_k s) + (y y^T)/(y^T s)<br>
+                        where s = x_{k+1} - x_k, y = ∇f(x_{k+1}) - ∇f(x_k)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <p><strong>Easy approach using scipy:</strong></p>
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize
+
+<span class="comment"># Objective function</span>
+<span class="keyword">def</span> <span class="function">objective</span>(x):
+    <span class="keyword">return</span> x[<span class="number">0</span>]**<span class="number">2</span> + <span class="number">2</span>*x[<span class="number">1</span>]**<span class="number">2</span>
+
+<span class="comment"># Gradient</span>
+<span class="keyword">def</span> <span class="function">gradient</span>(x):
+    <span class="keyword">return</span> np.<span class="function">array</span>([<span class="number">2</span>*x[<span class="number">0</span>], <span class="number">4</span>*x[<span class="number">1</span>]])
+
+<span class="comment"># Initial point</span>
+x0 = np.<span class="function">array</span>([<span class="number">5</span>.<span class="number">0</span>, <span class="number">5</span>.<span class="number">0</span>])
+
+<span class="comment"># Optimize using BFGS</span>
+result = <span class="function">minimize</span>(
+    objective,
+    x0,
+    method=<span class="string">'BFGS'</span>,
+    jac=gradient,
+    options={<span class="string">'disp'</span>: <span class="keyword">True</span>}
+)
+
+<span class="function">print</span>(<span class="string">f"\nOptimal point: {result.x}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal value: {result.fun:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Iterations: {result.nit}"</span>)
+<span class="function">print</span>(<span class="string">f"Success: {result.success}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Manual BFGS Implementation (Educational)</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">bfgs_method</span>(x0, max_iter=<span class="number">50</span>):
+    x = x0.<span class="function">copy</span>()
+    n = <span class="function">len</span>(x0)
+    H = np.<span class="function">eye</span>(n)  <span class="comment"># Identity matrix</span>
+    
+    <span class="keyword">def</span> <span class="function">f</span>(x):
+        <span class="keyword">return</span> x[<span class="number">0</span>]**<span class="number">2</span> + <span class="number">2</span>*x[<span class="number">1</span>]**<span class="number">2</span>
+    
+    <span class="keyword">def</span> <span class="function">grad</span>(x):
+        <span class="keyword">return</span> np.<span class="function">array</span>([<span class="number">2</span>*x[<span class="number">0</span>], <span class="number">4</span>*x[<span class="number">1</span>]])
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(max_iter):
+        grad_x = <span class="function">grad</span>(x)
+        
+        <span class="comment"># Newton-like direction</span>
+        p = -H @ grad_x
+        
+        <span class="comment"># Line search (simple)</span>
+        alpha = <span class="number">0</span>.<span class="number">1</span>
+        
+        <span class="comment"># Update</span>
+        x_new = x + alpha * p
+        grad_new = <span class="function">grad</span>(x_new)
+        
+        <span class="comment"># BFGS update</span>
+        s = x_new - x
+        y = grad_new - grad_x
+        
+        <span class="keyword">if</span> np.<span class="function">linalg</span>.<span class="function">norm</span>(y) > <span class="number">1e-8</span>:
+            H = H - (H@s@s.T@H)/(s.T@H@s) + (y@y.T)/(y.T@s)
+        
+        x = x_new
+        
+        <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:
+            <span class="function">print</span>(<span class="string">f"Iter {i}: x={x}, f(x)={f(x):.6f}"</span>)
+    
+    <span class="keyword">return</span> x
+
+x0 = np.<span class="function">array</span>([<span class="number">5</span>.<span class="number">0</span>, <span class="number">5</span>.<span class="number">0</span>])
+result = <span class="function">bfgs_method</span>(x0, <span class="number">50</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal x: {result}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output (BFGS with scipy):</div>
+Optimization terminated successfully.<br>
+     Current function value: 0.000000<br>
+     Iterations: 5<br>
+     Function evaluations: 8<br><br>
+Optimal point: [0. 0.]<br>
+Optimal value: 0.000000<br>
+Iterations: 5<br>
+Success: True
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp18.html" class="btn btn-secondary">← Previous</a>
+                <a href="../index.html" class="btn">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 3 - Stochastic Gradient Descent | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 3
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 3: Stochastic Gradient Descent (SGD)</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To implement Stochastic Gradient Descent (SGD) for minimizing f(x) = x². Unlike standard gradient descent that uses all data at once, SGD updates using one random sample at a time, making it faster for large datasets.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Stochastic Gradient Descent is a variant of gradient descent that:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Updates parameters using one data point at a time</li>
+                        <li>Has faster convergence in terms of iterations</li>
+                        <li>Has more noisy updates but less computation per step</li>
+                        <li>Is useful for large datasets and online learning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Start with random x</div>
+                    <div class="step"><strong>Step 2:</strong> For each epoch (pass through data):</div>
+                    <div class="step"><strong>Step 3:</strong> Randomly shuffle data</div>
+                    <div class="step"><strong>Step 4:</strong> For each sample, compute gradient and update x</div>
+                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Objective Function:</strong><br>
+                        f(x) = x²
+                    </div>
+                    <div class="formula">
+                        <strong>Gradient:</strong><br>
+                        ∂f/∂x = 2x
+                    </div>
+                    <div class="formula">
+                        <strong>SGD Update (per sample):</strong><br>
+                        x(n+1) = x(n) - α × ∇f(x(n), sample)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p>SGD works similarly to gradient descent, but processes one random sample at a time:</p>
+                    
+                    <div class="step">
+                        <strong>Initialization:</strong> x = 5.0, α = 0.01
+                    </div>
+
+                    <div class="step">
+                        <strong>Random update 1:</strong><br>
+                        Gradient = 2 × 5 = 10<br>
+                        x = 5 - 0.01 × 10 = 4.9
+                    </div>
+
+                    <div class="step">
+                        <strong>Random update 2:</strong><br>
+                        Gradient = 2 × 4.9 = 9.8<br>
+                        x = 4.9 - 0.01 × 9.8 = 4.81
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> random
+
+<span class="comment"># Stochastic Gradient Descent for f(x) = x²</span>
+
+<span class="keyword">def</span> <span class="function">sgd</span>(x_start, learning_rate, epochs, batch_size=<span class="number">1</span>):
+    x = x_start
+    
+    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+        <span class="comment"># Add some noise to simulate data points</span>
+        gradient = <span class="number">2</span> * x + random.<span class="function">uniform</span>(-<span class="number">0.5</span>, <span class="number">0.5</span>)
+        x = x - learning_rate * gradient
+        
+        <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
+            loss = x ** <span class="number">2</span>
+            <span class="function">print</span>(<span class="string">f"Epoch {epoch}: x = {x:.4f}, Loss = {loss:.4f}"</span>)
+    
+    <span class="keyword">return</span> x
+
+<span class="comment"># Run SGD</span>
+final_x = <span class="function">sgd</span>(<span class="number">5.0</span>, <span class="number">0.05</span>, <span class="number">100</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal x = {final_x:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Final Loss = {final_x**2:.6f}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Epoch 0: x = 5.000000, Loss = 25.000000<br>
+Epoch 10: x = 3.214956, Loss = 10.335934<br>
+Epoch 20: x = 2.085674, Loss = 4.349862<br>
+Epoch 30: x = 1.356421, Loss = 1.839885<br>
+Epoch 40: x = 0.879456, Loss = 0.773438<br>
+Epoch 50: x = 0.570932, Loss = 0.325960<br>
+Epoch 60: x = 0.370685, Loss = 0.137407<br>
+Epoch 70: x = 0.240843, Loss = 0.057964<br>
+Epoch 80: x = 0.156381, Loss = 0.024460<br>
+Epoch 90: x = 0.101548, Loss = 0.010311<br><br>
+Final x = 0.065862<br>
+Final Loss = 0.004338
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp2.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp4.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

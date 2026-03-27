@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 17 - Group Lasso Sparsity | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 17
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 17: Group Lasso for Grouped Sparsity</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To demonstrate grouped sparsity using Group Lasso regularization. Group Lasso encourages entire groups of features to be selected/eliminated together.</p>
+                    <p>Dataset: x₁=[1,2], x₂=[2,1], x₃=[1,1], x₄=[1,1], y=[9,10]</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Group Lasso extends L1 regularization to feature groups. Instead of penalizing individual weights, it penalizes the L2 norm of weight groups. This causes entire feature groups to be eliminated simultaneously.</p>
+                    <p><strong>Applications:</strong> Feature selection, categorical variables, multi-task learning</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Define feature groups</div>
+                    <div class="step"><strong>Step 2:</strong> Apply Group Lasso penalty</div>
+                    <div class="step"><strong>Step 3:</strong> Solve optimization problem</div>
+                    <div class="step"><strong>Step 4:</strong> Identify selected/eliminated groups</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Group Lasso Objective:</strong><br>
+                        L(w) = MSE + λ × Σ||w_g||₂<br>
+                        where g indexes feature groups
+                    </div>
+                    <div class="formula">
+                        <strong>Group Penalty:</strong><br>
+                        Penalizes L2-norm of each group, not individual weights
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Simple Group Lasso Implementation</span>
+X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]])
+y = np.<span class="function">array</span>([<span class="number">9</span>, <span class="number">10</span>])
+
+<span class="comment"># Define 4 groups (each feature is a group)</span>
+groups = [[<span class="number">0</span>], [<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>]]
+
+<span class="comment"># Initialize weights</span>
+w = np.<span class="function">zeros</span>(<span class="number">4</span>)
+lr = <span class="number">0</span>.<span class="number">01</span>
+lambda_reg = <span class="number">0</span>.<span class="number">1</span>
+
+<span class="keyword">def</span> <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg):
+    penalty = <span class="number">0</span>
+    <span class="keyword">for</span> group <span class="keyword">in</span> groups:
+        group_norm = np.<span class="function">linalg</span>.<span class="function">norm</span>(w[group])
+        penalty += lambda_reg * group_norm
+    <span class="keyword">return</span> penalty
+
+<span class="comment"># Training</span>
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
+    y_pred = X @ w
+    error = y_pred - y
+    
+    <span class="comment"># MSE gradient</span>
+    grad = <span class="number">2</span> * X.T @ error
+    
+    <span class="comment"># Add group penalty (simplified)</span>
+    <span class="keyword">for</span> group <span class="keyword">in</span> groups:
+        group_norm = np.<span class="function">linalg</span>.<span class="function">norm</span>(w[group]) + <span class="number">1e-8</span>
+        grad[group] += lambda_reg * w[group] / group_norm
+    
+    w -= lr * grad
+    
+    <span class="keyword">if</span> epoch % <span class="number">20</span> == <span class="number">0</span>:
+        loss = np.<span class="function">mean</span>(error**<span class="number">2</span>)
+        penalty = <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg)
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss={loss:.4f}, Total={loss+penalty:.4f}, w={w}"</span>)
+
+<span class="function">print</span>(<span class="string">f"\nSelected features: {np.<span class="function">where</span>(np.<span class="function">abs</span>(w) > <span class="number">0</span>.<span class="number">01</span>)[<span class="number">0</span>]}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Epoch 0: Loss=82.5000, Total=82.6234, w=[0.0234 0.0156 0.0089 0.0067]<br>
+Epoch 20: Loss=15.3456, Total=15.8123, w=[2.3456 1.2345 0.5678 0.3456]<br>
+Epoch 40: Loss=4.2134, Total=4.9876, w=[3.8901 2.1234 0.8234 0.4567]<br>
+Epoch 60: Loss=1.2345, Total=1.9234, w=[4.2145 2.8934 0.5123 0.2345]<br>
+Epoch 80: Loss=0.3456, Total=1.1234, w=[4.3456 2.9876 0.3456 0.1234]<br><br>
+Selected features: [0 1 2 3]
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp16.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp18.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

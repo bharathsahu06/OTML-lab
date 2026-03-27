@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 7 - Linear Programming with PuLP | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 7
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 7: Linear Programming with PuLP</h1>
+
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To implement linear programming both with PuLP library and without it (manual implementation) to understand how optimization solvers work internally.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>PuLP is a popular Python library for linear programming. This experiment shows:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>How to use PuLP for easy problem definition</li>
+                        <li>How to implement simple linear programming manually</li>
+                        <li>The differences between using a solver and building one</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>With PuLP:</strong> Define problem → Add variables → Add constraints → Solve</div>
+                    <div class="step"><strong>Without PuLP:</strong> Use direct calculation or check corner points</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program - With PuLP</div>
+                <div class="section-content">
+                    <p><strong>Install: pip install pulp</strong></p>
+                    <div class="code-block">
+<span class="keyword">from</span> pulp <span class="keyword">import</span> *
+
+<span class="comment"># Create problem</span>
+prob = <span class="function">LpProblem</span>(<span class="string">"Linear_Programming"</span>, LpMinimize)
+
+<span class="comment"># Variables</span>
+x = <span class="function">LpVariable</span>(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
+y = <span class="function">LpVariable</span>(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
+
+<span class="comment"># Objective: minimize 3x + 2y</span>
+prob += <span class="number">3</span>*x + <span class="number">2</span>*y, <span class="string">"objective"</span>
+
+<span class="comment"># Constraints: x + y >= 4</span>
+prob += x + y >= <span class="number">4</span>, <span class="string">"constraint1"</span>
+
+<span class="comment"># Solve</span>
+prob.<span class="function">solve</span>()
+
+<span class="comment"># Results</span>
+<span class="function">print</span>(<span class="string">f"Status: {LpStatus[prob.status]}"</span>)
+<span class="function">print</span>(<span class="string">f"x = {value(x):.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"y = {value(y):.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum = {value(prob.objective):.6f}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Manual Implementation (Without PuLP)</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="comment"># Manual Linear Programming - Check corner points</span>
+<span class="comment"># Minimize: 3x + 2y</span>
+<span class="comment"># Subject to: x + y >= 4, x >= 0, y >= 0</span>
+
+<span class="comment"># Corner points of feasible region</span>
+corners = [
+    (<span class="number">0</span>, <span class="number">4</span>),   <span class="comment"># (0, 4)</span>
+    (<span class="number">4</span>, <span class="number">0</span>)    <span class="comment"># (4, 0)</span>
+]
+
+<span class="comment"># Objective function</span>
+<span class="keyword">def</span> <span class="function">objective</span>(x, y):
+    <span class="keyword">return</span> <span class="number">3</span>*x + <span class="number">2</span>*y
+
+<span class="comment"># Evaluate at each corner</span>
+best_value = <span class="number">float</span>(<span class="string">'inf'</span>)
+best_point = <span class="keyword">None</span>
+
+<span class="keyword">for</span> point <span class="keyword">in</span> corners:
+    value = <span class="function">objective</span>(point[<span class="number">0</span>], point[<span class="number">1</span>])
+    <span class="function">print</span>(<span class="string">f"Point {point}: value = {value}"</span>)
+    
+    <span class="keyword">if</span> value < best_value:
+        best_value = value
+        best_point = point
+
+<span class="function">print</span>(<span class="string">f"\nOptimal point: {best_point}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal value: {best_value}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">PuLP Output:</div>
+Status: Optimal<br>
+x = 0.000000<br>
+y = 4.000000<br>
+Minimum = 8.000000<br><br>
+
+                    <div class="output-label">Manual Method Output:</div>
+Point (0, 4): value = 8<br>
+Point (4, 0): value = 12<br><br>
+Optimal point: (0, 4)<br>
+Optimal value: 8
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp6.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp8.html" class="btn">Next →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

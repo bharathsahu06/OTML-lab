@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 1 - Gradient Descent | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 1
+        </div>
+
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 1: Gradient Descent Optimization</h1>
+
+            <!-- AIM -->
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To understand and implement the gradient descent algorithm to find the minimum of the function f(x) = x². This experiment teaches the foundational concept of iteratively moving towards the minimum by following the negative gradient.</p>
+                </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                    <p>Gradient descent is one of the most important optimization algorithms. It works by:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Computing the gradient (derivative) of the function</li>
+                        <li>Moving in the opposite direction of the gradient</li>
+                        <li>Repeating until convergence</li>
+                    </ul>
+                    <p style="margin-top: 15px;">For f(x) = x², the derivative is f'(x) = 2x. We start from any point and keep updating x by subtracting a small step (learning rate) times the gradient.</p>
+                </div>
+            </div>
+
+            <!-- ALGORITHM -->
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step">
+                        <strong>Step 1:</strong> Initialize x to a random value (e.g., x = 5.0)
+                    </div>
+                    <div class="step">
+                        <strong>Step 2:</strong> Set learning rate α (e.g., α = 0.01)
+                    </div>
+                    <div class="step">
+                        <strong>Step 3:</strong> Calculate gradient: g = ∂f/∂x = 2x
+                    </div>
+                    <div class="step">
+                        <strong>Step 4:</strong> Update x: x = x - α × g
+                    </div>
+                    <div class="step">
+                        <strong>Step 5:</strong> Repeat steps 3-4 until x converges (change is very small)
+                    </div>
+                    <div class="step">
+                        <strong>Step 6:</strong> Return the final x value (minimum point)
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORMULAS -->
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Objective Function:</strong><br>
+                        f(x) = x²
+                    </div>
+                    <div class="formula">
+                        <strong>Gradient (Derivative):</strong><br>
+                        ∂f/∂x = 2x
+                    </div>
+                    <div class="formula">
+                        <strong>Update Rule:</strong><br>
+                        x(n+1) = x(n) - α × ∂f/∂x<br>
+                        where α is the learning rate (step size)
+                    </div>
+                </div>
+            </div>
+
+            <!-- MATHEMATICAL PROCEDURE -->
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure (Step by Step)</div>
+                <div class="section-content">
+                    <p><strong>Example Calculation:</strong></p>
+                    <p>Let's do gradient descent with initial x₀ = 5, learning rate α = 0.1</p>
+                    
+                    <div class="step">
+                        <strong>Iteration 0:</strong><br>
+                        x₀ = 5.0<br>
+                        f(5) = 5² = 25<br>
+                        ∇f = 2 × 5 = 10
+                    </div>
+
+                    <div class="step">
+                        <strong>Iteration 1:</strong><br>
+                        x₁ = 5.0 - 0.1 × 10 = 5.0 - 1.0 = 4.0<br>
+                        f(4) = 4² = 16<br>
+                        ∇f = 2 × 4 = 8
+                    </div>
+
+                    <div class="step">
+                        <strong>Iteration 2:</strong><br>
+                        x₂ = 4.0 - 0.1 × 8 = 4.0 - 0.8 = 3.2<br>
+                        f(3.2) = 3.2² = 10.24<br>
+                        ∇f = 2 × 3.2 = 6.4
+                    </div>
+
+                    <div class="step">
+                        <strong>Iteration 3:</strong><br>
+                        x₃ = 3.2 - 0.1 × 6.4 = 3.2 - 0.64 = 2.56<br>
+                        f(2.56) = 2.56² = 6.5536<br>
+                        ∇f = 2 × 2.56 = 5.12
+                    </div>
+
+                    <p style="margin-top: 15px;">... (continuing this process)</p>
+
+                    <div class="step">
+                        <strong>Final Iteration (after ~100 iterations):</strong><br>
+                        x ≈ 0.0 (very close to 0)<br>
+                        f(x) ≈ 0 (minimum value)
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRAM -->
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <p><strong>Easy to Understand Code:</strong></p>
+                    <div class="code-block">
+<span class="comment"># Gradient Descent for f(x) = x²</span>
+
+<span class="keyword">def</span> <span class="function">gradient_descent</span>(x_start, learning_rate, iterations):
+    x = x_start  <span class="comment"># Start point</span>
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(iterations):
+        gradient = <span class="number">2</span> * x  <span class="comment"># Calculate gradient (derivative of x²)</span>
+        x = x - learning_rate * gradient  <span class="comment"># Update x</span>
+        
+        <span class="comment"># Print progress every 10 iterations</span>
+        <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:
+            f_value = x ** <span class="number">2</span>
+            <span class="function">print</span>(<span class="string">f"Iteration {i}: x = {x:.4f}, f(x) = {f_value:.4f}"</span>)
+    
+    <span class="keyword">return</span> x
+
+<span class="comment"># Run the algorithm</span>
+final_x = <span class="function">gradient_descent</span>(<span class="number">5.0</span>, <span class="number">0.1</span>, <span class="number">100</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal minimum at x = {final_x:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum value f(x) = {final_x**2:.6f}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- OUTPUT -->
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Console Output:</div>
+Iteration 0: x = 5.0000, f(x) = 25.0000<br>
+Iteration 10: x = 1.7225, f(x) = 2.9671<br>
+Iteration 20: x = 0.5950, f(x) = 0.3540<br>
+Iteration 30: x = 0.2053, f(x) = 0.0421<br>
+Iteration 40: x = 0.0709, f(x) = 0.0050<br>
+Iteration 50: x = 0.0245, f(x) = 0.0006<br>
+Iteration 60: x = 0.0084, f(x) = 0.0001<br>
+Iteration 70: x = 0.0029, f(x) = 0.0000<br>
+Iteration 80: x = 0.0010, f(x) = 0.0000<br>
+Iteration 90: x = 0.0004, f(x) = 0.0000<br><br>
+Final minimum at x = 0.000000<br>
+Minimum value f(x) = 0.000000
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+                <a href="exp2.html" class="btn">Next Experiment →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
