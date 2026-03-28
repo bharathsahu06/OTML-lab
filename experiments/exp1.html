@@ -19,7 +19,7 @@
             <div class="section">
                 <div class="section-title">📌 Aim</div>
                 <div class="section-content">
-                    <p>To understand and implement the gradient descent algorithm to find the minimum of the function f(x) = x². This experiment teaches the foundational concept of iteratively moving towards the minimum by following the negative gradient.</p>
+                    <p>To understand and implement the gradient descent algorithm to find the minimum of the function f(x) = x². The method shows how repeated movement in the direction of the negative gradient leads toward the minimum of the objective function.</p>
                 </div>
             </div>
 
@@ -27,16 +27,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Gradient descent is one of the most important optimization algorithms. It works by:</p>
+                                        <p>Gradient descent is a first-order optimization method used to minimize a function by repeatedly moving in the direction of steepest decrease. At every iteration, the algorithm evaluates the gradient of the function at the current point and uses that information to decide how the variable should be updated.</p>
+                    <p style="margin-top: 10px;">For f(x) = x^2, the gradient is 2x, so the update rule keeps pulling x toward 0, which is the global minimum. This simple objective clearly shows how gradients, learning rate, and convergence are connected in iterative optimization.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Computing the gradient (derivative) of the function</li>
-                        <li>Moving in the opposite direction of the gradient</li>
-                        <li>Repeating until convergence</li>
+                        <li>The gradient tells how the function changes at the current point</li>
+                        <li>The learning rate controls how large each update step is</li>
+                        <li>Repeated updates gradually reduce the objective value until the algorithm converges</li>
                     </ul>
-                    <p style="margin-top: 15px;">For f(x) = x², the derivative is f'(x) = 2x. We start from any point and keep updating x by subtracting a small step (learning rate) times the gradient.</p>
                 </div>
             </div>
 

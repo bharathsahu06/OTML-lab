@@ -26,15 +26,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>The Conjugate Gradient (CG) method solves symmetric positive-definite systems. It:</p>
+                                        <p>The Conjugate Gradient method solves systems of linear equations by viewing the problem as the minimization of a quadratic function. For symmetric positive-definite matrices, it chooses search directions that are conjugate with respect to the matrix A rather than using ordinary steepest-descent directions.</p>
+                    <p style="margin-top: 10px;">This makes the method much more efficient than basic gradient updates and avoids explicitly computing the matrix inverse. The algorithm is especially important for large sparse systems, where direct methods may be too expensive in memory or time.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Uses conjugate directions (orthogonal in A-norm)</li>
-                        <li>Converges in at most n iterations for n×n system</li>
-                        <li>Ideal for large sparse matrices</li>
-                        <li>More efficient than Gaussian elimination</li>
+                        <li>The algorithm updates the residual, search direction, and solution estimate at each step</li>
+                        <li>It is well suited to large sparse problems in scientific computing</li>
+                        <li>CG combines optimization ideas with numerical linear algebra</li>
                     </ul>
                 </div>
             </div>

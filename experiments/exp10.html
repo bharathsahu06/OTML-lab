@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>The interior point method (also called barrier method) solves constrained problems by converting them to unconstrained problems with a barrier function. It works by adding a penalty term that prevents violations of constraints.</p>
+                                        <p>The interior point method, also called the barrier method, solves constrained optimization problems by approaching the optimum from inside the feasible region. Instead of stepping directly onto or beyond a constraint boundary, it modifies the objective with a barrier term that becomes very large near the boundary.</p>
+                    <p style="margin-top: 10px;">As the barrier parameter is gradually adjusted, the solution moves closer to the true constrained optimum while staying feasible throughout the iterations. This barrier-based approach gives a clear view of how modern constrained optimization methods enforce restrictions without leaving the allowed region.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The barrier function discourages constraint violation</li>
+                        <li>The search starts and remains inside the feasible set</li>
+                        <li>The method is widely used in constrained and large-scale optimization</li>
+                    </ul>
                 </div>
             </div>
 

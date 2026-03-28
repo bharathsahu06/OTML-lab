@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>This is a variant of Experiment 12 using a different linear relationship. The model should learn y = 2x + 3 instead of y = 2x + 1.</p>
+                                        <p>Mini-batch gradient descent can be applied to a different linear relationship while keeping the same optimization method. The model still learns by averaging gradient information over small batches, but it now has to fit a different target line.</p>
+                    <p style="margin-top: 10px;">This shows that the optimizer itself does not depend on one special dataset. Its convergence behavior depends on the learning rate, batch size, and the structure of the data, while the learned parameters should move toward the relationship y = 2x + 3.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Small batches provide a stable but efficient approximation of the full gradient</li>
+                        <li>The learned parameters should approach the new slope and intercept</li>
+                        <li>Changing the dataset changes the learned parameters even when the optimization method remains the same</li>
+                    </ul>
                 </div>
             </div>
 

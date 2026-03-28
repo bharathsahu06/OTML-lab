@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Same distributed approach as Experiment 13 but with smaller dataset. Demonstrates that distributed GD remains effective even with limited data points.</p>
+                                        <p>Distributed gradient descent can be illustrated on a smaller dataset while keeping the same collaborative update idea. Each worker processes its local data, produces a gradient contribution, and sends that information to a central update step.</p>
+                    <p style="margin-top: 10px;">Even with fewer samples, the method clearly shows how distributed optimization coordinates local computations to learn a shared model. It forms a conceptual bridge between simple gradient methods and large-scale machine learning systems.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Workers operate on separate partitions of the data</li>
+                        <li>The coordinator combines local gradients into a global update</li>
+                        <li>The same workflow scales from small demonstrations to real distributed training</li>
+                    </ul>
                 </div>
             </div>
 

@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>L1-regularized linear regression model: y = w₁×x₁ + w₂×x₂. The sub-gradient method is particularly useful for L1-regularization due to its non-differentiability at w=0.</p>
+                                        <p>L1-regularized regression can be applied to different datasets while still using the same sub-gradient optimization principle. The behavior of the method depends on the data as well as the regularization strength, so the learned coefficients change with the structure of the samples.</p>
+                    <p style="margin-top: 10px;">The algorithm balances two competing goals: fitting the training samples accurately and keeping the parameter vector simple by shrinking unnecessary weights. This shows that optimization is shaped both by the objective function and by the data being modeled.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The data term measures how well the model explains the observations</li>
+                        <li>The L1 penalty can reduce some coefficients to zero</li>
+                        <li>The final parameter values change when the dataset changes</li>
+                    </ul>
                 </div>
             </div>
 

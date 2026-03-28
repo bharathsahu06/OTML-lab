@@ -25,15 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Distributed GD divides data among multiple processors/machines. Each processor:</p>
+                                        <p>Distributed gradient descent applies the same optimization idea across multiple workers that each see only part of the data. Every worker computes a local gradient on its own partition, and those gradients are then aggregated to update a shared global model.</p>
+                    <p style="margin-top: 10px;">This demonstrates data-parallel learning, where computation is spread across machines or processes so larger problems can be handled efficiently. It also highlights an important systems idea: optimization quality depends not only on mathematics, but also on communication and synchronization between workers.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Computes local gradients on its data subset</li>
-                        <li>Sends gradients to a central server</li>
-                        <li>Server aggregates and updates parameters</li>
-                        <li>Weights distributed back to workers</li>
+                        <li>Local computation reduces the work done by any single worker</li>
+                        <li>Aggregation combines information from all data partitions into one update</li>
+                        <li>The method shows how scalable learning systems coordinate local and global computation</li>
                     </ul>
                 </div>
             </div>

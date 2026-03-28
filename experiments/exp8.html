@@ -25,11 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>L1-regularization adds a penalty term ||w||₁ to the loss function, promoting sparse solutions. The sub-gradient method is used for non-smooth optimization problems like L1-regularized loss.</p>
-                    <p style="margin-top: 10px;">Model: y = w₁×x₁ + w₂×x₂</p>
+                                        <p>L1-regularized linear regression includes a penalty based on the absolute values of the weights. That penalty discourages unnecessary coefficients and encourages sparse solutions, which is why L1 regularization is closely related to feature selection.</p>
+                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This connects a machine learning idea, regularization, with an optimization idea, handling non-smooth objective functions.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The regression term tries to fit the model to the observed data</li>
+                        <li>The L1 penalty pushes small coefficients toward zero</li>
+                        <li>The sub-gradient method makes optimization possible even when the loss is not smooth everywhere</li>
+                    </ul>
                 </div>
             </div>
 

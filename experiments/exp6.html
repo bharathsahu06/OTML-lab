@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>This is a quadratically constrained quadratic program (QCQP) where both the objective and constraints are quadratic or linear. This combines features of the previous experiments.</p>
+                                        <p>A convex quadratic optimization problem with linear constraints has a smooth curved objective surface together with a feasible region defined by inequalities. The quadratic terms control the shape of the objective, while the constraints determine where the solution is allowed to lie.</p>
+                    <p style="margin-top: 10px;">The goal is to find the feasible point that gives the smallest objective value. This shows how optimization is not only about minimizing a function, but also about respecting restrictions that come from the problem setting.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Quadratic terms produce a smooth objective with a clear notion of curvature</li>
+                        <li>Linear constraints define the boundary of feasible solutions</li>
+                        <li>CVXPY solves the numerical problem once the mathematical model is specified</li>
+                    </ul>
                 </div>
             </div>
 

@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Newton's method is a root-finding algorithm that uses both first and second derivatives (Hessian). It's faster than gradient descent because it has quadratic convergence. Each iteration updates using the Newton step formula which considers the curvature of the function.</p>
+                                        <p>Newton's method is a second-order optimization technique that uses both the slope and the curvature of a function to choose the next update. Instead of only following the direction of decrease like gradient descent, it also uses second-derivative information to scale the step more intelligently.</p>
+                    <p style="margin-top: 10px;">Because it accounts for curvature, Newton's method often converges much faster when the function behaves smoothly near the optimum. At the same time, it requires more computation because second derivatives must be evaluated, and its behavior depends on how well the local curvature reflects the shape of the objective function.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The first derivative identifies where the function is increasing or decreasing</li>
+                        <li>The second derivative describes how sharply the function is bending</li>
+                        <li>The update rule can reach an optimum in very few iterations when the curvature is well behaved</li>
+                    </ul>
                 </div>
             </div>
 

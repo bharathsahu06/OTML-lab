@@ -30,14 +30,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p><strong>Regularization Types:</strong></p>
+                                        <p>Three major regularization strategies used in linear regression are L1, L2, and Elastic Net. Regularization changes the objective function by adding a penalty on the weights so the model does not become unnecessarily complex.</p>
+                    <p style="margin-top: 10px;">These penalties help reduce overfitting and improve generalization, especially when data is noisy or features are correlated. Comparing the three approaches shows that different penalties produce different coefficient patterns and different modeling behavior.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li><strong>L1 (Lasso):</strong> Promotes sparsity (some weights become exactly 0)</li>
-                        <li><strong>L2 (Ridge):</strong> Shrinks weights smoothly (no exact zeros)</li>
-                        <li><strong>Elastic Net:</strong> Combination of L1 and L2 benefits</li>
+                        <li>L1 regularization encourages sparsity and can remove unimportant features</li>
+                        <li>L2 regularization shrinks weights smoothly and often improves numerical stability</li>
+                        <li>Elastic Net combines both effects, which is useful when features are correlated</li>
                     </ul>
                 </div>
             </div>

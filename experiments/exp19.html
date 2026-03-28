@@ -25,15 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Quasi-Newton methods (BFGS) are alternatives to Newton's method:</p>
+                                        <p>BFGS is a Quasi-Newton method that builds an approximation to the inverse Hessian using gradient information from previous steps. This gives it much of the speed advantage of Newton's method without requiring explicit second derivatives.</p>
+                    <p style="margin-top: 10px;">As the iterations proceed, the approximation improves and the search direction becomes more informed by the local curvature of the objective function. That is why BFGS is a popular general-purpose optimizer for smooth unconstrained problems and is widely used in practical optimization libraries.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Approximate Hessian (second derivatives) cheaply</li>
-                        <li>Converge faster than gradient descent</li>
-                        <li>Don't compute full Hessian like Newton's method</li>
-                        <li>Widely used in production: implemented in scipy.optimize</li>
+                        <li>Gradient differences reveal how the curvature is changing</li>
+                        <li>The inverse-Hessian approximation improves the search direction over time</li>
+                        <li>BFGS is often faster and more stable than basic gradient descent for smooth problems</li>
                     </ul>
                 </div>
             </div>

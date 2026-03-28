@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Extension of the interior point method to two dimensions. The barrier function prevents the solution from leaving the feasible region while pushing toward the optimum at the constraint boundary.</p>
+                                        <p>The interior point idea extends naturally to a two-variable problem, where the role of constraints becomes easier to visualize. The feasible region is now an area in the plane, and the objective must be minimized without leaving that allowed region.</p>
+                    <p style="margin-top: 10px;">The barrier term guides the search through the interior of the feasible set and gradually steers the solution toward the boundary point that gives the minimum objective value. It shows how multidimensional constrained optimization combines geometry with iterative numerical computation.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The objective determines which direction improves the solution</li>
+                        <li>The constraints shape the feasible region in two dimensions</li>
+                        <li>The barrier term prevents the iterates from leaving the admissible region</li>
+                    </ul>
                 </div>
             </div>
 

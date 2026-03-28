@@ -25,15 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>Stochastic Gradient Descent is a variant of gradient descent that:</p>
+                                        <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent in which the model is updated using one sample at a time instead of the full dataset. This makes each update very cheap and allows the algorithm to react quickly to data.</p>
+                    <p style="margin-top: 10px;">Because every step is based on limited information, the optimization path becomes noisier than standard gradient descent. That noise is often acceptable in practice because SGD scales well to large datasets and still moves toward the minimum on average over many updates.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Updates parameters using one data point at a time</li>
-                        <li>Has faster convergence in terms of iterations</li>
-                        <li>Has more noisy updates but less computation per step</li>
-                        <li>Is useful for large datasets and online learning</li>
+                        <li>Updates happen more frequently than in batch gradient descent</li>
+                        <li>Each step is computationally cheap but less stable</li>
+                        <li>The method is especially useful for large-scale and online learning problems</li>
                     </ul>
                 </div>
             </div>

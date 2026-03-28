@@ -25,10 +25,13 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                    <p class="long-description-note">This experiment is documented in full lab-record style so your report looks complete, methodical, and easy to present during viva. The focus is not only on getting the final numerical answer, but on understanding how each update step changes the objective value and why the algorithm is moving toward an optimum.</p>
-                    <p class="long-description-note">When you perform this in Jupyter Notebook, execute in sequence: define the objective/model, initialize variables, run iterations, monitor intermediate values, and verify convergence. Mention what happens when parameters like learning rate, initialization, batch size, or regularization strength are changed. This shows practical understanding beyond memorizing code.</p>
-                    <p class="long-description-note">Record observations clearly: convergence behavior, stability, final optimum, and any constraints satisfaction check. Compare your notebook output with the expected output provided in this page. These notes make the experiment look like genuinely performed hands-on work rather than copied theory.</p>
-                    <p>CVXPY is a Python library for convex optimization. It allows defining optimization problems in a user-friendly way and automatically solves them using appropriate algorithms. This problem minimizes a quadratic objective function while satisfying linear inequality constraints.</p>
+                                        <p>Quadratic programming through CVXPY combines a quadratic objective function with a set of constraints written in mathematical form. CVXPY provides a clear modeling interface for convex optimization problems and passes the model to a suitable numerical solver.</p>
+                    <p style="margin-top: 10px;">Since the problem is convex, the minimum found by the solver is the global minimum within the feasible region. This gives a clear view of how optimization models are built, how constraints shape the solution space, and how solver libraries handle the numerical computation.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The objective function measures what must be minimized</li>
+                        <li>The constraints restrict the search to feasible solutions</li>
+                        <li>CVXPY separates mathematical modeling from the solver implementation</li>
+                    </ul>
                 </div>
             </div>
 
