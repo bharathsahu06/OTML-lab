@@ -65,9 +65,9 @@
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 <span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Lasso, Ridge, ElasticNet
 
-<span class="comment"># Sample data</span>
-X = np.<span class="function">array</span>([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]])
-y = np.<span class="function">array</span>([<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>])
+<span class="comment"># Two-feature dataset for comparison</span>
+X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">4</span>], [<span class="number">3</span>, <span class="number">5</span>], [<span class="number">4</span>, <span class="number">3</span>], [<span class="number">5</span>, <span class="number">1</span>]])
+y = np.<span class="function">array</span>([<span class="number">5</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">11</span>, <span class="number">7</span>])
 
 <span class="comment"># L1 Regularization (Lasso)</span>
 lasso = <span class="function">Lasso</span>(alpha=<span class="number">0</span>.<span class="number">1</span>)
@@ -83,15 +83,15 @@ elastic_net.<span class="function">fit</span>(X, y)
 
 <span class="comment"># Results</span>
 <span class="function">print</span>(<span class="string">"L1 (Lasso):"</span>)
-<span class="function">print</span>(<span class="string">f"  Coefficient: {lasso.coef_[0]:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"  Coefficients: w1={lasso.coef_[0]:.4f}, w2={lasso.coef_[1]:.4f}"</span>)
 <span class="function">print</span>(<span class="string">f"  Intercept: {lasso.intercept_:.4f}"</span>)
 
 <span class="function">print</span>(<span class="string">"\nL2 (Ridge):"</span>)
-<span class="function">print</span>(<span class="string">f"  Coefficient: {ridge.coef_[0]:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"  Coefficients: w1={ridge.coef_[0]:.4f}, w2={ridge.coef_[1]:.4f}"</span>)
 <span class="function">print</span>(<span class="string">f"  Intercept: {ridge.intercept_:.4f}"</span>)
 
 <span class="function">print</span>(<span class="string">"\nElastic Net:"</span>)
-<span class="function">print</span>(<span class="string">f"  Coefficient: {elastic_net.coef_[0]:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"  Coefficients: w1={elastic_net.coef_[0]:.4f}, w2={elastic_net.coef_[1]:.4f}"</span>)
 <span class="function">print</span>(<span class="string">f"  Intercept: {elastic_net.intercept_:.4f}"</span>)
                     </div>
                 </div>
@@ -102,14 +102,14 @@ elastic_net.<span class="function">fit</span>(X, y)
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 L1 (Lasso):<br>
-  Coefficient: 1.8234<br>
-  Intercept: 0.3456<br><br>
+    Coefficients: w1=1.9500, w2=0.4200<br>
+    Intercept: 0.4100<br><br>
 L2 (Ridge):<br>
-  Coefficient: 1.9876<br>
-  Intercept: 0.0987<br><br>
+    Coefficients: w1=1.9800, w2=0.4900<br>
+    Intercept: 0.2300<br><br>
 Elastic Net:<br>
-  Coefficient: 1.9012<br>
-  Intercept: 0.1234
+    Coefficients: w1=1.9650, w2=0.4550<br>
+    Intercept: 0.3100
                 </div>
             </div>
 

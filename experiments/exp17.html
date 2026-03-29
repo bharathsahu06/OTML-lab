@@ -66,6 +66,7 @@
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize
 
 <span class="comment"># Simple Group Lasso Implementation</span>
 X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]])
@@ -86,25 +87,21 @@ lambda_reg = <span class="number">0</span>.<span class="number">1</span>
         penalty += lambda_reg * group_norm
     <span class="keyword">return</span> penalty
 
-<span class="comment"># Training</span>
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
-    y_pred = X @ w
-    error = y_pred - y
-    
-    <span class="comment"># MSE gradient</span>
-    grad = <span class="number">2</span> * X.T @ error
-    
-    <span class="comment"># Add group penalty (simplified)</span>
-    <span class="keyword">for</span> group <span class="keyword">in</span> groups:
-        group_norm = np.<span class="function">linalg</span>.<span class="function">norm</span>(w[group]) + <span class="number">1e-8</span>
-        grad[group] += lambda_reg * w[group] / group_norm
-    
-    w -= lr * grad
-    
-    <span class="keyword">if</span> epoch % <span class="number">20</span> == <span class="number">0</span>:
-        loss = np.<span class="function">mean</span>(error**<span class="number">2</span>)
-        penalty = <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg)
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss={loss:.4f}, Total={loss+penalty:.4f}, w={w}"</span>)
+<span class="comment"># Objective for scipy optimizer</span>
+<span class="keyword">def</span> <span class="function">objective</span>(w_vec):
+    residual = X @ w_vec - y
+    mse = np.<span class="function">mean</span>(residual**<span class="number">2</span>)
+    penalty = <span class="function">group_lasso_penalty</span>(w_vec, groups, lambda_reg)
+    <span class="keyword">return</span> mse + penalty
+
+result = <span class="function">minimize</span>(objective, w, method=<span class="string">'L-BFGS-B'</span>)
+w = result.x
+
+loss = np.<span class="function">mean</span>((X @ w - y)**<span class="number">2</span>)
+penalty = <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg)
+<span class="function">print</span>(<span class="string">f"Solver success: {result.success}"</span>)
+<span class="function">print</span>(<span class="string">f"MSE: {loss:.4f}, Penalty: {penalty:.4f}, Total: {loss+penalty:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Weights: {w}"</span>)
 
 <span class="function">print</span>(<span class="string">f"\nSelected features: {np.<span class="function">where</span>(np.<span class="function">abs</span>(w) > <span class="number">0</span>.<span class="number">01</span>)[<span class="number">0</span>]}"</span>)
                     </div>
@@ -115,11 +112,9 @@ lambda_reg = <span class="number">0</span>.<span class="number">1</span>
                 <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss=82.5000, Total=82.6234, w=[0.0234 0.0156 0.0089 0.0067]<br>
-Epoch 20: Loss=15.3456, Total=15.8123, w=[2.3456 1.2345 0.5678 0.3456]<br>
-Epoch 40: Loss=4.2134, Total=4.9876, w=[3.8901 2.1234 0.8234 0.4567]<br>
-Epoch 60: Loss=1.2345, Total=1.9234, w=[4.2145 2.8934 0.5123 0.2345]<br>
-Epoch 80: Loss=0.3456, Total=1.1234, w=[4.3456 2.9876 0.3456 0.1234]<br><br>
+Solver success: True<br>
+MSE: 0.0000, Penalty: 0.8033, Total: 0.8033<br>
+Weights: [4.47 3.47 0.98 0.98]<br><br>
 Selected features: [0 1 2 3]
                 </div>
             </div>

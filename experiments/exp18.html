@@ -117,7 +117,9 @@ b = np.<span class="function">array</span>([<span class="number">1</span>, <span
 
 <span class="comment"># Solve</span>
 solution = <span class="function">conjugate_gradient</span>(A, b)
+direct = np.<span class="function">linalg</span>.<span class="function">solve</span>(A, b)
 <span class="function">print</span>(<span class="string">f"\nSolution x = {solution}"</span>)
+<span class="function">print</span>(<span class="string">f"Direct solve = {direct}"</span>)
 <span class="function">print</span>(<span class="string">f"Verification: Ax = {A @ solution}"</span>)
 <span class="function">print</span>(<span class="string">f"Target b = {b}"</span>)
                     </div>
@@ -128,11 +130,12 @@ solution = <span class="function">conjugate_gradient</span>(A, b)
                 <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
-Iter 0: x = [0.21052632 0.52631579], residual = 0.789473<br>
-Iter 1: x = [0.11764706 0.70588235], residual = 0.000000<br>
+Iter 0: x = [0.25 0.5 ], residual = 0.559017<br>
+Iter 1: x = [0.09090909 0.63636364], residual = 0.000000<br>
 Converged at iteration 1<br><br>
-Solution x = [0.11764706 0.70588235]<br>
-Verification: Ax = [0.99999999 2.00000000]<br>
+Solution x = [0.09090909 0.63636364]<br>
+Direct solve = [0.09090909 0.63636364]<br>
+Verification: Ax = [1. 2.]<br>
 Target b = [1 2]
                 </div>
             </div>

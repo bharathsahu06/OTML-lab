@@ -84,8 +84,9 @@
             <div class="section">
                 <div class="section-title">&#128202; Mathematical Procedure</div>
                 <div class="section-content">
-                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
-                    <p><strong>Example:</strong> start gradient descent with x = 5.0 and learning rate &alpha; = 0.1.</p>
+                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16].</p>
+                    <p><strong>Data verification:</strong> (1,1), (2,4), (3,9), (4,16) all satisfy y = x<sup>2</sup>.</p>
+                    <p><strong>Run gradient descent:</strong> start with x = 5.0 and learning rate &alpha; = 0.1.</p>
 
                     <div class="step">
                         <strong>Iteration 0:</strong><br>
@@ -115,6 +116,7 @@
                         x approaches 0<br>
                         f(x) approaches 0
                     </div>
+                    <p style="margin-top: 10px;"><strong>Convergence check:</strong> update factor is (1 - 2&alpha;) = 0.8, so each step contracts x toward 0.</p>
                 </div>
             </div>
 

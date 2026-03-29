@@ -48,6 +48,16 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Model derivation:</strong> dataset x=[1,2,3,4], y=[3,5,7,9] follows y = 2x + 1.</p>
+                    <div class="step"><strong>Two-worker split:</strong> W1={(1,3),(2,5)}, W2={(3,7),(4,9)}.</div>
+                    <div class="step"><strong>Local-to-global updates:</strong> each worker computes (dw,db), server averages and applies update.</div>
+                    <div class="step"><strong>Convergence goal:</strong> w -&gt; 2 and b -&gt; 1 with decreasing MSE.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
@@ -76,7 +86,7 @@ lr = <span class="number">0</span>.<span class="number">01</span>
     <span class="keyword">for</span> X_Worker, y_worker <span class="keyword">in</span> workers:
         y_pred = w*X_Worker + b
         dw = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>((y_worker - y_pred) * X_Worker)
-        db = -<span class="number">2</span>/len(X_worker) * np.<span class="function">sum</span>(y_worker - y_pred)
+        db = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>(y_worker - y_pred)
         grads_w.<span class="function">append</span>(dw)
         grads_b.<span class="function">append</span>(db)
     
