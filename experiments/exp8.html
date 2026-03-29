@@ -25,10 +25,10 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>L1-regularized linear regression includes a penalty based on the absolute values of the weights. That penalty discourages unnecessary coefficients and encourages sparse solutions, which is why L1 regularization is closely related to feature selection.</p>
-                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This connects a machine learning idea, regularization, with an optimization idea, handling non-smooth objective functions.</p>
+                                                            <p>L1-regularized linear regression adds a penalty based on the absolute values of the coefficients. This discourages unnecessary parameters and encourages sparse solutions, which is why the method is closely related to feature selection.</p>
+                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This makes the method a strong example of how optimization techniques are adapted for non-smooth machine learning objectives.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The regression term tries to fit the model to the observed data</li>
+                        <li>The regression term tries to fit the model to observed data</li>
                         <li>The L1 penalty pushes small coefficients toward zero</li>
                         <li>The sub-gradient method makes optimization possible even when the loss is not smooth everywhere</li>
                     </ul>

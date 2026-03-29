@@ -25,11 +25,11 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the entire dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
-                    <p style="margin-top: 10px;">This gives a better balance between computational efficiency and stability. The updates are less noisy than SGD, but still much faster and more practical than full batch updates, especially for machine learning models trained on larger datasets.</p>
+                                                            <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the full dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
+                    <p style="margin-top: 10px;">This gives a useful balance between computational efficiency and stability. The method is widely used in machine learning because batch size can be tuned to control update noise, memory use, speed, and convergence behavior during training.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Each batch provides a partial but useful estimate of the true gradient</li>
-                        <li>Repeated epochs gradually refine the slope and bias of the regression line</li>
+                        <li>Each mini-batch provides a partial but useful estimate of the full gradient</li>
+                        <li>Repeated epochs gradually improve the model parameters</li>
                         <li>Batch size affects computational cost, stability, and convergence behavior</li>
                     </ul>
                 </div>

@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                    <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent in which updates are made using limited information at each step instead of using the full objective in one exact update. For this experiment, we apply that idea to f(x) = x^2 and use the sample values x = [1, 2, 3, 4] with y = [1, 4, 9, 16] as reference values from the function.</p>
-                    <p style="margin-top: 10px;">Because each update is based on a noisy estimate, the optimization path is less smooth than standard gradient descent. Even so, the overall trend still moves x toward 0, and the given data confirms that y = x^2 for the sampled inputs.</p>
+                                        <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent that updates the parameters using only a small portion of the available information at each step. This makes each update inexpensive and allows the method to react quickly while optimization is in progress.</p>
+                    <p style="margin-top: 10px;">Because the updates are stochastic, the optimization path is noisier than standard gradient descent, but the method scales well and is central to modern machine learning. Its behavior depends on the learning rate, data ordering, and the tradeoff between speed and stability.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Updates happen more frequently than in batch gradient descent</li>
-                        <li>Each step is cheap to compute but less stable</li>
-                        <li>Noise in the gradient causes small fluctuations around the minimum</li>
+                        <li>Updates happen more frequently than in full batch gradient descent</li>
+                        <li>Each step is cheap to compute but less stable than a full gradient update</li>
+                        <li>Noisy updates can still move the method toward a good solution over time</li>
                     </ul>
                 </div>
             </div>

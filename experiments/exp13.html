@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>Distributed gradient descent applies the same optimization idea across multiple workers that each see only part of the data. Every worker computes a local gradient on its own partition, and those gradients are then aggregated to update a shared global model.</p>
-                    <p style="margin-top: 10px;">This demonstrates data-parallel learning, where computation is spread across machines or processes so larger problems can be handled efficiently. It also highlights an important systems idea: optimization quality depends not only on mathematics, but also on communication and synchronization between workers.</p>
+                                                            <p>Distributed gradient descent applies optimization across multiple workers that each process only part of the data. Every worker computes a local gradient, and those local updates are then aggregated into a shared global update.</p>
+                    <p style="margin-top: 10px;">This method shows how optimization and computing systems interact in large-scale learning. Performance depends not only on the mathematics of the update rule but also on communication, synchronization, and how the data is partitioned across workers.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>Local computation reduces the work done by any single worker</li>
-                        <li>Aggregation combines information from all data partitions into one update</li>
-                        <li>The method shows how scalable learning systems coordinate local and global computation</li>
+                        <li>Aggregation combines information from all partitions into one update</li>
+                        <li>The method illustrates how scalable learning systems coordinate local and global computation</li>
                     </ul>
                 </div>
             </div>

@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>Quadratic programming through CVXPY combines a quadratic objective function with a set of constraints written in mathematical form. CVXPY provides a clear modeling interface for convex optimization problems and passes the model to a suitable numerical solver.</p>
-                    <p style="margin-top: 10px;">Since the problem is convex, the minimum found by the solver is the global minimum within the feasible region. This gives a clear view of how optimization models are built, how constraints shape the solution space, and how solver libraries handle the numerical computation.</p>
+                                                            <p>Quadratic programming optimizes a quadratic objective subject to constraints, and CVXPY provides a clear way to express such models in code. The user defines variables, an objective, and constraints, and the solver handles the numerical optimization behind the scenes.</p>
+                    <p style="margin-top: 10px;">These problems are important in convex optimization because they often have well-structured solution behavior and strong theoretical guarantees. Working with CVXPY also helps separate mathematical modeling from the internal details of the optimization solver.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>The objective function measures what must be minimized</li>
-                        <li>The constraints restrict the search to feasible solutions</li>
-                        <li>CVXPY separates mathematical modeling from the solver implementation</li>
+                        <li>The constraints define the feasible region of allowed solutions</li>
+                        <li>CVXPY converts the mathematical model into a solvable optimization program</li>
                     </ul>
                 </div>
             </div>

@@ -25,11 +25,11 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>The interior point method, also called the barrier method, solves constrained optimization problems by approaching the optimum from inside the feasible region. Instead of stepping directly onto or beyond a constraint boundary, it modifies the objective with a barrier term that becomes very large near the boundary.</p>
-                    <p style="margin-top: 10px;">As the barrier parameter is gradually adjusted, the solution moves closer to the true constrained optimum while staying feasible throughout the iterations. This barrier-based approach gives a clear view of how modern constrained optimization methods enforce restrictions without leaving the allowed region.</p>
+                                                            <p>Interior point methods solve constrained optimization problems by approaching the optimum from inside the feasible region and using barrier terms to discourage moves toward the constraint boundaries. Instead of stepping outside the allowed region, the search remains feasible throughout the iterations.</p>
+                    <p style="margin-top: 10px;">As the barrier parameter changes, the iterates move closer to the true constrained optimum while preserving the structure of the problem. This makes interior point methods important tools in modern constrained and large-scale optimization.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>The barrier function discourages constraint violation</li>
-                        <li>The search starts and remains inside the feasible set</li>
+                        <li>The search starts and stays inside the feasible set</li>
                         <li>The method is widely used in constrained and large-scale optimization</li>
                     </ul>
                 </div>

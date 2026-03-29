@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>Mini-batch gradient descent can be applied to a different linear relationship while keeping the same optimization method. The model still learns by averaging gradient information over small batches, but it now has to fit a different target line.</p>
-                    <p style="margin-top: 10px;">This shows that the optimizer itself does not depend on one special dataset. Its convergence behavior depends on the learning rate, batch size, and the structure of the data, while the learned parameters should move toward the relationship y = 2x + 3.</p>
+                                                            <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the full dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
+                    <p style="margin-top: 10px;">This gives a useful balance between computational efficiency and stability. The method is widely used in machine learning because batch size can be tuned to control update noise, memory use, speed, and convergence behavior during training.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Small batches provide a stable but efficient approximation of the full gradient</li>
-                        <li>The learned parameters should approach the new slope and intercept</li>
-                        <li>Changing the dataset changes the learned parameters even when the optimization method remains the same</li>
+                        <li>Each mini-batch provides a partial but useful estimate of the full gradient</li>
+                        <li>Repeated epochs gradually improve the model parameters</li>
+                        <li>Batch size affects computational cost, stability, and convergence behavior</li>
                     </ul>
                 </div>
             </div>

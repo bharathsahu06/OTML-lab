@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>Distributed gradient descent can be illustrated on a smaller dataset while keeping the same collaborative update idea. Each worker processes its local data, produces a gradient contribution, and sends that information to a central update step.</p>
-                    <p style="margin-top: 10px;">Even with fewer samples, the method clearly shows how distributed optimization coordinates local computations to learn a shared model. It forms a conceptual bridge between simple gradient methods and large-scale machine learning systems.</p>
+                                                            <p>Distributed gradient descent applies optimization across multiple workers that each process only part of the data. Every worker computes a local gradient, and those local updates are then aggregated into a shared global update.</p>
+                    <p style="margin-top: 10px;">This method shows how optimization and computing systems interact in large-scale learning. Performance depends not only on the mathematics of the update rule but also on communication, synchronization, and how the data is partitioned across workers.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Workers operate on separate partitions of the data</li>
-                        <li>The coordinator combines local gradients into a global update</li>
-                        <li>The same workflow scales from small demonstrations to real distributed training</li>
+                        <li>Local computation reduces the work done by any single worker</li>
+                        <li>Aggregation combines information from all partitions into one update</li>
+                        <li>The method illustrates how scalable learning systems coordinate local and global computation</li>
                     </ul>
                 </div>
             </div>

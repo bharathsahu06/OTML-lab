@@ -26,12 +26,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>The Conjugate Gradient method solves systems of linear equations by viewing the problem as the minimization of a quadratic function. For symmetric positive-definite matrices, it chooses search directions that are conjugate with respect to the matrix A rather than using ordinary steepest-descent directions.</p>
-                    <p style="margin-top: 10px;">This makes the method much more efficient than basic gradient updates and avoids explicitly computing the matrix inverse. The algorithm is especially important for large sparse systems, where direct methods may be too expensive in memory or time.</p>
+                                                            <p>Conjugate Gradient (CG) is an iterative method for solving symmetric positive definite linear systems and can also be understood from an optimization viewpoint. Instead of moving along ordinary steepest-descent directions, it builds conjugate directions that reuse curvature information more efficiently.</p>
+                    <p style="margin-top: 10px;">This usually gives faster progress than basic gradient descent, especially on large sparse problems where direct matrix factorizations can be expensive. CG is therefore a central method in numerical linear algebra, scientific computing, and optimization.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The algorithm updates the residual, search direction, and solution estimate at each step</li>
-                        <li>It is well suited to large sparse problems in scientific computing</li>
-                        <li>CG combines optimization ideas with numerical linear algebra</li>
+                        <li>The residual measures how far the current estimate is from the exact solution</li>
+                        <li>Conjugate directions avoid undoing progress made in earlier steps</li>
+                        <li>The method is well suited to large sparse systems in scientific computing</li>
                     </ul>
                 </div>
             </div>

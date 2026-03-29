@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                    <p>Gradient descent is a first-order optimization method used to minimize a function by repeatedly moving in the direction of steepest decrease. In this experiment, we apply it to the simple function f(x) = x^2 and use the sample values x = [1, 2, 3, 4] with y = [1, 4, 9, 16] to confirm the function values.</p>
-                    <p style="margin-top: 10px;">Since y = x^2 for the given samples, the pairs (1,1), (2,4), (3,9), and (4,16) match the objective function exactly. The gradient is 2x, so each update step pushes the optimization variable closer to 0, which is the global minimum.</p>
+                                        <p>Gradient descent is a first-order optimization method that minimizes an objective by repeatedly moving in the direction of the negative gradient. At each step, the derivative tells how the variable should be changed to reduce the objective value.</p>
+                    <p style="margin-top: 10px;">The method is simple, widely used, and forms the foundation of many optimization and machine learning algorithms. Its behavior depends strongly on the learning rate, which controls how fast the updates move and how stable the convergence becomes.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The gradient tells how the function changes at the current point</li>
-                        <li>The learning rate controls how large each update step is</li>
-                        <li>Repeated updates gradually reduce the objective value until the algorithm converges</li>
+                        <li>The gradient indicates the direction of steepest increase, so the negative gradient gives a descent direction</li>
+                        <li>The learning rate controls the size of each update step</li>
+                        <li>Repeated updates gradually reduce the objective until the method converges</li>
                     </ul>
                 </div>
             </div>

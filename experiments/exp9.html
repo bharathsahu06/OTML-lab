@@ -25,12 +25,12 @@
             <div class="section">
                 <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                        <p>L1-regularized regression can be applied to different datasets while still using the same sub-gradient optimization principle. The behavior of the method depends on the data as well as the regularization strength, so the learned coefficients change with the structure of the samples.</p>
-                    <p style="margin-top: 10px;">The algorithm balances two competing goals: fitting the training samples accurately and keeping the parameter vector simple by shrinking unnecessary weights. This shows that optimization is shaped both by the objective function and by the data being modeled.</p>
+                                                            <p>L1-regularized linear regression adds a penalty based on the absolute values of the coefficients. This discourages unnecessary parameters and encourages sparse solutions, which is why the method is closely related to feature selection.</p>
+                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This makes the method a strong example of how optimization techniques are adapted for non-smooth machine learning objectives.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The data term measures how well the model explains the observations</li>
-                        <li>The L1 penalty can reduce some coefficients to zero</li>
-                        <li>The final parameter values change when the dataset changes</li>
+                        <li>The regression term tries to fit the model to observed data</li>
+                        <li>The L1 penalty pushes small coefficients toward zero</li>
+                        <li>The sub-gradient method makes optimization possible even when the loss is not smooth everywhere</li>
                     </ul>
                 </div>
             </div>
