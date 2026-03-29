@@ -3,144 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 19 - Quasi-Newton Method | OTML Lab</title>
+    <title>Experiment 19 • Quasi-Newton Method</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 19
+            <a href="../index.html">Home</a> / CO5 / Experiment 19
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 19: Quasi-Newton Method (BFGS)</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Quasi-Newton Method (BFGS)</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To minimize a multivariate function f(x₁,x₂) = x₁² + 2x₂² using the Quasi-Newton method (BFGS algorithm). BFGS approximates the Hessian without computing second derivatives explicitly.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>BFGS is a Quasi-Newton method that builds an approximation to the inverse Hessian using gradient information from previous steps. This gives it much of the speed advantage of Newton's method without requiring explicit second derivatives.</p>
-                    <p style="margin-top: 10px;">As the iterations proceed, the approximation improves and the search direction becomes more informed by the local curvature of the objective function. That is why BFGS is a popular general-purpose optimizer for smooth unconstrained problems and is widely used in practical optimization libraries.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Gradient differences reveal how the curvature is changing</li>
-                        <li>The inverse-Hessian approximation improves the search direction over time</li>
-                        <li>BFGS is often faster and more stable than basic gradient descent for smooth problems</li>
-                    </ul>
+                    <p>To implement the BFGS (Broyden–Fletcher–Goldfarb–Shanno) algorithm for non-linear optimization which builds an approximate Hessian inverse from gradient observations.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize position and Hessian approximation H</div>
-                    <div class="step"><strong>Step 2:</strong> Compute gradient ∇f</div>
-                    <div class="step"><strong>Step 3:</strong> Compute Newton-like direction: p = -H ∇f</div>
-                    <div class="step"><strong>Step 4:</strong> Line search to find step size</div>
-                    <div class="step"><strong>Step 5:</strong> Update position</div>
-                    <div class="step"><strong>Step 6:</strong> Update Hessian approximation (BFGS formula)</div>
-                    <div class="step"><strong>Step 7:</strong> Repeat until convergence</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Objective Function:</strong><br>
-                        f(x₁, x₂) = x₁² + 2x₂²
-                    </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        ∇f = [2x₁, 4x₂]^T
-                    </div>
-                    <div class="formula">
-                        <strong>BFGS Update (Hessian approximation):</strong><br>
-                        H_{k+1} = H_k - (H_k s s^T H_k)/(s^T H_k s) + (y y^T)/(y^T s)<br>
-                        where s = x_{k+1} - x_k, y = ∇f(x_{k+1}) - ∇f(x_k)
+                    <div class="step">
+                        <strong>Part A: Rank-2 Update</strong>
+                        <p>Approximate the Hessian inverse \( B_k \) iteratively to avoid the computational cost of direct second-derivative calculation.</p>
+                        <div class="formula">\( s_k = x_{k+1} - x_k \); \( y_k = \nabla f_{k+1} - \nabla f_k \)</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <div class="step"><strong>Objective:</strong> minimize f(x₁,x₂)=x₁²+2x₂².</div>
-                    <div class="step"><strong>Stationary condition:</strong> ∇f=[2x₁,4x₂]ᵀ=0 gives x₁=0, x₂=0.</div>
-                    <div class="step"><strong>Optimality check:</strong> Hessian [[2,0],[0,4]] is positive definite, so (0,0) is the unique global minimum.</div>
-                    <div class="step"><strong>BFGS process:</strong> start from x₀=[5,5], use gradient-based quasi-Newton updates to approach (0,0).</div>
-                    <div class="step"><strong>Expected result:</strong> final point near [0,0] with very small function value and gradient norm.</div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <p><strong>Easy approach using scipy:</strong></p>
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-<span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize
-
-<span class="comment"># Objective function</span>
-<span class="keyword">def</span> <span class="function">objective</span>(x):
-    <span class="keyword">return</span> x[<span class="number">0</span>]**<span class="number">2</span> + <span class="number">2</span>*x[<span class="number">1</span>]**<span class="number">2</span>
-
-<span class="comment"># Gradient</span>
-<span class="keyword">def</span> <span class="function">gradient</span>(x):
-    <span class="keyword">return</span> np.<span class="function">array</span>([<span class="number">2</span>*x[<span class="number">0</span>], <span class="number">4</span>*x[<span class="number">1</span>]])
-
-<span class="comment"># Initial point</span>
-x0 = np.<span class="function">array</span>([<span class="number">5</span>.<span class="number">0</span>, <span class="number">5</span>.<span class="number">0</span>])
-
-history = []
-<span class="keyword">def</span> <span class="function">callback</span>(xk):
-    history.<span class="function">append</span>(xk.<span class="function">copy</span>())
-
-<span class="comment"># Optimize using BFGS</span>
-result = <span class="function">minimize</span>(
-    objective,
-    x0,
-    method=<span class="string">'BFGS'</span>,
-    jac=gradient,
-    callback=callback,
-    options={<span class="string">'disp'</span>: <span class="keyword">True</span>}
-)
-
-<span class="function">print</span>(<span class="string">f"\nOptimal point: {result.x}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal value: {result.fun:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Iterations: {result.nit}"</span>)
-<span class="function">print</span>(<span class="string">f"Gradient norm: {np.linalg.norm(gradient(result.x)):.2e}"</span>)
-<span class="function">print</span>(<span class="string">f"Success: {result.success}"</span>)
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output (BFGS with scipy):</div>
-Optimization terminated successfully.<br>
-     Current function value: 0.000000<br>
-        Iterations: 9<br>
-        Function evaluations: 10<br><br>
-    Optimal point: [1.11e-08 3.52e-09]<br>
-    Optimal value: 0.000000<br>
-    Iterations: 9<br>
-    Gradient norm: 2.04e-08<br>
-Success: True
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="exp18.html" class="btn btn-secondary">← Previous</a>
-                <a href="../index.html" class="btn">Back to Home</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp18.html" class="btn btn-secondary">⬅️ Experiment 18</a>
+                <a href="../index.html" class="btn btn-primary">🏠 Back to Overview</a>
+            </nav>
+        </article>
     </div>
 </body>
 </html>

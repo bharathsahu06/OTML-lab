@@ -3,147 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 7 - Linear Programming with PuLP | OTML Lab</title>
+    <title>Experiment 07 • PuLP Modeling</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 7
+            <a href="../index.html">Home</a> / CO2 / Experiment 07
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 7: Linear Programming with PuLP</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Linear Programming with PuLP</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To implement linear programming both with PuLP library and without it (manual implementation) to understand how optimization solvers work internally.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Linear programming can be understood from two complementary perspectives: modeling the problem with a solver library such as PuLP and understanding the logic behind a manual implementation. PuLP offers a high-level way to define decision variables, objectives, and constraints without dealing directly with solver internals.</p>
-                    <p style="margin-top: 10px;">At the same time, a manual approach helps reveal what the solver is conceptually doing when it evaluates feasibility and searches for an optimum. Comparing both views builds stronger intuition about how optimization software connects theory with computation.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>PuLP is useful for formulating practical optimization models quickly</li>
-                        <li>A manual method helps explain the internal logic of the solution process</li>
-                        <li>Together they connect mathematical modeling, implementation, and interpretation</li>
-                    </ul>
+                    <p>To implement a linear programming solver using the PuLP library, which provides a high-level Pythonic interface to industry-standard solvers like CBC and GLPK.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>With PuLP:</strong> Define problem → Add variables → Add constraints → Solve</div>
-                    <div class="step"><strong>Without PuLP:</strong> Use direct calculation or check corner points</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
                 <div class="section-content">
-                    <div class="step"><strong>Problem:</strong> minimize z = 3x + 2y subject to x + y ≥ 4, x ≥ 0, y ≥ 0.</div>
-                    <div class="step"><strong>Manual method:</strong> evaluate objective at feasible corner points (0,4) and (4,0).</div>
-                    <div class="step"><strong>Corner values:</strong> z(0,4)=8 and z(4,0)=12, so minimum is at (0,4).</div>
-                    <div class="step"><strong>PuLP method:</strong> formulate the same objective/constraints and solve with CBC solver.</div>
-                    <div class="step"><strong>Verification:</strong> both manual and PuLP methods return x=0, y=4, z*=8.</div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program - With PuLP</div>
-                <div class="section-content">
-                    <p><strong>Install: pip install pulp</strong></p>
                     <div class="code-block">
 <span class="keyword">from</span> pulp <span class="keyword">import</span> *
 
-<span class="comment"># Create problem</span>
-prob = <span class="function">LpProblem</span>(<span class="string">"Linear_Programming"</span>, LpMinimize)
+<span class="comment"># Initialize the problem</span>
+prob = LpProblem(<span class="string">"Minimization_Problem"</span>, LpMinimize)
 
-<span class="comment"># Variables</span>
-x = <span class="function">LpVariable</span>(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
-y = <span class="function">LpVariable</span>(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
-
-<span class="comment"># Objective: minimize 3x + 2y</span>
-prob += <span class="number">3</span>*x + <span class="number">2</span>*y, <span class="string">"objective"</span>
-
-<span class="comment"># Constraints: x + y >= 4</span>
-prob += x + y >= <span class="number">4</span>, <span class="string">"constraint1"</span>
-
-<span class="comment"># Solve</span>
-prob.<span class="function">solve</span>()
-
-<span class="comment"># Results</span>
-<span class="function">print</span>(<span class="string">f"Status: {LpStatus[prob.status]}"</span>)
-<span class="function">print</span>(<span class="string">f"x = {value(x):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"y = {value(y):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum = {value(prob.objective):.6f}"</span>)
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Manual Implementation (Without PuLP)</div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="comment"># Manual Linear Programming - Check corner points</span>
-<span class="comment"># Minimize: 3x + 2y</span>
-<span class="comment"># Subject to: x + y >= 4, x >= 0, y >= 0</span>
-
-<span class="comment"># Corner points of feasible region</span>
-corners = [
-    (<span class="number">0</span>, <span class="number">4</span>),   <span class="comment"># (0, 4)</span>
-    (<span class="number">4</span>, <span class="number">0</span>)    <span class="comment"># (4, 0)</span>
-]
+<span class="comment"># Define decision variables</span>
+x = LpVariable(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
+y = LpVariable(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
 
 <span class="comment"># Objective function</span>
-<span class="keyword">def</span> <span class="function">objective</span>(x, y):
-    <span class="keyword">return</span> <span class="number">3</span>*x + <span class="number">2</span>*y
+prob += <span class="number">3</span>*x + <span class="number">2</span>*y
 
-<span class="comment"># Evaluate at each corner</span>
-best_value = <span class="number">float</span>(<span class="string">'inf'</span>)
-best_point = <span class="keyword">None</span>
+<span class="comment"># Constraints</span>
+prob += x + y >= <span class="number">4</span>
 
-<span class="keyword">for</span> point <span class="keyword">in</span> corners:
-    value = <span class="function">objective</span>(point[<span class="number">0</span>], point[<span class="number">1</span>])
-    <span class="function">print</span>(<span class="string">f"Point {point}: value = {value}"</span>)
-    
-    <span class="keyword">if</span> value < best_value:
-        best_value = value
-        best_point = point
+<span class="comment"># Solve</span>
+status = prob.solve(PULP_CBC_CMD(msg=<span class="number">0</span>))
 
-<span class="function">print</span>(<span class="string">f"\nOptimal point: {best_point}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal value: {best_value}"</span>)
+<span class="function">print</span>(<span class="string">f"Status: {LpStatus[status]}"</span>)
+<span class="function">print</span>(<span class="string">f"x = {value(x):.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"y = {value(y):.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Objective = {value(prob.objective):.6f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
+                </div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output (PuLP):</div>
+                    <div class="output-label">Terminal Console</div>
 Status: Optimal<br>
 x = 0.000000<br>
 y = 4.000000<br>
-Minimum = 8.000000<br><br>
-
-                    <div class="output-label">Notebook Output (Manual Method):</div>
-Point (0, 4): value = 8<br>
-Point (4, 0): value = 12<br><br>
-Optimal point: (0, 4)<br>
-Optimal value: 8
+Objective = 8.000000
                 </div>
-            </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="exp6.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp8.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp6.html" class="btn btn-secondary">⬅️ Experiment 06</a>
+                <a href="exp8.html" class="btn btn-primary">Proceed to Experiment 08 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>

@@ -3,159 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 10 - Interior Point Method | OTML Lab</title>
+    <title>Experiment 10 • Interior Point Method</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 10
+            <a href="../index.html">Home</a> / CO3 / Experiment 10
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 10: Interior Point Method</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Interior Point Method (IPM)</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To solve a non-linear constrained optimization problem using the interior point method: minimize f(x) = x² subject to x ≥ 1. The interior point method is a powerful technique for constrained optimization.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Interior point methods solve constrained optimization problems by approaching the optimum from inside the feasible region and using barrier terms to discourage moves toward the constraint boundaries. Instead of stepping outside the allowed region, the search remains feasible throughout the iterations.</p>
-                    <p style="margin-top: 10px;">As the barrier parameter changes, the iterates move closer to the true constrained optimum while preserving the structure of the problem. This makes interior point methods important tools in modern constrained and large-scale optimization.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The barrier function discourages constraint violation</li>
-                        <li>The search starts and stays inside the feasible set</li>
-                        <li>The method is widely used in constrained and large-scale optimization</li>
-                    </ul>
+                    <p>To implement the Interior Point Method for constrained optimization using the logarithmic barrier function approach.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Start with feasible point inside constraint region (x=2)</div>
-                    <div class="step"><strong>Step 2:</strong> Add barrier function: f(x) + (1/t)×log(x-1)</div>
-                    <div class="step"><strong>Step 3:</strong> Minimize modified objective</div>
-                    <div class="step"><strong>Step 4:</strong> Increase t (reduce barrier weight)</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
-                <div class="section-content">
-                    <div class="formula">
-                        <strong>Original Problem:</strong><br>
-                        minimize f(x) = x²<br>
-                        subject to x ≥ 1
-                    </div>
-                    <div class="formula">
-                        <strong>Barrier Problem:</strong><br>
-                        minimize f(x) - (1/t)×log(x-1)<br>
-                        where t → ∞ (penalty weight decreases)
-                    </div>
-                    <div class="formula">
-                        <strong>Barrier Gradient:</strong><br>
-                        ∇f_barrier = 2x - (1/t)×1/(x-1)
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
                 <div class="section-content">
                     <div class="step">
-                        <strong>Original constrained problem:</strong><br>
-                        minimize x² subject to x ≥ 1
+                        <strong>Part A: Constrained Problem</strong>
+                        <p>Minimize \( f(x) = x^2 \) subject to \( x \ge 1 \).</p>
                     </div>
+
                     <div class="step">
-                        <strong>Feasible-region logic:</strong><br>
-                        unconstrained minimum of x² is at x = 0, but 0 is infeasible (violates x ≥ 1)
-                    </div>
-                    <div class="step">
-                        <strong>Boundary optimum:</strong><br>
-                        smallest feasible x is x* = 1, so f(x*) = 1
-                    </div>
-                    <div class="step">
-                        <strong>Interior-point path:</strong><br>
-                        barrier iterates stay at x &gt; 1 and approach 1 as t increases
+                        <strong>Part B: Logarithmic Barrier</strong>
+                        <p>Approximate the indicator function with a smooth barrier:</p>
+                        <div class="formula">\( \text{minimize } \phi(x) = x^2 - \mu \ln(x - 1) \)</div>
+                        <p>As \( \mu \to 0 \), the solution to the barrier problem approaches the constrained minimum.</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
+                </div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Interior Point Method</span>
-<span class="comment"># Minimize: f(x) = x²</span>
-<span class="comment"># Subject to: x >= 1</span>
+<span class="keyword">def</span> <span class="function">barrier_objective</span>(x, mu):
+    <span class="keyword">return</span> x**<span class="number">2</span> - mu * np.log(x - <span class="number">1</span>)
 
-<span class="keyword">def</span> <span class="function">objective</span>(x):
-    <span class="keyword">return</span> x**<span class="number">2</span>
-
-<span class="keyword">def</span> <span class="function">barrier</span>(x, t):
-    <span class="comment"># Barrier function: -log(x-1)</span>
-    <span class="keyword">if</span> x <= <span class="number">1</span>:
-        <span class="keyword">return</span> <span class="number">float</span>(<span class="string">'inf'</span>)
-    <span class="keyword">return</span> -(<span class="number">1</span>/t) * np.<span class="function">log</span>(x - <span class="number">1</span>)
-
-<span class="keyword">def</span> <span class="function">barrier_gradient</span>(x, t):
-    <span class="keyword">return</span> <span class="number">2</span>*x - (<span class="number">1</span>/t) * <span class="number">1</span>/(x - <span class="number">1</span>)
-
-<span class="comment"># Parameters</span>
-x = <span class="number">2</span>.<span class="number">0</span>  <span class="comment"># Start inside constraint region</span>
-t = <span class="number">1</span>.<span class="number">0</span>   <span class="comment"># Initial barrier parameter</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
-
-<span class="comment"># Iterations</span>
-<span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
-    <span class="comment"># Minimize with current barrier</span>
-    <span class="keyword">for</span> inner <span class="keyword">in</span> <span class="function">range</span>(<span class="number">50</span>):
-        grad = <span class="function">barrier_gradient</span>(x, t)
-        x = x - lr * grad
+<span class="keyword">def</span> <span class="function">solve_ipm</span>():
+    x = <span class="number">2.0</span>  <span class="comment"># Start in the feasible interior</span>
+    mu = <span class="number">1.0</span>
+    alpha = <span class="number">0.05</span>
+    
+    <span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+        <span class="comment"># Update mu</span>
+        mu *= <span class="number">0.5</span>
         
-        <span class="keyword">if</span> x <= <span class="number">1</span>.<span class="number">01</span>:
-            x = <span class="number">1</span>.<span class="number">01</span>
-    
-    obj_val = <span class="function">objective</span>(x)
-    <span class="function">print</span>(<span class="string">f"Iteration {iteration}: x = {x:.6f}, f(x) = {obj_val:.6f}, t = {t}"</span>)
-    
-    t *= <span class="number">10</span>  <span class="comment"># Increase t</span>
+        <span class="comment"># Optimize interior function</span>
+        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
+            grad = <span class="number">2</span>*x - mu / (x - <span class="number">1</span>)
+            x = x - alpha * grad
+            
+        <span class="function">print</span>(<span class="string">f"Mu = {mu:.3f}, x = {x:.6f}"</span>)
 
-<span class="function">print</span>(<span class="string">f"\nOptimal x ≈ {x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal f(x) ≈ {objective(x):.6f}"</span>)
+solve_ipm()
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Iteration 0: x = 1.789234, f(x) = 3.201567, t = 1.0<br>
-Iteration 1: x = 1.047723, f(x) = 1.097723, t = 10.0<br>
-Iteration 2: x = 1.010000, f(x) = 1.020100, t = 100.0<br>
-Iteration 3: x = 1.010000, f(x) = 1.020100, t = 1000.0<br>
-Iteration 4: x = 1.010000, f(x) = 1.020100, t = 10000.0<br>
-Iteration 5: x = 1.010000, f(x) = 1.020100, t = 100000.0<br><br>
-Optimal x ≈ 1.010000<br>
-Optimal f(x) ≈ 1.020100
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="exp9.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp11.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp9.html" class="btn btn-secondary">⬅️ Experiment 09</a>
+                <a href="exp11.html" class="btn btn-primary">Proceed to Experiment 11 ➔</a>
+            </nav>
+        </article>
     </div>
 </body>
 </html>

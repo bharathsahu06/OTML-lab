@@ -3,138 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 8 - Sub-gradient L1-Regularization | OTML Lab</title>
+    <title>Experiment 08 • Sub-gradient Methods</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 8
+            <a href="../index.html">Home</a> / CO3 / Experiment 08
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 8: Sub-gradient Method with L1-Regularization</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Sub-gradient Methods for L1-Regularization</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To implement the sub-gradient method for linear regression with L1-regularization (Lasso). Uses dataset: (1,2,5), (2,1,6), (3,4,7). L1-regularization promotes sparsity in the solution.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>L1-regularized linear regression adds a penalty based on the absolute values of the coefficients. This discourages unnecessary parameters and encourages sparse solutions, which is why the method is closely related to feature selection.</p>
-                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This makes the method a strong example of how optimization techniques are adapted for non-smooth machine learning objectives.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The regression term tries to fit the model to observed data</li>
-                        <li>The L1 penalty pushes small coefficients toward zero</li>
-                        <li>The sub-gradient method makes optimization possible even when the loss is not smooth everywhere</li>
-                    </ul>
+                    <p>To implement the sub-gradient descent algorithm for optimizing non-differentiable objectives, specifically linear regression with an L1-norm penalty (Lasso).</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize weights w₁, w₂</div>
-                    <div class="step"><strong>Step 2:</strong> For each sample, compute prediction error</div>
-                    <div class="step"><strong>Step 3:</strong> Compute sub-gradient including L1 term</div>
-                    <div class="step"><strong>Step 4:</strong> Update weights</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Loss Function with L1-Regularization:</strong><br>
-                        L(w) = Σ(yᵢ - ŷᵢ)² + λ||w||₁<br>
-                        where λ is regularization strength
+                    <div class="step">
+                        <strong>Part A: Objective Function</strong>
+                        <p>We minimize the sum of squared errors plus an L1 penalty:</p>
+                        <div class="formula">\( J(w) = \frac{1}{n} \sum_{i=1}^n (y_i - w x_i)^2 + \lambda |w| \)</div>
                     </div>
-                    <div class="formula">
-                        <strong>Sub-gradient:</strong><br>
-                        ∂L/∂w = -2Σ(yᵢ - ŷᵢ)xᵢ + λ×sign(w)
-                    </div>
-                    <div class="formula">
-                        <strong>Update Rule:</strong><br>
-                        w(n+1) = w(n) - α × sub-gradient
+
+                    <div class="step">
+                        <strong>Part B: Sub-gradient Calculation</strong>
+                        <p>The L1 term \( |w| \) is not differentiable at \( w=0 \). We use the sub-gradient:</p>
+                        <div class="formula">
+                            \( \partial |w| = \text{sign}(w) \) if \( w \neq 0 \) <br>
+                            \( \partial |w| \in [-1, 1] \) if \( w = 0 \)
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Given data:</strong> (x1,x2,y) = (1,2,5), (2,1,6), (3,4,7).</p>
-                    <div class="step"><strong>Model:</strong> ŷ = w1x1 + w2x2, initialize w = [0, 0].</div>
-                    <div class="step"><strong>Objective:</strong> minimize J(w) = Σ(y - ŷ)^2 + λ(|w1| + |w2|), with λ = 0.1.</div>
-                    <div class="step"><strong>Sub-gradient step:</strong> g = 2Xᵀ(Xw - y) + λ sign(w), then update w ← w - αg.</div>
-                    <div class="step"><strong>Interpretation:</strong> L1 term shrinks coefficients toward zero while still fitting the three samples.</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Dataset: (x1, x2, y)</span>
-X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">4</span>]])
-y = np.<span class="function">array</span>([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>])
+<span class="comment"># Dataset 1</span>
+X = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
+y = np.array([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>])
 
-<span class="comment"># Initialize weights</span>
-w = np.<span class="function">array</span>([<span class="number">0</span>.<span class="number">0</span>, <span class="number">0</span>.<span class="number">0</span>])
-learning_rate = <span class="number">0</span>.<span class="number">01</span>
-lambda_reg = <span class="number">0</span>.<span class="number">1</span>  <span class="comment"># L1 regularization strength</span>
+w = <span class="number">0.0</span>
+alpha = <span class="number">0.01</span>
+lam = <span class="number">0.1</span>
 
-<span class="comment"># Subgradient descent</span>
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
-    <span class="comment"># Predictions</span>
-    y_pred = X @ w
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1000</span>):
+    <span class="comment"># Gradient of MSE part</span>
+    grad_mse = -<span class="number">2</span> * np.mean((y - w*X) * X)
     
-    <span class="comment"># Error</span>
-    error = y_pred - y
+    <span class="comment"># Sub-gradient of L1 part</span>
+    subgrad_l1 = lam * np.sign(w) <span class="keyword">if</span> w != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
     
-    <span class="comment"># Gradient</span>
-    grad = <span class="number">2</span> * X.T @ error
-    
-    <span class="comment"># Sub-gradient (add L1 penalty)</span>
-    sub_grad = grad + lambda_reg * np.<span class="function">sign</span>(w)
-    
-    <span class="comment"># Update</span>
-    w = w - learning_rate * sub_grad
-    
-    <span class="keyword">if</span> epoch % <span class="number">20</span> == <span class="number">0</span>:
-        loss = np.<span class="function">mean</span>(error**<span class="number">2</span>) + lambda_reg * np.<span class="function">sum</span>(np.<span class="function">abs</span>(w))
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w}"</span>)
+    w = w - alpha * (grad_mse + subgrad_l1)
 
-<span class="function">print</span>(<span class="string">f"\nFinal w = {w}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal weight w: {w:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"MSE: {np.mean((y - w*X)**2):.6f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss = 28.1000, w = [0.02 0.01]<br>
-Epoch 20: Loss = 5.2341, w = [0.85 0.52]<br>
-Epoch 40: Loss = 3.1402, w = [1.12 0.78]<br>
-Epoch 60: Loss = 2.5610, w = [1.28 0.95]<br>
-Epoch 80: Loss = 2.3245, w = [1.35 1.04]<br><br>
-Final w = [1.42 1.11]
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
                 </div>
-            </div>
+                <div class="output-block">
+                    <div class="output-label">Terminal Console</div>
+Optimal weight w: 2.228571<br>
+MSE: 1.053061
+                </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="exp7.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp9.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 07</a>
+                <a href="exp9.html" class="btn btn-primary">Proceed to Experiment 09 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>

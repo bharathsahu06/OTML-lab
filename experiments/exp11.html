@@ -3,144 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 11 - Interior Point Method 2D | OTML Lab</title>
+    <title>Experiment 11 • IPM in 2D Space</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 11
+            <a href="../index.html">Home</a> / CO3 / Experiment 11
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 11: Interior Point Method (2D)</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Interior Point Method in 2D Space</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To solve a 2D non-linear constrained optimization problem using the interior point method: minimize f(x,y) = x + y subject to x ≥ 1, y ≥ 1.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Interior point methods extend naturally to multivariable constrained optimization, where the feasible set becomes a region rather than a single interval. The method still uses barrier terms to guide the search through the interior of the admissible set instead of crossing the boundaries.</p>
-                    <p style="margin-top: 10px;">In higher dimensions, these methods show how numerical optimization combines geometry, feasibility, and iterative improvement in one framework. They are widely used because they remain stable on constrained problems while steadily moving toward an optimum.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The objective determines which direction improves the solution</li>
-                        <li>The constraints shape the feasible region in multiple dimensions</li>
-                        <li>The barrier term prevents the iterates from leaving the admissible region</li>
-                    </ul>
+                    <p>To extend the logarithmic barrier Interior Point Method to a multi-variable linear objective function with multiple inequality constraints.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize (x,y) inside feasible region</div>
-                    <div class="step"><strong>Step 2:</strong> Create barrier objective with penalty for constraint violation</div>
-                    <div class="step"><strong>Step 3:</strong> Perform gradient descent on barrier function</div>
-                    <div class="step"><strong>Step 4:</strong> Gradually reduce barrier weight (increase t)</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat until optimal solution found</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Problem:</strong><br>
-                        minimize f(x,y) = x + y<br>
-                        subject to x ≥ 1, y ≥ 1
+                    <div class="step">
+                        <strong>Part A: Linear Objective</strong>
+                        <p>Minimize \( f(x, y) = x + y \) subject to \( x \ge 1, y \ge 1 \).</p>
                     </div>
-                    <div class="formula">
-                        <strong>Barrier Formulation:</strong><br>
-                        minimize (x + y) - (1/t)[log(x-1) + log(y-1)]
-                    </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        ∂f/∂x = 1 - (1/t)×1/(x-1)<br>
-                        ∂f/∂y = 1 - (1/t)×1/(y-1)
+
+                    <div class="step">
+                        <strong>Part B: Barrier Formulation</strong>
+                        <div class="formula">\( \phi(x, y) = x + y - \mu \ln(x - 1) - \mu \ln(y - 1) \)</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <div class="step"><strong>Original problem:</strong> minimize f(x,y) = x + y with constraints x ≥ 1, y ≥ 1.</div>
-                    <div class="step"><strong>Feasibility:</strong> the smallest feasible values are x = 1 and y = 1.</div>
-                    <div class="step"><strong>Optimal point:</strong> (x*, y*) = (1, 1), and f(x*,y*) = 1 + 1 = 2.</div>
-                    <div class="step"><strong>Interior-point interpretation:</strong> barrier updates keep x &gt; 1, y &gt; 1 and converge toward (1,1) as t increases.</div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="comment"># Interior Point Method 2D</span>
-<span class="comment"># min: f(x,y) = x + y</span>
-<span class="comment"># s.t: x >= 1, y >= 1</span>
-
-<span class="keyword">def</span> <span class="function">objective</span>(x, y):
-    <span class="keyword">return</span> x + y
-
-<span class="keyword">def</span> <span class="function">barrier_gradient</span>(x, y, t):
-    <span class="comment"># Gradient of barrier function</span>
-    gx = <span class="number">1</span> - (<span class="number">1</span>/t) / (x - <span class="number">1</span>)
-    gy = <span class="number">1</span> - (<span class="number">1</span>/t) / (y - <span class="number">1</span>)
-    <span class="keyword">return</span> np.<span class="function">array</span>([gx, gy])
-
-<span class="comment"># Initialize</span>
-point = np.<span class="function">array</span>([<span class="number">3</span>.<span class="number">0</span>, <span class="number">3</span>.<span class="number">0</span>])
-t = <span class="number">0</span>.<span class="number">1</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
-
-<span class="comment"># Barrier method iterations</span>
-<span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="function">range</span>(<span class="number">8</span>):
-    <span class="comment"># Inner minimization</span>
-    <span class="keyword">for</span> inner <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
-        grad = <span class="function">barrier_gradient</span>(point[<span class="number">0</span>], point[<span class="number">1</span>], t)
-        point = point - lr * grad
-        
-        <span class="comment"># Ensure feasibility</span>
-        point = np.<span class="function">maximum</span>(point, <span class="number">1</span>.<span class="number">01</span>)
-    
-    obj = <span class="function">objective</span>(point[<span class="number">0</span>], point[<span class="number">1</span>])
-    <span class="function">print</span>(<span class="string">f"Iter {iteration}: x={point[0]:.4f}, y={point[1]:.4f}, f={obj:.4f}, t={t}"</span>)
-    
-    t *= <span class="number">10</span>
-
-<span class="function">print</span>(<span class="string">f"\nOptimal: x={point[0]:.4f}, y={point[1]:.4f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal value = {objective(point[0], point[1]):.4f}"</span>)
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Iter 0: x=5.1854, y=5.1854, f=10.3709, t=0.1<br>
-Iter 1: x=4.4483, y=4.4483, f=8.8966, t=1.0<br>
-Iter 2: x=3.4823, y=3.4823, f=6.9645, t=10.0<br>
-Iter 3: x=2.4874, y=2.4874, f=4.9748, t=100.0<br>
-Iter 4: x=1.4885, y=1.4885, f=2.9770, t=1000.0<br>
-Iter 5: x=1.0100, y=1.0100, f=2.0200, t=10000.0<br><br>
-Optimal: x=1.0100, y=1.0100<br>
-Optimal value = 2.0200
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="exp10.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp12.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp10.html" class="btn btn-secondary">⬅️ Experiment 10</a>
+                <a href="exp12.html" class="btn btn-primary">Proceed to Experiment 12 ➔</a>
+            </nav>
+        </article>
     </div>
 </body>
 </html>

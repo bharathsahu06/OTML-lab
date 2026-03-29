@@ -3,146 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 12 - Mini-batch Gradient Descent | OTML Lab</title>
+    <title>Experiment 12 • Mini-batch Gradient Descent</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 12
+            <a href="../index.html">Home</a> / CO4 / Experiment 12
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 12: Mini-batch Gradient Descent</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Mini-batch Gradient Descent (MBGD)</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To minimize the loss function of linear regression using mini-batch gradient descent for dataset x=[1,2,3,4], y=[3,5,7,9]. Mini-batch GD is a compromise between batch and stochastic methods.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the full dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
-                    <p style="margin-top: 10px;">This gives a useful balance between computational efficiency and stability. The method is widely used in machine learning because batch size can be tuned to control update noise, memory use, speed, and convergence behavior during training.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Each mini-batch provides a partial but useful estimate of the full gradient</li>
-                        <li>Repeated epochs gradually improve the model parameters</li>
-                        <li>Batch size affects computational cost, stability, and convergence behavior</li>
-                    </ul>
+                    <p>To implement Mini-batch Gradient Descent, balancing the stability of batch methods with the computational efficiency of stochastic updates.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize weights randomly</div>
-                    <div class="step"><strong>Step 2:</strong> Divide data into mini-batches</div>
-                    <div class="step"><strong>Step 3:</strong> For each batch, compute gradient</div>
-                    <div class="step"><strong>Step 4:</strong> Update weights</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat for multiple epochs</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Linear Model:</strong><br>
-                        ŷ = wx + b
+                    <div class="step">
+                        <strong>Part A: Batch Formulation</strong>
+                        <p>Objective: Fit \( y = mx + c \). Divide the full dataset into small clusters (batches).</p>
+                        <p>Dataset: \( x=[1, 2, 3, 4], y=[3, 5, 7, 9] \)</p>
+                        <p>Batch size = 2 (e.g., Batch 1: \((1,3), (2,5)\); Batch 2: \((3,7), (4,9)\))</p>
                     </div>
-                    <div class="formula">
-                        <strong>Loss (MSE):</strong><br>
-                        L = (1/m) × Σ(yᵢ - ŷᵢ)²
-                    </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        ∂L/∂w = -(2/m) × Σ(yᵢ - ŷᵢ) × xᵢ
+
+                    <div class="step">
+                        <strong>Part B: Batch-wise Update Rule</strong>
+                        <div class="formula">\( \nabla L = \frac{1}{B} \sum_{i \in \text{Batch}} \text{grad}(i) \)</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Model derivation from data:</strong> x=[1,2,3,4], y=[3,5,7,9] follows y = 2x + 1.</p>
-                    <div class="step"><strong>Check:</strong> 2(1)+1=3, 2(2)+1=5, 2(3)+1=7, 2(4)+1=9.</div>
-                    <div class="step"><strong>Target parameters:</strong> w*=2, b*=1.</div>
-                    <div class="step"><strong>Optimization:</strong> mini-batch updates (batch size 2) gradually recover w and b from random initialization.</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Mini-batch Gradient Descent for Linear Regression</span>
-X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]).<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">1</span>)
-y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
+<span class="comment"># Full dataset</span>
+X = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
+y = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
 
-<span class="comment"># Initialize</span>
-w = <span class="number">0</span>.<span class="number">0</span>
-b = <span class="number">0</span>.<span class="number">0</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
+m, c = <span class="number">0.0</span>, <span class="number">0.0</span>
+alpha = <span class="number">0.01</span>
 batch_size = <span class="number">2</span>
-epochs = <span class="number">50</span>
 
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
-    <span class="comment"># Shuffle data</span>
-    indices = np.<span class="function">random</span>.<span class="function">permutation</span>(<span class="function">len</span>(X))
-    X_shuffled = X[indices]
-    y_shuffled = y[indices]
-    
-    <span class="comment"># Mini-batches</span>
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(X), batch_size):
-        X_batch = X_shuffled[i:i+batch_size]
-        y_batch = y_shuffled[i:i+batch_size]
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, len(X), batch_size):
+        xb = X[i:i+batch_size]
+        yb = y[i:i+batch_size]
         
-        <span class="comment"># Predictions</span>
-        y_pred = w*X_batch + b
+        <span class="comment"># Batch Gradient</span>
+        error = yb - (m * xb + c)
+        m_grad = -<span class="number">2</span> * np.mean(error * xb)
+        c_grad = -<span class="number">2</span> * np.mean(error)
         
-        <span class="comment"># Gradients</span>
-        dw = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>((y_batch - y_pred) * X_batch)
-        db = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>(y_batch - y_pred)
-        
-        <span class="comment"># Update</span>
-        w -= lr * dw
-        b -= lr * db
-    
-    <span class="comment"># Loss</span>
-    y_pred_all = w*X + b
-    loss = np.<span class="function">mean</span>((y - y_pred_all)**<span class="number">2</span>)
-    
-    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w:.4f}, b = {b:.4f}"</span>)
+        m = m - alpha * m_grad
+        c = c - alpha * c_grad
+    <span class="function">print</span>(<span class="string">f"Epoch {epoch+1}: m = {m:.4f}, c = {c:.4f}"</span>)
 
-<span class="function">print</span>(<span class="string">f"\nFinal: y = {w:.4f}x + {b:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal Parameters: m = {m:.6f}, c = {c:.6f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss = 20.8512, w = 0.2234, b = 0.1567<br>
-Epoch 10: Loss = 2.1234, w = 1.8234, b = 0.5612<br>
-Epoch 20: Loss = 0.3456, w = 1.9876, b = 0.9234<br>
-Epoch 30: Loss = 0.0567, w = 1.9987, b = 0.9876<br>
-Epoch 40: Loss = 0.0089, w = 1.9998, b = 0.9987<br><br>
-Final: y = 2.0000x + 1.0000
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="exp11.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp13.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp11.html" class="btn btn-secondary">⬅️ Experiment 11</a>
+                <a href="exp13.html" class="btn btn-primary">Proceed to Experiment 13 ➔</a>
+            </nav>
+        </article>
     </div>
 </body>
 </html>

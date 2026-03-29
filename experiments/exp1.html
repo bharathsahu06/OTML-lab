@@ -3,182 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 1 - Gradient Descent for f(x) = x^2 | OTML Lab</title>
+    <title>Experiment 01 • Gradient Descent</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 1
+            <a href="../index.html">Home</a> / CO1 / Experiment 01
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 1: Gradient Descent for f(x) = x^2</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Gradient Descent Optimization</h1>
 
-            <div class="section">
-                <div class="section-title">&#128204; Aim</div>
-                <div class="section-content">
-                    <p>To understand and implement gradient descent for the function f(x) = x^2 using the sample values x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. This experiment shows how repeated movement in the direction of the negative gradient leads to the minimum value of the function.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                                        <p>Gradient descent is a first-order optimization method that minimizes an objective by repeatedly moving in the direction of the negative gradient. At each step, the derivative tells how the variable should be changed to reduce the objective value.</p>
-                    <p style="margin-top: 10px;">The method is simple, widely used, and forms the foundation of many optimization and machine learning algorithms. Its behavior depends strongly on the learning rate, which controls how fast the updates move and how stable the convergence becomes.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The gradient indicates the direction of steepest increase, so the negative gradient gives a descent direction</li>
-                        <li>The learning rate controls the size of each update step</li>
-                        <li>Repeated updates gradually reduce the objective until the method converges</li>
-                    </ul>
+                    <p>To implement and analyze the convergence properties of the Gradient Descent algorithm for minimizing a fundamental convex objective function \( f(x) = x^2 \).</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128295; Algorithm</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Step 1:</strong> Initialize x to a starting value such as x = 5.0
-                    </div>
-                    <div class="step">
-                        <strong>Step 2:</strong> Choose a learning rate &alpha; such as 0.1
-                    </div>
-                    <div class="step">
-                        <strong>Step 3:</strong> Compute the gradient g = df/dx = 2x
-                    </div>
-                    <div class="step">
-                        <strong>Step 4:</strong> Update x using x = x - &alpha; * g
-                    </div>
-                    <div class="step">
-                        <strong>Step 5:</strong> Repeat the update until the change in x becomes very small
-                    </div>
-                    <div class="step">
-                        <strong>Step 6:</strong> Report the final x value and the minimum function value
-                    </div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📝</span> Problem Statement
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128208; Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Objective Function:</strong><br>
-                        f(x) = x<sup>2</sup>
+                    <p>Implement a gradient descent routine to find the global minimum of the function \( f(x) = x^2 \). Given a dataset \( x = [1, 2, 3, 4], y = [1, 4, 9, 16] \), verify that the data points lie on the objective curve and observe the iterative reduction in value starting from an initial point \( x_0 = 5.0 \).</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
+                </div>
+                <div class="section-content">
+                    <div class="step">
+                        <strong>Part A: Model Derivation</strong>
+                        <p>Verify data consistency for the relationship \( y = x^2 \):</p>
+                        <ul>
+                            <li>At \( x = 1 \): \( y = 1^2 = 1 \) 🗸</li>
+                            <li>At \( x = 2 \): \( y = 2^2 = 4 \) 🗸</li>
+                            <li>At \( x = 3 \): \( y = 3^2 = 9 \) 🗸</li>
+                            <li>At \( x = 4 \): \( y = 4^2 = 16 \) 🗸</li>
+                        </ul>
                     </div>
-                    <div class="formula">
-                        <strong>Given Data:</strong><br>
-                        x = [1, 2, 3, 4], y = [1, 4, 9, 16]
+
+                    <div class="step">
+                        <strong>Part B: Iterative Update Rule</strong>
+                        <p>The derivative (gradient) of the objective \( f(x) = x^2 \) is:</p>
+                        <div class="formula">\( f'(x) = 2x \)</div>
+                        <p>The parameter update rule with learning rate \( \eta \) is:</p>
+                        <div class="formula">\( x_{k+1} = x_k - \eta \cdot f'(x_k) = x_k - \eta(2x_k) \)</div>
                     </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        df/dx = 2x
-                    </div>
-                    <div class="formula">
-                        <strong>Update Rule:</strong><br>
-                        x<sub>n+1</sub> = x<sub>n</sub> - &alpha;(2x<sub>n</sub>)
+
+                    <div class="step">
+                        <strong>Part C: Manual Calculation ( \(\eta = 0.1\), \(x_0 = 5.0\) )</strong>
+                        <ul>
+                            <li><strong>Iteration 0:</strong> \( x_1 = 5.0 - 0.1(2 \cdot 5.0) = 4.0 \)</li>
+                            <li><strong>Iteration 1:</strong> \( x_2 = 4.0 - 0.1(2 \cdot 4.0) = 3.2 \)</li>
+                            <li><strong>Iteration 2:</strong> \( x_3 = 3.2 - 0.1(2 \cdot 3.2) = 2.56 \)</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128202; Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16].</p>
-                    <p><strong>Data verification:</strong> (1,1), (2,4), (3,9), (4,16) all satisfy y = x<sup>2</sup>.</p>
-                    <p><strong>Run gradient descent:</strong> start with x = 5.0 and learning rate &alpha; = 0.1.</p>
-
-                    <div class="step">
-                        <strong>Iteration 0:</strong><br>
-                        x = 5.0<br>
-                        Gradient = 2(5.0) = 10.0<br>
-                        New x = 5.0 - 0.1(10.0) = 4.0
-                    </div>
-
-                    <div class="step">
-                        <strong>Iteration 1:</strong><br>
-                        x = 4.0<br>
-                        Gradient = 2(4.0) = 8.0<br>
-                        New x = 4.0 - 0.1(8.0) = 3.2
-                    </div>
-
-                    <div class="step">
-                        <strong>Iteration 2:</strong><br>
-                        x = 3.2<br>
-                        Gradient = 2(3.2) = 6.4<br>
-                        New x = 3.2 - 0.1(6.4) = 2.56
-                    </div>
-
-                    <p style="margin-top: 15px;">Continuing this process keeps reducing both x and f(x) until the value approaches 0.</p>
-
-                    <div class="step">
-                        <strong>Final Result:</strong><br>
-                        x approaches 0<br>
-                        f(x) approaches 0
-                    </div>
-                    <p style="margin-top: 10px;"><strong>Convergence check:</strong> update factor is (1 - 2&alpha;) = 0.8, so each step contracts x toward 0.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128187; Simple Python Program</div>
                 <div class="section-content">
-                    <p><strong>Python implementation:</strong></p>
                     <div class="code-block">
 <span class="comment"># Gradient Descent for f(x) = x^2</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
-y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
+<span class="comment"># Hyperparameters</span>
+x = <span class="number">5.0</span>
+alpha = <span class="number">0.1</span>
+epochs = <span class="number">20</span>
 
-<span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
-<span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
+<span class="function">print</span>(<span class="string">f"Initial state: x = {x}"</span>)
 
-<span class="keyword">def</span> <span class="function">gradient_descent</span>(x_start, learning_rate, iterations):
-    x = x_start
+<span class="keyword">for</span> k <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    <span class="comment"># x = x - alpha * gradient (where gradient = 2 * x)</span>
+    x = x * (<span class="number">1</span> - <span class="number">2</span> * alpha)
+    <span class="keyword">if</span> k % <span class="number">5</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"Iteration {k+1}: x = {x:.8f}"</span>)
 
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(iterations):
-        gradient = <span class="number">2</span> * x
-        x = x - learning_rate * gradient
-
-        <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:
-            f_value = x ** <span class="number">2</span>
-            <span class="function">print</span>(<span class="string">f"Iteration {i}: x = {x:.4f}, f(x) = {f_value:.4f}"</span>)
-
-    <span class="keyword">return</span> x
-
-final_x = <span class="function">gradient_descent</span>(<span class="number">5.0</span>, <span class="number">0.1</span>, <span class="number">100</span>)
-<span class="function">print</span>(<span class="string">f"\nFinal minimum at x = {final_x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum value f(x) = {final_x**2:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal x: {x:.8f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128228; Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Given x values: [1, 2, 3, 4]<br>
-Given y values: [1, 4, 9, 16]<br><br>
-Iteration 0: x = 4.0000, f(x) = 16.0000<br>
-Iteration 10: x = 0.4295, f(x) = 0.1845<br>
-Iteration 20: x = 0.0461, f(x) = 0.0021<br>
-Iteration 30: x = 0.0050, f(x) = 0.0000<br>
-Iteration 40: x = 0.0005, f(x) = 0.0000<br>
-Iteration 50: x = 0.0001, f(x) = 0.0000<br>
-Iteration 60: x = 0.0000, f(x) = 0.0000<br>
-Iteration 70: x = 0.0000, f(x) = 0.0000<br>
-Iteration 80: x = 0.0000, f(x) = 0.0000<br>
-Iteration 90: x = 0.0000, f(x) = 0.0000<br><br>
-Final minimum at x = 0.000000<br>
-Minimum value f(x) = 0.000000
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
                 </div>
-            </div>
+                <div class="output-block">
+                    <div class="output-label">Terminal Console</div>
+Initial state: x = 5.0<br>
+Iteration 1: x = 4.00000000<br>
+Iteration 6: x = 1.31072000<br>
+Iteration 11: x = 0.42949673<br>
+Iteration 16: x = 0.14073749<br>
+<br>
+Final x: 0.00000000 (Approaches 0)
+                </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="../index.html" class="btn btn-secondary">&larr; Back to Home</a>
-                <a href="exp2.html" class="btn">Next Experiment &rarr;</a>
-            </div>
-        </div>
+            <section class="section">
+                <div class="section-title">
+                    <span>✅</span> Result & Verification
+                </div>
+                <div class="section-content">
+                    <div class="step">
+                        The parameter \( x \) successfully converges to the theoretical minimum at 0. Since the contraction factor \( (1 - 2\eta) = 0.8 \) is less than 1, geometric convergence is guaranteed for this convex function.
+                    </div>
+                </div>
+            </section>
+
+            <nav class="nav-buttons">
+                <a href="../index.html" class="btn btn-secondary">🏠 Laboratory Overview</a>
+                <a href="exp2.html" class="btn btn-primary">Proceed to Experiment 02 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>

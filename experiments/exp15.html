@@ -3,125 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 15 - Distributed GD (Dataset 2) | OTML Lab</title>
+    <title>Experiment 15 • Scalable Systems</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 15
+            <a href="../index.html">Home</a> / CO4 / Experiment 15
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 15: Distributed Gradient Descent (Dataset 2)</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Modeling Distributed System Staleness</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To simulate distributed gradient descent on another dataset: x=[1,2,3,4], y=[3,5,7,9]. This shows how the distributed approach generalizes across datasets.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Distributed gradient descent applies optimization across multiple workers that each process only part of the data. Every worker computes a local gradient, and those local updates are then aggregated into a shared global update.</p>
-                    <p style="margin-top: 10px;">This method shows how optimization and computing systems interact in large-scale learning. Performance depends not only on the mathematics of the update rule but also on communication, synchronization, and how the data is partitioned across workers.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Local computation reduces the work done by any single worker</li>
-                        <li>Aggregation combines information from all partitions into one update</li>
-                        <li>The method illustrates how scalable learning systems coordinate local and global computation</li>
-                    </ul>
+                    <p>To analyze the convergence properties of distributed optimization in the presence of communication delays (staleness) between workers and the parameter server.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize global parameters</div>
-                    <div class="step"><strong>Step 2:</strong> Partition data to workers</div>
-                    <div class="step"><strong>Step 3:</strong> Each worker processes its data partition</div>
-                    <div class="step"><strong>Step 4:</strong> Workers send gradients to server</div>
-                    <div class="step"><strong>Step 5:</strong> Server averages gradients</div>
-                    <div class="step"><strong>Step 6:</strong> Update global model</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
                 <div class="section-content">
-                    <p><strong>Model derivation:</strong> dataset x=[1,2,3,4], y=[3,5,7,9] follows y = 2x + 1.</p>
-                    <div class="step"><strong>Two-worker split:</strong> W1={(1,3),(2,5)}, W2={(3,7),(4,9)}.</div>
-                    <div class="step"><strong>Local-to-global updates:</strong> each worker computes (dw,db), server averages and applies update.</div>
-                    <div class="step"><strong>Convergence goal:</strong> w -&gt; 2 and b -&gt; 1 with decreasing MSE.</div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="comment"># Distributed GD - Dataset 2</span>
-X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
-y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
-
-num_workers = <span class="number">2</span>
-n = <span class="function">len</span>(X) // num_workers
-
-<span class="comment"># Partition data</span>
-workers = [
-    (X[:n], y[:n]),
-    (X[n:], y[n:])
-]
-
-w, b = <span class="number">0</span>.<span class="number">0</span>, <span class="number">0</span>.<span class="number">0</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
-
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">40</span>):
-    <span class="comment"># Collect gradients</span>
-    grads_w, grads_b = [], []
-    
-    <span class="keyword">for</span> X_Worker, y_worker <span class="keyword">in</span> workers:
-        y_pred = w*X_Worker + b
-        dw = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>((y_worker - y_pred) * X_Worker)
-        db = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>(y_worker - y_pred)
-        grads_w.<span class="function">append</span>(dw)
-        grads_b.<span class="function">append</span>(db)
-    
-    <span class="comment"># Average and update</span>
-    w -= lr * np.<span class="function">mean</span>(grads_w)
-    b -= lr * np.<span class="function">mean</span>(grads_b)
-    
-    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
-        y_pred = w*X + b
-        loss = np.<span class="function">mean</span>((y - y_pred)**<span class="number">2</span>)
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss={loss:.4f}, w={w:.4f}, b={b:.4f}"</span>)
-
-<span class="function">print</span>(<span class="string">f"\nFinal model: y = {w:.4f}x + {b:.4f}"</span>)
+                    <div class="step">
+                        <strong>Part A: Stale Gradient Update</strong>
+                        <div class="formula">\( w_{t+1} = w_t - \eta \cdot \nabla L(w_{t-\tau}) \)</div>
+                        <p>Where \( \tau \) represents the delay (number of steps) since the worker last pulled parameters from the server.</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss=20.8512, w=0.1234, b=0.0567<br>
-Epoch 10: Loss=2.1456, w=1.8234, b=0.5123<br>
-Epoch 20: Loss=0.3789, w=1.9834, b=0.9123<br>
-Epoch 30: Loss=0.0612, w=1.9956, b=0.9876<br>
-Epoch 40: Loss=0.0098, w=1.9989, b=0.9987<br><br>
-Final model: y = 2.0001x + 1.0001
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="exp14.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp16.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp14.html" class="btn btn-secondary">⬅️ Experiment 14</a>
+                <a href="exp16.html" class="btn btn-primary">Proceed to Experiment 16 ➔</a>
+            </nav>
+        </article>
     </div>
 </body>
 </html>

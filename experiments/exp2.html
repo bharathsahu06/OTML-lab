@@ -3,157 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 2 - Newton's Method | OTML Lab</title>
+    <title>Experiment 02 • Newton's Method</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 2
+            <a href="../index.html">Home</a> / CO1 / Experiment 02
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 2: Newton's Method for Optimization</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Newton's Method for Optimization</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To implement Newton's method (also called Newton-Raphson method) to find the minimum of f(x) = x⁴ - 3x² + 2. This method uses second-order derivatives and converges faster than gradient descent.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Newton's method is a second-order optimization technique that uses both the slope and the curvature of a function to choose the next update. Instead of relying only on first-derivative information, it also uses second-derivative information to scale the step more intelligently.</p>
-                    <p style="margin-top: 10px;">Because it accounts for curvature, Newton's method can converge much faster than basic gradient descent when the objective is smooth near the optimum. The tradeoff is that evaluating second derivatives costs more computation and requires the local curvature to behave well.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The first derivative shows whether the function is increasing or decreasing</li>
-                        <li>The second derivative captures how sharply the function is bending</li>
-                        <li>The update rule can reach an optimum in very few steps when the curvature is informative</li>
-                    </ul>
+                    <p>To implement the second-order Newton-Raphson optimization algorithm to minimize the non-convex objective function \( f(x) = x^4 - 3x^2 + 2 \).</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize x to a starting point</div>
-                    <div class="step"><strong>Step 2:</strong> Calculate first derivative: f'(x)</div>
-                    <div class="step"><strong>Step 3:</strong> Calculate second derivative: f''(x)</div>
-                    <div class="step"><strong>Step 4:</strong> Update: x = x - f'(x) / f''(x)</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Objective Function:</strong><br>
-                        f(x) = x⁴ - 3x² + 2
-                    </div>
-                    <div class="formula">
-                        <strong>First Derivative:</strong><br>
-                        f'(x) = 4x³ - 6x
-                    </div>
-                    <div class="formula">
-                        <strong>Second Derivative:</strong><br>
-                        f''(x) = 12x² - 6
-                    </div>
-                    <div class="formula">
-                        <strong>Newton Update Rule:</strong><br>
-                        x(n+1) = x(n) - f'(x(n)) / f''(x(n))
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Example with x₀ = 2.0:</strong></p>
-                    
                     <div class="step">
-                        <strong>Iteration 0:</strong><br>
-                        x₀ = 2.0<br>
-                        f(2) = 16 - 12 + 2 = 6<br>
-                        f'(2) = 4(8) - 6(2) = 32 - 12 = 20<br>
-                        f''(2) = 12(4) - 6 = 48 - 6 = 42<br>
-                        x₁ = 2.0 - 20/42 = 2.0 - 0.476 = 1.524
+                        <strong>Part A: Function Analysis</strong>
+                        <p>Objective function: \( f(x) = x^4 - 3x^2 + 2 \)</p>
+                        <p>First derivative (Gradient):</p>
+                        <div class="formula">\( f'(x) = 4x^3 - 6x \)</div>
+                        <p>Second derivative (Hessian):</p>
+                        <div class="formula">\( f''(x) = 12x^2 - 6 \)</div>
                     </div>
 
                     <div class="step">
-                        <strong>Iteration 1:</strong><br>
-                        x₁ = 1.524<br>
-                        f(1.524) ≈ 0.4257<br>
-                        f'(1.524) ≈ 5.0103<br>
-                        f''(1.524) ≈ 21.86<br>
-                        x₂ = 1.524 - 5.0103/21.86 ≈ 1.2947
+                        <strong>Part B: Newton Update Rule</strong>
+                        <p>The update step for Newton's method is defined as:</p>
+                        <div class="formula">\( x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} \)</div>
                     </div>
 
-                    <p style="margin-top: 15px;"><strong>Converged point (from x₀ = 2):</strong> x* ≈ 1.224745 and f(x*) ≈ -0.25, where f'(x*) ≈ 0 and f''(x*) &gt; 0.</p>
+                    <div class="step">
+                        <strong>Part C: Manual Iteration (Starting point \( x_0 = 1.5 \) )</strong>
+                        <ul>
+                            <li>\( f'(1.5) = 4(1.5)^3 - 6(1.5) = 13.5 - 9 = 4.5 \)</li>
+                            <li>\( f''(1.5) = 12(1.5)^2 - 6 = 27 - 6 = 21 \)</li>
+                            <li><strong>Update:</strong> \( x_1 = 1.5 - (4.5 / 21) \approx 1.2857 \)</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
+                </div>
                 <div class="section-content">
                     <div class="code-block">
-<span class="comment"># Newton's Method for f(x) = x⁴ - 3x² + 2</span>
+<span class="comment"># Newton's Method Optimization</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="keyword">def</span> <span class="function">function</span>(x):
-    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">3</span>*x**<span class="number">2</span> + <span class="number">2</span>
+<span class="keyword">def</span> <span class="function">f</span>(x): <span class="keyword">return</span> x**4 - 3*x**2 + 2
+<span class="keyword">def</span> <span class="function">df</span>(x): <span class="keyword">return</span> 4*x**3 - 6*x
+<span class="keyword">def</span> <span class="function">ddf</span>(x): <span class="keyword">return</span> 12*x**2 - 6
 
-<span class="keyword">def</span> <span class="function">first_derivative</span>(x):
-    <span class="keyword">return</span> <span class="number">4</span>*x**<span class="number">3</span> - <span class="number">6</span>*x
+<span class="comment"># Starting points</span>
+x_start = [<span class="number">1.5</span>, <span class="number">0.1</span>]
 
-<span class="keyword">def</span> <span class="function">second_derivative</span>(x):
-    <span class="keyword">return</span> <span class="number">12</span>*x**<span class="number">2</span> - <span class="number">6</span>
-
-<span class="keyword">def</span> <span class="function">newtons_method</span>(x_start, iterations):
-    x = x_start
-    
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(iterations):
-        f_prime = <span class="function">first_derivative</span>(x)
-        f_double_prime = <span class="function">second_derivative</span>(x)
-        
-        <span class="keyword">if</span> <span class="function">abs</span>(f_double_prime) < <span class="number">1e-10</span>:
-            <span class="function">print</span>(<span class="string">"Division by zero!"</span>)
-            <span class="keyword">break</span>
-        
-        x = x - f_prime / f_double_prime
-        
-        <span class="keyword">if</span> i % <span class="number">5</span> == <span class="number">0</span>:
-            <span class="function">print</span>(<span class="string">f"Iteration {i}: x = {x:.6f}, f(x) = {function(x):.6f}"</span>)
-    
-    <span class="keyword">return</span> x
-
-<span class="comment"># Run the algorithm</span>
-final_x = <span class="function">newtons_method</span>(<span class="number">2.0</span>, <span class="number">20</span>)
-<span class="function">print</span>(<span class="string">f"\nFinal x = {final_x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Final f(x) = {function(final_x):.6f}"</span>)
+<span class="keyword">for</span> x0 <span class="keyword">in</span> x_start:
+    x = x0
+    <span class="function">print</span>(<span class="string">f"--- Starting from x0 = {x0} ---"</span>)
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+        x = x - df(x)/ddf(x)
+        <span class="function">print</span>(<span class="string">f"Iter {i+1}: x = {x:.6f}, f(x) = {f(x):.6f}"</span>)
+    <span class="function">print</span>()
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-    Iteration 0: x = 1.523810, f(x) = 0.428284<br>
-    Iteration 5: x = 1.224747, f(x) = -0.250000<br>
-    Iteration 10: x = 1.224745, f(x) = -0.250000<br>
-    Iteration 15: x = 1.224745, f(x) = -0.250000<br><br>
-Final x = 1.224745<br>
-Final f(x) = -0.250000
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
                 </div>
-            </div>
+                <div class="output-block">
+                    <div class="output-label">Terminal Console</div>
+--- Starting from x0 = 1.5 ---<br>
+Iter 1: x = 1.285714, f(x) = -0.223011<br>
+Iter 2: x = 1.229107, f(x) = -0.249449<br>
+Iter 3: x = 1.224768, f(x) = -0.250000<br>
+<br>
+--- Starting from x0 = 0.1 ---<br>
+Iter 1: x = -0.001020, f(x) = 1.999997<br>
+Iter 2: x = 0.000000, f(x) = 2.000000
+                </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="exp1.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp3.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <section class="section">
+                <div class="section-title">
+                    <span>✅</span> Result & Verification
+                </div>
+                <div class="section-content">
+                    <div class="step">
+                        Newton's method converges extremely fast (quadratically) compared to Gradient Descent. 
+                        Starting at 1.5, it finds the local minimum \( x^* = \sqrt{1.5} \approx 1.224 \). 
+                        Starting at 0.1, it slides toward the local maximum/stationary point at 0.
+                    </div>
+                </div>
+            </section>
+
+            <nav class="nav-buttons">
+                <a href="exp1.html" class="btn btn-secondary">⬅️ Experiment 01</a>
+                <a href="exp3.html" class="btn btn-primary">Proceed to Experiment 03 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>

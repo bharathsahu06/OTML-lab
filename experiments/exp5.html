@@ -3,142 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 5 - Linear Optimization with CVXPY | OTML Lab</title>
+    <title>Experiment 05 • Linear Programming</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 5
+            <a href="../index.html">Home</a> / CO2 / Experiment 05
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 5: Linear Programming with CVXPY</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Linear Programming (CVXPY)</h1>
 
-            <div class="section">
-                <div class="section-title">📌 Aim</div>
-                <div class="section-content">
-                    <p>To solve a linear programming problem using CVXPY: minimize f(x,y) = 3x + 2y subject to constraints x+y ≥ 4, x ≥ 0, y ≥ 0. This demonstrates standard linear optimization.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
                 <div class="section-content">
-                                                            <p>Linear programming studies optimization problems in which both the objective function and the constraints are linear. These models are widely used in planning, scheduling, transportation, and resource allocation because they capture decisions with simple but powerful structure.</p>
-                    <p style="margin-top: 10px;">The feasible set formed by the constraints has a strong geometric interpretation, and optimal solutions often occur at boundary or corner points. CVXPY makes the model easy to formulate while keeping the optimization logic clear and mathematically transparent.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The objective can represent cost, time, loss, or profit</li>
-                        <li>The constraints encode limits such as capacity, balance, or non-negativity</li>
-                        <li>Efficient solvers exploit the linear structure of the problem</li>
-                    </ul>
+                    <p>To solve a standard Linear Programming (LP) problem where both the objective function and constraints are linear in the decision variables.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Define decision variables</div>
-                    <div class="step"><strong>Step 2:</strong> Define linear objective function</div>
-                    <div class="step"><strong>Step 3:</strong> Add linear constraints</div>
-                    <div class="step"><strong>Step 4:</strong> Solve using CVXPY</div>
-                    <div class="step"><strong>Step 5:</strong> Extract optimal solution</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📐 Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Minimize:</strong><br>
-                        f(x,y) = 3x + 2y
-                    </div>
-                    <div class="formula">
-                        <strong>Subject to:</strong><br>
-                        x + y ≥ 4<br>
-                        x ≥ 0<br>
-                        y ≥ 0
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Problem from Aim:</strong> minimize f(x,y)=3x+2y subject to x+y≥4, x≥0, y≥0.</p>
-                    
                     <div class="step">
-                        <strong>Constraint Analysis:</strong><br>
-                        The feasible region is unbounded and defined by:<br>
-                        - x + y ≥ 4 (above the line from (0,4) to (4,0))<br>
-                        - x ≥ 0 (right of y-axis)<br>
-                        - y ≥ 0 (above x-axis)
+                        <strong>Part A: Problem Formulation</strong>
+                        <p>Objective function: \( \text{minimize } f(x, y) = 3x + 2y \)</p>
+                        <p>Subject to:</p>
+                        <ul>
+                            <li>\( x + y \ge 4 \)</li>
+                            <li>\( x \ge 0, y \ge 0 \)</li>
+                        </ul>
                     </div>
 
                     <div class="step">
-                        <strong>Corner points (vertices):</strong><br>
-                        (0, 4): f = 3(0) + 2(4) = 8<br>
-                        (4, 0): f = 3(4) + 2(0) = 12<br>
-                        Optimal is at (0, 4) with minimum value = 8
-                    </div>
-
-                    <div class="step">
-                        <strong>Optimal Solution:</strong><br>
-                        x* = 0, y* = 4<br>
-                        Minimum value = 8
+                        <strong>Part B: Corner Point Analysis</strong>
+                        <p>In linear programming, the optimum always lies at a vertex of the feasible region:</p>
+                        <ul>
+                            <li>At \((4, 0)\): \( 3(4) + 2(0) = 12 \)</li>
+                            <li>At \((0, 4)\): \( 3(0) + 2(4) = 8 \) (Minimum)</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
+                </div>
                 <div class="section-content">
                     <div class="code-block">
 <span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
 
 <span class="comment"># Define variables</span>
-x = cp.<span class="function">Variable</span>()
-y = cp.<span class="function">Variable</span>()
+x = cp.Variable()
+y = cp.Variable()
 
-<span class="comment"># Define objective: minimize 3x + 2y</span>
-objective = cp.<span class="function">Minimize</span>(<span class="number">3</span>*x + <span class="number">2</span>*y)
+<span class="comment"># Define objective</span>
+objective = cp.Minimize(<span class="number">3</span>*x + <span class="number">2</span>*y)
 
 <span class="comment"># Define constraints</span>
-constraints = [
-    x + y >= <span class="number">4</span>,    <span class="comment"># x + y >= 4</span>
-    x >= <span class="number">0</span>,         <span class="comment"># x >= 0</span>
-    y >= <span class="number">0</span>          <span class="comment"># y >= 0</span>
-]
+constraints = [x + y >= <span class="number">4</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
 
-<span class="comment"># Create and solve</span>
-problem = cp.<span class="function">Problem</span>(objective, constraints)
-problem.<span class="function">solve</span>()
+<span class="comment"># Solve problem</span>
+prob = cp.Problem(objective, constraints)
+prob.solve()
 
-<span class="comment"># Results</span>
-<span class="function">print</span>(<span class="string">f"Optimal x = {x.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal y = {y.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum value = {objective.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Status: {problem.status}"</span>)
+<span class="function">print</span>(<span class="string">f"Status: {prob.status}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal x: {x.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal y: {y.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum objective: {prob.value:.6f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Optimal x = 0.000000<br>
-Optimal y = 4.000000<br>
-Minimum value = 8.000000<br>
-Status: optimal
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
                 </div>
-            </div>
+                <div class="output-block">
+                    <div class="output-label">Terminal Console</div>
+Status: optimal<br>
+Optimal x: 0.000000<br>
+Optimal y: 4.000000<br>
+Minimum objective: 8.000000
+                </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="exp4.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp6.html" class="btn">Next →</a>
-            </div>
-        </div>
+            <section class="section">
+                <div class="section-title">
+                    <span>✅</span> Result & Verification
+                </div>
+                <div class="section-content">
+                    <div class="step">
+                        Since the coefficient of \( y \) (2) is smaller than that of \( x \) (3), the algorithm chooses to maximize \( y \) within the constraint to achieve the lowest overall value.
+                    </div>
+                </div>
+            </section>
+
+            <nav class="nav-buttons">
+                <a href="exp4.html" class="btn btn-secondary">⬅️ Experiment 04</a>
+                <a href="exp6.html" class="btn btn-primary">Proceed to Experiment 06 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>

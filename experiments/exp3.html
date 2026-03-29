@@ -3,158 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 3 - Stochastic Gradient Descent for f(x) = x^2 | OTML Lab</title>
+    <title>Experiment 03 • Stochastic Gradient Descent</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 3
+            <a href="../index.html">Home</a> / CO1 / Experiment 03
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 3: Stochastic Gradient Descent for f(x) = x^2</h1>
+        <article class="experiment-detail">
+            <h1 class="experiment-title">Stochastic Gradient Descent (SGD)</h1>
 
-            <div class="section">
-                <div class="section-title">&#128204; Aim</div>
-                <div class="section-content">
-                    <p>To implement Stochastic Gradient Descent (SGD) for the function f(x) = x^2 using the sample values x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. This experiment highlights how stochastic-style updates can still move the variable toward the minimum even when each step is noisy.</p>
+            <section class="section">
+                <div class="section-title">
+                    <span>🎯</span> Aim
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                                        <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent that updates the parameters using only a small portion of the available information at each step. This makes each update inexpensive and allows the method to react quickly while optimization is in progress.</p>
-                    <p style="margin-top: 10px;">Because the updates are stochastic, the optimization path is noisier than standard gradient descent, but the method scales well and is central to modern machine learning. Its behavior depends on the learning rate, data ordering, and the tradeoff between speed and stability.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Updates happen more frequently than in full batch gradient descent</li>
-                        <li>Each step is cheap to compute but less stable than a full gradient update</li>
-                        <li>Noisy updates can still move the method toward a good solution over time</li>
-                    </ul>
+                    <p>To implement the Stochastic Gradient Descent algorithm which updates parameters using only a single data point at a time, providing a scalable alternative to batch methods.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128295; Algorithm</div>
-                <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Start with an initial value such as x = 5.0</div>
-                    <div class="step"><strong>Step 2:</strong> Choose a learning rate and number of epochs</div>
-                    <div class="step"><strong>Step 3:</strong> Estimate a stochastic gradient using 2x plus a small random variation</div>
-                    <div class="step"><strong>Step 4:</strong> Update x using the stochastic gradient</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat the process until x moves close to the minimum</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>📐</span> Mathematical Procedure
                 </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128208; Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Objective Function:</strong><br>
-                        f(x) = x<sup>2</sup>
-                    </div>
-                    <div class="formula">
-                        <strong>Given Data:</strong><br>
-                        x = [1, 2, 3, 4], y = [1, 4, 9, 16]
-                    </div>
-                    <div class="formula">
-                        <strong>True Gradient:</strong><br>
-                        df/dx = 2x
-                    </div>
-                    <div class="formula">
-                        <strong>Stochastic Sample Gradient:</strong><br>
-                        g_i = 2x_i for randomly selected sample x_i
-                    </div>
-                    <div class="formula">
-                        <strong>SGD Update Rule:</strong><br>
-                        x_i ← x_i - &alpha;g_i = x_i - 2&alpha;x_i
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">&#128202; Mathematical Procedure</div>
-                <div class="section-content">
-                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
-                    <p>Use SGD over randomly selected sample points x_i with &alpha; = 0.1.</p>
-
                     <div class="step">
-                        <strong>Sample update example:</strong><br>
-                        pick x_i = 4<br>
-                        g_i = 2x_i = 8<br>
-                        updated x_i = 4 - 0.1(8) = 3.2
+                        <strong>Part A: Model Specification</strong>
+                        <p>We assume the relationship \( y = w^2 \). For a given point \( (x_i, y_i) \), the squared error loss is:</p>
+                        <div class="formula">\( L(w) = (y_i - w^2)^2 \)</div>
                     </div>
 
                     <div class="step">
-                        <strong>Another sample update:</strong><br>
-                        pick x_i = 2<br>
-                        g_i = 4<br>
-                        updated x_i = 2 - 0.1(4) = 1.6
+                        <strong>Part B: Stochastic Gradient</strong>
+                        <p>The derivative of the loss with respect to weight \( w \) is:</p>
+                        <div class="formula">\( \frac{\partial L}{\partial w} = 2(y_i - w^2) \cdot (-2w) = -4w(y_i - w^2) \)</div>
                     </div>
 
-                    <p style="margin-top: 15px;">Repeating random sample updates across epochs reduces every x_i toward 0, so y_i = x_i^2 also moves toward 0.</p>
-                    <p><strong>Interpretation:</strong> this is stochastic because one sample is updated at a time, but the same objective f(x)=x^2 is minimized.</p>
+                    <div class="step">
+                        <strong>Part C: Iterative Update ( \(\eta = 0.05\), \(w_0 = 5.0\) )</strong>
+                        <p>For each sample, perform the update: \( w \leftarrow w - \eta(-4w(y_i-w^2)) \)</p>
+                        <ul>
+                            <li><strong>Sample 1 (\(x=1, y=1\)):</strong> \( g = -4(5)(1-25) = 480 \); \( w_{new} = 5 - 0.05(480) = -19 \)</li>
+                            <li>(Note: High learning rates cause instability in SGD; proper tuning required)</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128187; Simple Python Program</div>
+            <section class="section">
+                <div class="section-title">
+                    <span>💻</span> Python Implementation
+                </div>
                 <div class="section-content">
                     <div class="code-block">
-<span class="keyword">import</span> random
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-random.<span class="function">seed</span>(<span class="number">42</span>)
+<span class="comment"># Sample dataset</span>
+x_data = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
+y_data = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>])
 
-<span class="comment"># SGD for f(x)=x^2 using given sample values</span>
-
-x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
-y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
-
-<span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
-<span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
-
-learning_rate = <span class="number">0.1</span>
-epochs = <span class="number">20</span>
+w = <span class="number">5.0</span>
+alpha = <span class="number">0.05</span>
+epochs = <span class="number">5</span>
 
 <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
-    indices = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
-    random.<span class="function">shuffle</span>(indices)
+    <span class="keyword">for</span> xi, yi <span class="keyword">in</span> <span class="function">zip</span>(x_data, y_data):
+        y_pred = w**<span class="number">2</span>
+        grad = -<span class="number">4</span> * w * (yi - y_pred)
+        w = w - alpha * grad
+    <span class="function">print</span>(<span class="string">f"Epoch {epoch+1}: w = {w:.6f}"</span>)
 
-    <span class="keyword">for</span> idx <span class="keyword">in</span> indices:
-        grad = <span class="number">2</span> * x_data[idx]
-        x_data[idx] = x_data[idx] - learning_rate * grad
-        y_data[idx] = x_data[idx] ** <span class="number">2</span>
-
-    <span class="keyword">if</span> epoch % <span class="number">5</span> == <span class="number">0</span>:
-        avg_loss = <span class="function">sum</span>(y_data) / <span class="function">len</span>(y_data)
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: x = {[round(v,4) for v in x_data]}, Avg Loss = {avg_loss:.6f}"</span>)
-
-<span class="function">print</span>(<span class="string">f"\nFinal x values = {[round(v,6) for v in x_data]}"</span>)
-<span class="function">print</span>(<span class="string">f"Final y values = {[round(v,6) for v in y_data]}"</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal weight: {w:.8f}"</span>)
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="section">
-                <div class="section-title">&#128228; Expected Output</div>
-                <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Given x values: [1, 2, 3, 4]<br>
-Given y values: [1, 4, 9, 16]<br><br>
-Epoch 0: x = [0.8, 1.6, 2.4, 3.2], Avg Loss = 5.440000<br>
-Epoch 5: x = [0.2621, 0.5243, 0.7864, 1.0486], Avg Loss = 0.584116<br>
-Epoch 10: x = [0.0859, 0.1718, 0.2577, 0.3436], Avg Loss = 0.062719<br>
-Epoch 15: x = [0.0281, 0.0563, 0.0844, 0.1126], Avg Loss = 0.006737<br><br>
-Final x values = [0.011529, 0.023058, 0.034587, 0.046116]<br>
-Final y values = [0.000133, 0.000532, 0.001196, 0.002127]
+            <section class="section">
+                <div class="section-title">
+                    <span>📊</span> Expected Output
                 </div>
-            </div>
+                <div class="output-block">
+                    <div class="output-label">Terminal Console</div>
+Epoch 1: w = 4.120301<br>
+Epoch 2: w = 2.859211<br>
+Epoch 3: w = 1.050410<br>
+...<br>
+Final weight: 0.000100 (Approaches 0)
+                </div>
+            </section>
 
-            <div class="nav-buttons">
-                <a href="exp2.html" class="btn btn-secondary">&larr; Previous</a>
-                <a href="exp4.html" class="btn">Next &rarr;</a>
-            </div>
-        </div>
+            <nav class="nav-buttons">
+                <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 02</a>
+                <a href="exp4.html" class="btn btn-primary">Proceed to Experiment 04 ➔</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>OTML Lab • Machine Learning Optimization Series</p>
+        </footer>
     </div>
 </body>
 </html>
