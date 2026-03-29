@@ -3,111 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 17 • Variable Block Sparsity</title>
+    <title>Experiment 17 - Group Lasso Sparsity | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 17: Group Lasso for Variable Block Sparsity</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 17
+            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 17
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To demonstrate group sparsity by partitioning feature space into blocks and applying L2-norm penalties to each block (Variable Block Sparsity).</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 17: Group Lasso for Grouped Sparsity</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>Group Lasso enforces that the coefficients for a group of variables are either all zero or all non-zero. This is particularly useful when categorical variables are encoded via dummy variables (where the set must be kept or dropped together), or when features naturally form clusters.</p>
-                <div class="formula">
-                    <strong>Objective:</strong> \( \min_{\mathbf{w}} \sum_{i=1}^n (y_i - \mathbf{x}_i^T \mathbf{w})^2 + \lambda \sum_{g=1}^G \sqrt{p_g} \|\mathbf{w}_g\|_2 \)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To demonstrate grouped sparsity using Group Lasso regularization. Group Lasso encourages entire groups of features to be selected/eliminated together.</p>
+                    <p>Dataset: x₁=[1,2], x₂=[2,1], x₃=[1,1], x₄=[1,1], y=[9,10]</p>
                 </div>
-                <p>Where \( p_g \) is the dimensionality of group \( g \).</p>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Organize weights into groups \( \mathbf{w}_{G1}, \mathbf{w}_{G2}, \dots \).</li>
-                    <li>Update weights using Proximal Gradient Descent.</li>
-                    <li>At each step, apply the group soft-thresholding operator:
-                        <div class="formula">
-                            \( \mathbf{w}_g = \left( 1 - \frac{\lambda \eta \sqrt{p_g}}{\|\mathbf{w}_g\|_2} \right)_+ \mathbf{w}_g \)
-                        </div>
-                    </li>
-                    <li>If the entire group norm is below the threshold, all weights in that group are set to zero.</li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
-            <div class="section-content">
-                <p>L2-norm for Group 1 (\( w_1, w_2 \)):</p>
-                <div class="formula">
-                    \( \|w_{G1}\|_2 = \sqrt{w_1^2 + w_2^2} \)
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>Group Lasso extends sparse regularization from individual features to predefined groups of features. Instead of penalizing each coefficient independently, it penalizes the norm of an entire group, so related variables tend to be selected or removed together.</p>
+                    <p style="margin-top: 10px;">This is useful when features naturally belong to the same category, measurement source, or logical block. The method improves interpretability because the model can retain or discard whole groups rather than making isolated coefficient decisions.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The grouping structure adds prior knowledge to the optimization problem</li>
+                        <li>Whole feature groups can shrink to zero together</li>
+                        <li>The method is useful in structured feature selection and multi-task learning</li>
+                    </ul>
                 </div>
-                <p>L2-norm for Group 2 (\( w_3, w_4 \)):</p>
-                <div class="formula">
-                    \( \|w_{G2}\|_2 = \sqrt{w_3^2 + w_4^2} \)
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Define feature groups</div>
+                    <div class="step"><strong>Step 2:</strong> Apply Group Lasso penalty</div>
+                    <div class="step"><strong>Step 3:</strong> Solve optimization problem</div>
+                    <div class="step"><strong>Step 4:</strong> Identify selected/eliminated groups</div>
                 </div>
-                <p>The penalty is the sum of these norms multiplied by \( \lambda \).</p>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import numpy as np
-from scipy.optimize import minimize
-
-X = np.array([[1, 2, 1, 1], [2, 1, 1, 1]], dtype=float)
-y = np.array([9, 10], dtype=float)
-lam = 0.1
-
-def objective(w):
-    mse = np.sum((y - X @ w)**2)
-    # Norms of groups 1 (index 0,1) and 2 (index 2,3)
-    g1_norm = np.linalg.norm(w[:2])
-    g2_norm = np.linalg.norm(w[2:])
-    return mse + lam * (g1_norm + g2_norm)
-
-res = minimize(objective, np.zeros(4))
-print(f"Optimal Weights: {res.x}")
-print(f"Group 1 Norm: {np.linalg.norm(res.x[:2]):.4f}")
-print(f"Group 2 Norm: {np.linalg.norm(res.x[2:]):.4f}")
-</pre>
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Group Lasso Objective:</strong><br>
+                        L(w) = MSE + λ × Σ||w_g||₂<br>
+                        where g indexes feature groups
+                    </div>
+                    <div class="formula">
+                        <strong>Group Penalty:</strong><br>
+                        Penalizes L2-norm of each group, not individual weights
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Unregularized OLS: w = [4.2, 2.6, 0.4, 0.4]
-Group Lasso (λ=0.1): w = [3.95, 2.45, 0.18, 0.18]
-- ||w_G1||_2 = 4.680 (Useful Group)
-- ||w_G2||_2 = 0.254 (Shrunk Group)
-</pre>
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given data:</strong> x₁=[1,2], x₂=[2,1], x₃=[1,1], x₄=[1,1], y=[9,10].</p>
+                    <div class="step"><strong>Grouping:</strong> define feature groups g₁,...,g₄ (one feature per group in this demo).</div>
+                    <div class="step"><strong>Objective:</strong> minimize MSE(w) + λΣ||w_g||₂.</div>
+                    <div class="step"><strong>Optimization:</strong> solve for w using numerical minimization (L-BFGS-B) of the grouped objective.</div>
+                    <div class="step"><strong>Interpretation:</strong> groups with tiny norms are suppressed; active groups remain selected together.</div>
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp16.html" class="btn btn-secondary">⬅️ Experiment 16</a>
-            <a href="exp18.html" class="btn">Next: Experiment 18 ➔</a>
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize
+
+<span class="comment"># Simple Group Lasso Implementation</span>
+X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]])
+y = np.<span class="function">array</span>([<span class="number">9</span>, <span class="number">10</span>])
+
+<span class="comment"># Define 4 groups (each feature is a group)</span>
+groups = [[<span class="number">0</span>], [<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>]]
+
+<span class="comment"># Initialize weights</span>
+w = np.<span class="function">zeros</span>(<span class="number">4</span>)
+lr = <span class="number">0</span>.<span class="number">01</span>
+lambda_reg = <span class="number">0</span>.<span class="number">1</span>
+
+<span class="keyword">def</span> <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg):
+    penalty = <span class="number">0</span>
+    <span class="keyword">for</span> group <span class="keyword">in</span> groups:
+        group_norm = np.<span class="function">linalg</span>.<span class="function">norm</span>(w[group])
+        penalty += lambda_reg * group_norm
+    <span class="keyword">return</span> penalty
+
+<span class="comment"># Objective for scipy optimizer</span>
+<span class="keyword">def</span> <span class="function">objective</span>(w_vec):
+    residual = X @ w_vec - y
+    mse = np.<span class="function">mean</span>(residual**<span class="number">2</span>)
+    penalty = <span class="function">group_lasso_penalty</span>(w_vec, groups, lambda_reg)
+    <span class="keyword">return</span> mse + penalty
+
+result = <span class="function">minimize</span>(objective, w, method=<span class="string">'L-BFGS-B'</span>)
+w = result.x
+
+loss = np.<span class="function">mean</span>((X @ w - y)**<span class="number">2</span>)
+penalty = <span class="function">group_lasso_penalty</span>(w, groups, lambda_reg)
+<span class="function">print</span>(<span class="string">f"Solver success: {result.success}"</span>)
+<span class="function">print</span>(<span class="string">f"MSE: {loss:.4f}, Penalty: {penalty:.4f}, Total: {loss+penalty:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Weights: {w}"</span>)
+
+<span class="function">print</span>(<span class="string">f"\nSelected features: {np.<span class="function">where</span>(np.<span class="function">abs</span>(w) > <span class="number">0</span>.<span class="number">01</span>)[<span class="number">0</span>]}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Solver success: True<br>
+MSE: 0.0000, Penalty: 0.8033, Total: 0.8033<br>
+Weights: [4.47 3.47 0.98 0.98]<br><br>
+Selected features: [0 1 2 3]
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp16.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp18.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>

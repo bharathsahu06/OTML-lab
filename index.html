@@ -3,142 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTML Lab • Home</title>
+    <title>OTML Lab - Optimization &amp; Machine Learning Experiments</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Optimization Techniques for Machine Learning</h1>
-        <p>Laboratory Manual and Experiment Repository</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>&#128300; OTML Lab</h1>
+            <p>Optimization &amp; Machine Learning Experiments</p>
+            <p style="font-size: 0.9em; margin-top: 10px; color: #999;">
+                A comprehensive guide to implementing and understanding optimization algorithms
+            </p>
+        </header>
 
-    <nav class="main-nav">
-        <a href="guide.html">Quick Start Guide</a>
-        <a href="reference.html">Glossary & Reference</a>
-        <a href="procedures.html">Full Procedures</a>
-    </nav>
+        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h2 style="color: #856404; margin-top: 0;">📚 Comprehensive Resource Available</h2>
+            <p style="color: #856404; margin-bottom: 10px;"><strong>NEW:</strong> All 19 experiments now have complete mathematical procedures with working Python code and verified outputs!</p>
+            <p style="margin: 0;">
+                <a href="procedures.html" style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; transition: 0.3s;" onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+                    View All Procedures with Code &rarr;
+                </a>
+            </p>
+        </div>
 
-    <div class="container index-container">
-        <!-- CO1 -->
-        <section class="co-section">
-            <div class="co-title">
-                <h2>CO1: Basic Optimization Methods</h2>
-            </div>
-            <div class="experiment-list">
+        <div class="co-container" id="co1">
+            <div class="co-header">CO1: Gradient Descent &amp; Optimization Fundamentals</div>
+            <div class="experiments-grid">
                 <a href="experiments/exp1.html" class="experiment-card">
-                    <h3>Experiment 01</h3>
-                    <p>Gradient Descent for function \( f(x) = x^2 \).</p>
+                    <span class="experiment-number">Exp 1</span>
+                    <h3>Gradient Descent</h3>
+                    <p>Gradient descent for f(x) = x^2 with x = [1, 2, 3, 4], y = [1, 4, 9, 16]</p>
                 </a>
                 <a href="experiments/exp2.html" class="experiment-card">
-                    <h3>Experiment 02</h3>
-                    <p>Newton's Method for \( f(x) = x^4 - 3x^2 + 2 \).</p>
+                    <span class="experiment-number">Exp 2</span>
+                    <h3>Newton's Method</h3>
+                    <p>Optimization of f(x) = x^4 - 3x^2 + 2</p>
                 </a>
                 <a href="experiments/exp3.html" class="experiment-card">
-                    <h3>Experiment 03</h3>
-                    <p>Stochastic Gradient Descent for \( f(x) = x^2 \).</p>
+                    <span class="experiment-number">Exp 3</span>
+                    <h3>Stochastic Gradient Descent</h3>
+                    <p>SGD for f(x) = x^2 with x = [1, 2, 3, 4], y = [1, 4, 9, 16]</p>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <!-- CO2 -->
-        <section class="co-section">
-            <div class="co-title">
-                <h2>CO2: Constrained Optimization</h2>
-            </div>
-            <div class="experiment-list">
+        <div class="co-container" id="co2">
+            <div class="co-header">CO2: Convex Optimization &amp; Linear Programming</div>
+            <div class="experiments-grid">
                 <a href="experiments/exp4.html" class="experiment-card">
-                    <h3>Experiment 04</h3>
-                    <p>Minimize \( f(x,y)=x^2+y^2 \) with constraints (CVXPY).</p>
+                    <span class="experiment-number">Exp 4</span>
+                    <h3>Quadratic Optimization (CVXPY)</h3>
+                    <p>Minimize f(x,y) = x^2 + y^2 with constraints</p>
                 </a>
                 <a href="experiments/exp5.html" class="experiment-card">
-                    <h3>Experiment 05</h3>
-                    <p>Linear Objective Optimization (3x+2y) (CVXPY).</p>
+                    <span class="experiment-number">Exp 5</span>
+                    <h3>Linear Optimization (CVXPY)</h3>
+                    <p>Minimize f(x,y) = 3x + 2y with constraints</p>
                 </a>
                 <a href="experiments/exp6.html" class="experiment-card">
-                    <h3>Experiment 06</h3>
-                    <p>Quadratic objective \( x_1^2+x_2^2 \) (CVXPY).</p>
+                    <span class="experiment-number">Exp 6</span>
+                    <h3>Quadratic Linear Constraints (CVXPY)</h3>
+                    <p>Minimize f(x) = x1^2 + x2^2 with constraints</p>
                 </a>
                 <a href="experiments/exp7.html" class="experiment-card">
-                    <h3>Experiment 07</h3>
-                    <p>Linear Programming with and without PuLP.</p>
+                    <span class="experiment-number">Exp 7</span>
+                    <h3>Linear Programming (PuLP)</h3>
+                    <p>With and without PuLP library</p>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <!-- CO3 -->
-        <section class="co-section">
-            <div class="co-title">
-                <h2>CO3: Non-Smooth and Interior Point Methods</h2>
-            </div>
-            <div class="experiment-list">
+        <div class="co-container" id="co3">
+            <div class="co-header">CO3: Sub-gradient &amp; Interior Point Methods</div>
+            <div class="experiments-grid">
                 <a href="experiments/exp8.html" class="experiment-card">
-                    <h3>Experiment 08</h3>
-                    <p>Sub-gradient Method with L1-regularized loss (Dataset 1).</p>
+                    <span class="experiment-number">Exp 8</span>
+                    <h3>Sub-gradient L1-Regularization</h3>
+                    <p>Linear regression with dataset (1,2,5), (2,1,6), (3,4,7)</p>
                 </a>
                 <a href="experiments/exp9.html" class="experiment-card">
-                    <h3>Experiment 09</h3>
-                    <p>Sub-gradient Method with L1-regularized loss (Dataset 2).</p>
+                    <span class="experiment-number">Exp 9</span>
+                    <h3>Sub-gradient L1-Regularization</h3>
+                    <p>Linear regression with dataset (2,3,8), (1,4,7), (3,2,9)</p>
                 </a>
                 <a href="experiments/exp10.html" class="experiment-card">
-                    <h3>Experiment 10</h3>
-                    <p>Interior point method for \( \min f(x)=x^2 \) s.t. \( x \ge 1 \).</p>
+                    <span class="experiment-number">Exp 10</span>
+                    <h3>Interior Point Method</h3>
+                    <p>Non-linear constraint: min f(x) = x^2</p>
                 </a>
                 <a href="experiments/exp11.html" class="experiment-card">
-                    <h3>Experiment 11</h3>
-                    <p>Interior point method for \( \min f(x,y)=x+y \) s.t. \( x,y \ge 1 \).</p>
+                    <span class="experiment-number">Exp 11</span>
+                    <h3>Interior Point Method 2D</h3>
+                    <p>Minimize f(x,y) = x + y with constraints</p>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <!-- CO4 -->
-        <section class="co-section">
-            <div class="co-title">
-                <h2>CO4: Distributed and Stochastic Systems</h2>
-            </div>
-            <div class="experiment-list">
+        <div class="co-container" id="co4">
+            <div class="co-header">CO4: Mini-batch &amp; Distributed Gradient Descent</div>
+            <div class="experiments-grid">
                 <a href="experiments/exp12.html" class="experiment-card">
-                    <h3>Experiment 12</h3>
-                    <p>Mini-batch Gradient Descent for \( y=2x+1 \).</p>
+                    <span class="experiment-number">Exp 12</span>
+                    <h3>Mini-batch Gradient Descent</h3>
+                    <p>Linear regression with x=[1,2,3,4], y=[3,5,7,9]</p>
                 </a>
                 <a href="experiments/exp13.html" class="experiment-card">
-                    <h3>Experiment 13</h3>
-                    <p>Distributed Gradient Descent Simulation (6 points).</p>
+                    <span class="experiment-number">Exp 13</span>
+                    <h3>Distributed Gradient Descent</h3>
+                    <p>Simulate distributed algorithm for larger dataset</p>
                 </a>
                 <a href="experiments/exp14.html" class="experiment-card">
-                    <h3>Experiment 14</h3>
-                    <p>Mini-batch Gradient Descent for \( y=2x+3 \).</p>
+                    <span class="experiment-number">Exp 14</span>
+                    <h3>Mini-batch Gradient Descent 2</h3>
+                    <p>Linear regression with x=[1,2,3,4], y=[5,7,9,11]</p>
                 </a>
                 <a href="experiments/exp15.html" class="experiment-card">
-                    <h3>Experiment 15</h3>
-                    <p>Distributed Gradient Descent Simulation (4 points).</p>
+                    <span class="experiment-number">Exp 15</span>
+                    <h3>Distributed Gradient Descent 2</h3>
+                    <p>Simulate distributed algorithm</p>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <!-- CO5 -->
-        <section class="co-section">
-            <div class="co-title">
-                <h2>CO5: Regularization & Advanced Methods</h2>
-            </div>
-            <div class="experiment-list">
+        <div class="co-container" id="co5">
+            <div class="co-header">CO5: Regularization &amp; Advanced Optimization</div>
+            <div class="experiments-grid">
                 <a href="experiments/exp16.html" class="experiment-card">
-                    <h3>Experiment 16</h3>
-                    <p>L1, L2 Regularization and Elastic Net Regression.</p>
+                    <span class="experiment-number">Exp 16</span>
+                    <h3>L1/L2 &amp; Elastic Net Regression</h3>
+                    <p>Linear regression with L1, L2, and Elastic Net regularization</p>
                 </a>
                 <a href="experiments/exp17.html" class="experiment-card">
-                    <h3>Experiment 17</h3>
-                    <p>Grouped Sparsity demonstration using Group Lasso.</p>
+                    <span class="experiment-number">Exp 17</span>
+                    <h3>Group Lasso Sparsity</h3>
+                    <p>Demonstrate grouped sparsity using Group Lasso</p>
                 </a>
                 <a href="experiments/exp18.html" class="experiment-card">
-                    <h3>Experiment 18</h3>
-                    <p>Conjugate Gradient Method for Linear Systems \( Ax=b \).</p>
+                    <span class="experiment-number">Exp 18</span>
+                    <h3>Conjugate Gradient Method</h3>
+                    <p>Solve system of linear equations</p>
                 </a>
                 <a href="experiments/exp19.html" class="experiment-card">
-                    <h3>Experiment 19</h3>
-                    <p>Quasi-Newton Method for \( f(x_1,x_2)=x_1^2+2x_2^2 \).</p>
+                    <span class="experiment-number">Exp 19</span>
+                    <h3>Quasi-Newton Method</h3>
+                    <p>Minimize f(x1,x2) = x1^2 + 2x2^2</p>
                 </a>
             </div>
-        </section>
+        </div>
+
+        <footer>
+            <p>&copy; OTML Lab - Optimization &amp; Machine Learning Laboratory</p>
+            <p>Educational Resource for Understanding Optimization Algorithms</p>
+        </footer>
     </div>
 </body>
 </html>

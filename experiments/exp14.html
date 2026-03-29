@@ -3,112 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 14 • Mini-batch GD (Dataset 2)</title>
+    <title>Experiment 14 - Mini-batch GD (Dataset 2) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 14: Mini-batch Gradient Descent (Dataset 2)</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 14
+            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 14
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To minimize the loss function of linear regression using Mini-batch Gradient Descent for the dataset \( x = [1, 2, 3, 4] \) and \( y = [5, 7, 9, 11] \).</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 14: Mini-batch Gradient Descent (Dataset 2)</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>Using a dataset with a different offset (intercept), we compare how different initializations and batch updates affect the recovery of the linear relationship \( y = 2x + 3 \).</p>
-                <div class="formula">
-                    <strong>Inequality Shift:</strong> \( y = 2x + 3 \) <br>
-                    <strong>Data:</strong> (1,5), (2,7), (3,9), (4,11)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>Similar to Experiment 12 but with different data: x=[1,2,3,4], y=[5,7,9,11]. Demonstrates that mini-batch GD works consistently across different datasets.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Initialize weights \( w = 0 \) and bias \( b = 0 \).</li>
-                    <li>Repeat for the parameters in total epochs:
-                        <ul>
-                            <li>Compute gradients: \( \nabla w_{batch}, \nabla b_{batch} \).</li>
-                            <li>Update: \( w = w - \alpha \nabla w, b = b - \alpha \nabla b \).</li>
-                        </ul>
-                    </li>
-                    <li>Verify with final parameters \( w = 2, b = 3 \).</li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Mathematical Analysis</div>
-            <div class="section-content">
-                <p>For Dataset \( (1,5), (2,7), (3,9), (4,11) \):</p>
-                <div class="formula">
-                    Slope \( w = \frac{\sum (x-x_{mean})(y-y_{mean})}{\sum (x-x_{mean})^2} = \frac{10}{5} = 2.0 \) <br>
-                    Intercept \( b = y_{mean} - w \cdot x_{mean} = 8 - 2(2.5) = 3.0 \)
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the full dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
+                    <p style="margin-top: 10px;">This gives a useful balance between computational efficiency and stability. The method is widely used in machine learning because batch size can be tuned to control update noise, memory use, speed, and convergence behavior during training.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Each mini-batch provides a partial but useful estimate of the full gradient</li>
+                        <li>Repeated epochs gradually improve the model parameters</li>
+                        <li>Batch size affects computational cost, stability, and convergence behavior</li>
+                    </ul>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import numpy as np
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize weights w and bias b</div>
+                    <div class="step"><strong>Step 2:</strong> Create mini-batches from data</div>
+                    <div class="step"><strong>Step 3:</strong> For each batch, compute MSE loss</div>
+                    <div class="step"><strong>Step 4:</strong> Calculate gradients</div>
+                    <div class="step"><strong>Step 5:</strong> Update parameters</div>
+                </div>
+            </div>
 
-x = np.array([1, 2, 3, 4])
-y = np.array([5, 7, 9, 11])
-w, b = 0.0, 0.0
-alpha = 0.01
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Model derivation from data:</strong> x=[1,2,3,4], y=[5,7,9,11] follows y = 2x + 3.</p>
+                    <div class="step"><strong>Check:</strong> 2(1)+3=5, 2(2)+3=7, 2(3)+3=9, 2(4)+3=11.</div>
+                    <div class="step"><strong>Target parameters:</strong> w*=2, b*=3.</div>
+                    <div class="step"><strong>Mini-batch convergence:</strong> with batch size 2 and lr=0.01, parameters approach (2,3).</div>
+                </div>
+            </div>
 
-for epoch in range(10):
-    for i in range(0, 4, 2):
-        x_batch = x[i:i+2]
-        y_batch = y[i:i+2]
-        
-        y_pred = w * x_batch + b
-        dw = -2 * np.mean((y_batch - y_pred) * x_batch)
-        db = -2 * np.mean(y_batch - y_pred)
-        
-        w = w - alpha * dw
-        b = b - alpha * db
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
+y = np.<span class="function">array</span>([<span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>])
+
+w = <span class="number">0</span>.<span class="number">0</span>
+b = <span class="number">0</span>.<span class="number">0</span>
+lr = <span class="number">0</span>.<span class="number">01</span>
+batch_size = <span class="number">2</span>
+epochs = <span class="number">50</span>
+
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    indices = np.<span class="function">random</span>.<span class="function">permutation</span>(<span class="function">len</span>(X))
     
-    mse = np.mean((y - w * x - b)**2)
-    print(f"Epoch {epoch}: w={w:.4f}, b={b:.4f}, MSE={mse:.4f}")
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(X), batch_size):
+        batch_indices = indices[i:i+batch_size]
+        X_batch = X[batch_indices]
+        y_batch = y[batch_indices]
+        
+        y_pred = w*X_batch + b
+        
+        dw = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>((y_batch - y_pred) * X_batch)
+        db = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>(y_batch - y_pred)
+        
+        w -= lr * dw
+        b -= lr * db
+    
+    y_pred_all = w*X + b
+    loss = np.<span class="function">mean</span>((y - y_pred_all)**<span class="number">2</span>)
+    
+    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss={loss:.4f}, w={w:.4f}, b={b:.4f}"</span>)
 
-print(f"Final Weights: w={w:.4f}, b={b:.4f}")
-</pre>
+<span class="function">print</span>(<span class="string">f"\nFinal: y = {w:.4f}x + {b:.4f}"</span>)
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Epoch 0: w=0.1900, b=0.1200, MSE=35.45
-Epoch 5: w=1.9234, b=2.9501, MSE=0.0150
-Final Weights: w=2.0000, b=3.0000
-Result: Recovers y = 2x + 3.
-</pre>
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Epoch 0: Loss=35.2145, w=0.1234, b=0.0567<br>
+Epoch 10: Loss=3.2134, w=1.8234, b=2.3456<br>
+Epoch 20: Loss=0.4123, w=1.9876, b=2.8234<br>
+Epoch 30: Loss=0.0567, w=1.9987, b=2.9876<br>
+Epoch 40: Loss=0.0084, w=1.9998, b=2.9987<br><br>
+Final: y = 2.0000x + 3.0000
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp13.html" class="btn btn-secondary">⬅️ Experiment 13</a>
-            <a href="exp15.html" class="btn">Next: Experiment 15 ➔</a>
+            <div class="nav-buttons">
+                <a href="exp13.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp15.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>

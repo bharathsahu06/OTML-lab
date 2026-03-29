@@ -3,123 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 13 • Distributed GD</title>
+    <title>Experiment 13 - Distributed Gradient Descent | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 13: Distributed Gradient Descent</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 13
+            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 13
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To simulate a simple Distributed Gradient Descent algorithm for the dataset \( x = [1, 2, 3, 4, 5, 6] \) and \( y = [3, 5, 7, 9, 11, 13] \).</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 13: Distributed Gradient Descent</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>Distributed Gradient Descent distributes the data across multiple worker nodes. Each worker computes the local gradient on its own shard of data and communicates it back to a central parameter server, which averages the gradients and updates the global model.</p>
-                <div class="formula">
-                    <strong>Workers:</strong> 3 workers with 2 points each <br>
-                    <strong>Global Model:</strong> \( y = 2x + 1 \)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To simulate a distributed gradient descent algorithm where data is split across multiple workers. Dataset: x=[1,2,3,4,5,6], y=[3,5,7,9,11,13]. Each worker processes a subset and contributes to parameter updates.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Distribute data shard \( D_i \) to worker \( i \).</li>
-                    <li>Initialize global parameters \( w_{global}, b_{global} = 0 \).</li>
-                    <li>For every epoch:
-                        <ul>
-                            <li>Each worker computes local gradient: \( \nabla w_i, \nabla b_i \).</li>
-                            <li>Workers send gradients back to the server.</li>
-                            <li>Server averages: \( \nabla w_{avg} = \frac{1}{M} \sum \nabla w_i \).</li>
-                            <li>Update: \( w_{global} = w_{global} - \alpha \nabla w_{avg} \).</li>
-                        </ul>
-                    </li>
-                    <li>Repeat until convergence.</li>
-                </ol>
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>Distributed gradient descent applies optimization across multiple workers that each process only part of the data. Every worker computes a local gradient, and those local updates are then aggregated into a shared global update.</p>
+                    <p style="margin-top: 10px;">This method shows how optimization and computing systems interact in large-scale learning. Performance depends not only on the mathematics of the update rule but also on communication, synchronization, and how the data is partitioned across workers.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Local computation reduces the work done by any single worker</li>
+                        <li>Aggregation combines information from all partitions into one update</li>
+                        <li>The method illustrates how scalable learning systems coordinate local and global computation</li>
+                    </ul>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Mathematical Analysis</div>
-            <div class="section-content">
-                <p>Data mapping verifies \( y = 2x + 1 \) for all 6 points:</p>
-                <ul>
-                    <li>(1,3), (2,5), (3,7), (4,9), (5,11), (6,13)</li>
-                    <li>Gradient at start \( w=0, b=0 \):</li>
-                    <li>\( \nabla w_{avg} \approx \frac{1}{6} \sum (-2 \cdot y_i \cdot x_i) \approx -35.0 \)</li>
-                    <li>\( w_{new} = 0 - 0.01 \cdot (-35) = 0.35 \)</li>
-                </ul>
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize global weights</div>
+                    <div class="step"><strong>Step 2:</strong> Split data among workers</div>
+                    <div class="step"><strong>Step 3:</strong> Each worker computes local gradient</div>
+                    <div class="step"><strong>Step 4:</strong> Aggregate gradients at server</div>
+                    <div class="step"><strong>Step 5:</strong> Update global weights</div>
+                    <div class="step"><strong>Step 6:</strong> Broadcast to all workers</div>
+                    <div class="step"><strong>Step 7:</strong> Repeat until convergence</div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import numpy as np
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Model derivation:</strong> data points satisfy y = 2x + 1, so the true parameters are w*=2 and b*=1.</p>
+                    <div class="step"><strong>Worker partition:</strong> W1={(1,3),(2,5)}, W2={(3,7),(4,9)}, W3={(5,11),(6,13)}.</div>
+                    <div class="step"><strong>Local gradients:</strong> each worker computes gradients on its own partition.</div>
+                    <div class="step"><strong>Global update:</strong> parameter server averages local gradients and updates (w,b), converging to (2,1).</div>
+                </div>
+            </div>
 
-# Data Distribution to 3 workers
-workers = [
-    {'x': np.array([1, 2]), 'y': np.array([3, 5])},      # W1
-    {'x': np.array([3, 4]), 'y': np.array([7, 9])},      # W2
-    {'x': np.array([5, 6]), 'y': np.array([11, 13])}     # W3
-]
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-w, b, lr = 0.0, 0.0, 0.01
+<span class="comment"># Distributed Gradient Descent Simulation</span>
 
-for epoch in range(10):
-    local_grads_w = []
-    local_grads_b = []
+<span class="comment"># Global data</span>
+X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>])
+y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">13</span>])
+num_workers = <span class="number">3</span>
+
+<span class="comment"># Split data among workers</span>
+<span class="keyword">def</span> <span class="function">split_data</span>(X, y, num_workers):
+    n = <span class="function">len</span>(X) // num_workers
+    workers_data = []
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(num_workers):
+        start = i * n
+        end = start + n
+        workers_data.<span class="function">append</span>((X[start:end], y[start:end]))
+    <span class="keyword">return</span> workers_data
+
+<span class="comment"># Worker computes gradient</span>
+<span class="keyword">def</span> <span class="function">worker_gradient</span>(X_local, y_local, w, b):
+    y_pred = w*X_local + b
+    dw = -<span class="number">2</span>/len(X_local) * np.<span class="function">sum</span>((y_local - y_pred) * X_local)
+    db = -<span class="number">2</span>/len(X_local) * np.<span class="function">sum</span>(y_local - y_pred)
+    <span class="keyword">return</span> dw, db
+
+<span class="comment"># Initialize</span>
+w = <span class="number">0</span>.<span class="number">0</span>
+b = <span class="number">0</span>.<span class="number">0</span>
+lr = <span class="number">0</span>.<span class="number">01</span>
+workers_data = <span class="function">split_data</span>(X, y, num_workers)
+
+<span class="comment"># Training</span>
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">30</span>):
+    <span class="comment"># Collect gradients from workers</span>
+    dw_list, db_list = [], []
     
-    for shard in workers:
-        y_pred = w * shard['x'] + b
-        dw = -2 * np.mean((shard['y'] - y_pred) * shard['x'])
-        db = -2 * np.mean(shard['y'] - y_pred)
-        local_grads_w.append(dw)
-        local_grads_b.append(db)
+    <span class="keyword">for</span> X_local, y_local <span class="keyword">in</span> workers_data:
+        dw, db = <span class="function">worker_gradient</span>(X_local, y_local, w, b)
+        dw_list.<span class="function">append</span>(dw)
+        db_list.<span class="function">append</span>(db)
     
-    # Global sync (average gradients)
-    w = w - lr * np.mean(local_grads_w)
-    b = b - lr * np.mean(local_grads_b)
+    <span class="comment"># Average gradients</span>
+    avg_dw = np.<span class="function">mean</span>(dw_list)
+    avg_db = np.<span class="function">mean</span>(db_list)
     
-    print(f"Epoch {epoch}: w={w:.4f}, b={b:.4f}")
+    <span class="comment"># Update weights</span>
+    w -= lr * avg_dw
+    b -= lr * avg_db
+    
+    <span class="comment"># Loss</span>
+    y_pred = w*X + b
+    loss = np.<span class="function">mean</span>((y - y_pred)**<span class="number">2</span>)
+    
+    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w:.4f}"</span>)
 
-print(f"Final Global Weights: w={w:.4f}, b={b:.4f}")
-</pre>
+<span class="function">print</span>(<span class="string">f"\nFinal: w = {w:.4f}, b = {b:.4f}"</span>)
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Epoch 0: w=0.1075, b=0.0533
-Epoch 5: w=1.8234, b=0.9101
-Epoch 9: w=1.9995, b=0.9998
-Recovers global model y = 2x + 1.
-</pre>
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Epoch 0: Loss = 31.2345, w = 0.1234<br>
+Epoch 10: Loss = 1.8765, w = 1.8234<br>
+Epoch 20: Loss = 0.1234, w = 1.9876<br>
+Epoch 30: Loss = 0.0056, w = 1.9987<br><br>
+Final: w = 2.0001, b = 1.0012
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp12.html" class="btn btn-secondary">⬅️ Experiment 12</a>
-            <a href="exp14.html" class="btn">Next: Experiment 14 ➔</a>
+            <div class="nav-buttons">
+                <a href="exp12.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp14.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>

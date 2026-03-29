@@ -3,89 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 6 • CVXPY Quadratic</title>
+    <title>Experiment 6 - Quadratic with Linear Constraints | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 6: Quadratic Optimization with CVXPY</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 6
+            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 6
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To minimize the quadratic objective function \( f(x) = x_1^2 + x_2^2 \) subject to the linear constraints \( x_1 + x_2 \ge 1 \), \( x_1 \ge 0, x_2 \ge 0 \) using CVXPY.</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 6: Quadratic Objective with Linear Constraints (CVXPY)</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>This experiment demonstrates solving a quadratic program (QP) using the CVXPY library. The objective function is the squared distance from the origin, and the feasible region is defined by a linear inequalities.</p>
-                <div class="formula">
-                    <strong>Problem:</strong> \( \min x_1^2 + x_2^2 \) <br>
-                    <strong>Subject to:</strong> \( x_1 + x_2 \ge 1, x_1, x_2 \ge 0 \)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To minimize a quadratic objective function f(x₁,x₂) = x₁² + x₂² subject to linear constraints using CVXPY: x₁+x₂ ≥ 1, x₁ ≥ 0, x₂ ≥ 0.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Define variables \( x_1, x_2 \) using \( \texttt{cp.Variable()} \).</li>
-                    <li>Construct the quadratic objective function: \( \texttt{cp.Minimize(x1**2 + x2**2)} \).</li>
-                    <li>Define the constraint list: \( [x_1 + x_2 \ge 1, x_1 \ge 0, x_2 \ge 0] \).</li>
-                    <li>Solve the problem using \( \texttt{cp.Problem(objective, constraints).solve()} \).</li>
-                    <li>Verify that the solution matches the analytical point \( (0.5, 0.5) \).</li>
-                </ol>
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>Convex quadratic optimization with linear constraints combines a curved objective with a feasible region defined by inequalities. The quadratic terms shape the objective surface, while the constraints determine where a solution is allowed to lie.</p>
+                    <p style="margin-top: 10px;">This type of model appears frequently in optimization and machine learning because it balances smooth objectives with practical restrictions. Using CVXPY shows how such problems can be modeled clearly and solved numerically once the mathematical structure is specified.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Quadratic terms introduce curvature into the objective</li>
+                        <li>Linear constraints define the admissible search region</li>
+                        <li>The solver finds the best feasible point that minimizes the objective</li>
+                    </ul>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import cvxpy as cp
-
-x1 = cp.Variable()
-x2 = cp.Variable()
-
-objective = cp.Minimize(x1**2 + x2**2)
-constraints = [x1 + x2 >= 1, x1 >= 0, x2 >= 0]
-
-problem = cp.Problem(objective, constraints)
-result = problem.solve()
-
-print(f"Optimal x1: {x1.value:.4f}")
-print(f"Optimal x2: {x2.value:.4f}")
-print(f"Minimum Value: {result:.4f}")
-</pre>
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Define variables x₁ and x₂</div>
+                    <div class="step"><strong>Step 2:</strong> Define quadratic objective</div>
+                    <div class="step"><strong>Step 3:</strong> Add linear constraints</div>
+                    <div class="step"><strong>Step 4:</strong> Solve the problem</div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Optimal x1: 0.5000
-Optimal x2: 0.5000
-Minimum Value: 0.5000
-Verification: Point (0.5, 0.5) satisfies x1+x2=1.
-</pre>
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Minimize:</strong><br>
+                        f(x₁, x₂) = x₁² + x₂²
+                    </div>
+                    <div class="formula">
+                        <strong>Subject to:</strong><br>
+                        x₁ + x₂ ≥ 1<br>
+                        x₁ ≥ 0<br>
+                        x₂ ≥ 0
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp5.html" class="btn btn-secondary">⬅️ Experiment 5</a>
-            <a href="exp7.html" class="btn">Next: Experiment 7 ➔</a>
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <div class="step">
+                        <strong>Optimal Point:</strong><br>
+                        By symmetry, x₁ = x₂ = 0.5<br>
+                        This lies on the constraint boundary x₁ + x₂ = 1
+                    </div>
+                    <div class="step">
+                        <strong>Optimal Value:</strong><br>
+                        f(0.5, 0.5) = 0.25 + 0.25 = 0.5
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
+
+<span class="comment"># Define variables</span>
+x1 = cp.<span class="function">Variable</span>()
+x2 = cp.<span class="function">Variable</span>()
+
+<span class="comment"># Objective: minimize x₁² + x₂²</span>
+objective = cp.<span class="function">Minimize</span>(x1**<span class="number">2</span> + x2**<span class="number">2</span>)
+
+<span class="comment"># Constraints</span>
+constraints = [
+    x1 + x2 >= <span class="number">1</span>,
+    x1 >= <span class="number">0</span>,
+    x2 >= <span class="number">0</span>
+]
+
+<span class="comment"># Solve</span>
+problem = cp.<span class="function">Problem</span>(objective, constraints)
+problem.<span class="function">solve</span>()
+
+<span class="comment"># Results</span>
+<span class="function">print</span>(<span class="string">f"x₁ = {x1.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"x₂ = {x2.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum = {objective.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Status: {problem.status}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+x₁ = 0.500000<br>
+x₂ = 0.500000<br>
+Minimum = 0.500000<br>
+Status: optimal
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp5.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp7.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>

@@ -3,126 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 04 • Stochastic Gradient Descent</title>
+    <title>Experiment 4 - Quadratic Optimization with CVXPY | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 04: Stochastic Gradient Descent (SGD)</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 04
+            <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 4
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To implement Stochastic Gradient Descent (SGD) for linear regression, demonstrating how the model parameters are updated after processing each individual sample from the dataset.</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 4: Quadratic Programming with CVXPY</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>Unlike standard Gradient Descent which uses the entire dataset to compute gradients, Stochastic Gradient Descent (SGD) updates parameters for every single data point. This makes the optimization faster and able to handle huge datasets, though the path to the minimum is more "noisy" or "stochastic".</p>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Initialize parameters \( m \) and \( c \).</li>
-                    <li>For each epoch:
-                        <ul>
-                            <li>Shuffle the dataset (or select points randomly).</li>
-                            <li>For each training example \( (x, y) \):
-                                <ul>
-                                    <li>Calculate prediction \( \hat{y} = mx + c \).</li>
-                                    <li>Calculate Gradient for this single point: \( \frac{\partial L}{\partial m} = -(y - \hat{y})x \).</li>
-                                    <li>Update: \( m = m - \eta \cdot \frac{\partial L}{\partial m} \).</li>
-                                    <li>Update: \( c = c - \eta \cdot \frac{\partial L}{\partial c} \).</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Formulas</div>
-            <div class="section-content">
-                <div class="formula">
-                    Error per point: \( e = y - (mx + c) \)
-                </div>
-                <div class="formula">
-                    Update Gradient: \( \nabla m = -e \cdot x, \quad \nabla c = -e \)
-                </div>
-                <div class="formula">
-                    Parameter Update: \( \theta = \theta - \eta \nabla_\theta L \)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To solve a constrained quadratic optimization problem using CVXPY: minimize f(x,y) = x² + y² subject to constraints x+y ≥ 1, x ≥ 0, y ≥ 0. This demonstrates convex optimization using a professional library.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
-            <div class="section-content">
-                <p>Assume point \( (2.5, 6.1) \) and model \( y = 1.0x + 0.5 \), \( \eta=0.01 \).</p>
-                <ul>
-                    <li>Prediction: \( 1.0(2.5) + 0.5 = 3.0 \)</li>
-                    <li>Error: \( 6.1 - 3.0 = 3.1 \)</li>
-                    <li>Update \( m \): \( 1.0 - 0.01(-3.1 \cdot 2.5) = 1.0 + 0.0775 = 1.0775 \)</li>
-                    <li>Update \( c \): \( 0.5 - 0.01(-3.1) = 0.5 + 0.031 = 0.531 \)</li>
-                </ul>
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>Quadratic programming optimizes a quadratic objective subject to constraints, and CVXPY provides a clear way to express such models in code. The user defines variables, an objective, and constraints, and the solver handles the numerical optimization behind the scenes.</p>
+                    <p style="margin-top: 10px;">These problems are important in convex optimization because they often have well-structured solution behavior and strong theoretical guarantees. Working with CVXPY also helps separate mathematical modeling from the internal details of the optimization solver.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The objective function measures what must be minimized</li>
+                        <li>The constraints define the feasible region of allowed solutions</li>
+                        <li>CVXPY converts the mathematical model into a solvable optimization program</li>
+                    </ul>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import random
-
-# Synthetic data: y = 2x + 1
-data = [(x, 2*x + 1 + random.uniform(-1, 1)) for x in [random.uniform(0, 10) for _ in range(100)]]
-
-m, c = 0.0, 0.0
-eta = 0.01
-
-for epoch in range(100):
-    x, y = random.choice(data)
-    y_pred = m * x + c
-    error = y - y_pred
-    
-    # SGD updates
-    m = m - eta * (-error * x)
-    c = c - eta * (-error)
-
-print(f"Final model: y = {m:.4f}x + {c:.4f}")
-</pre>
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Define decision variables x and y</div>
+                    <div class="step"><strong>Step 2:</strong> Define objective function: minimize x² + y²</div>
+                    <div class="step"><strong>Step 3:</strong> Add constraints: x+y ≥ 1, x ≥ 0, y ≥ 0</div>
+                    <div class="step"><strong>Step 4:</strong> Create optimization problem</div>
+                    <div class="step"><strong>Step 5:</strong> Solve the problem</div>
+                    <div class="step"><strong>Step 6:</strong> Extract and display results</div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-epoch 1: m=0.3404, c=0.0881, loss=38.8000
-...
-Final learned model:
-y^ = 2.1467x + 0.4851
-</pre>
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Objective (Minimize):</strong><br>
+                        f(x,y) = x² + y²
+                    </div>
+                    <div class="formula">
+                        <strong>Subject to (Constraints):</strong><br>
+                        x + y ≥ 1<br>
+                        x ≥ 0<br>
+                        y ≥ 0
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp3.html" class="btn btn-secondary">⬅️ Experiment 03</a>
-            <a href="exp5.html" class="btn">Next: Experiment 05 ➔</a>
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Problem from Aim:</strong> minimize f(x,y)=x²+y² subject to x+y≥1, x≥0, y≥0.</p>
+                    
+                    <div class="step">
+                        <strong>Feasible Region:</strong><br>
+                        First-quadrant half-plane with x+y≥1 (an unbounded convex region).
+                    </div>
+
+                    <div class="step">
+                        <strong>Optimal Point:</strong><br>
+                        For minimum norm in this feasible set, optimum lies on active boundary x + y = 1.<br>
+                        By symmetry at optimum x = y.<br>
+                        Therefore: x = 0.5, y = 0.5
+                    </div>
+
+                    <div class="step">
+                        <strong>Verification:</strong><br>
+                        f(0.5, 0.5) = 0.5² + 0.5² = 0.25 + 0.25 = 0.5<br>
+                        Constraint check: 0.5 + 0.5 = 1 ✓ (satisfies ≥ 1)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <p><strong>Install CVXPY first: pip install cvxpy</strong></p>
+                    <div class="code-block">
+<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
+
+<span class="comment"># Define variables</span>
+x = cp.<span class="function">Variable</span>()
+y = cp.<span class="function">Variable</span>()
+
+<span class="comment"># Define objective: minimize x² + y²</span>
+objective = cp.<span class="function">Minimize</span>(x**<span class="number">2</span> + y**<span class="number">2</span>)
+
+<span class="comment"># Define constraints</span>
+constraints = [
+    x + y >= <span class="number">1</span>,    <span class="comment"># x + y >= 1</span>
+    x >= <span class="number">0</span>,         <span class="comment"># x >= 0</span>
+    y >= <span class="number">0</span>          <span class="comment"># y >= 0</span>
+]
+
+<span class="comment"># Create and solve problem</span>
+problem = cp.<span class="function">Problem</span>(objective, constraints)
+problem.<span class="function">solve</span>()
+
+<span class="comment"># Display results</span>
+<span class="function">print</span>(<span class="string">f"Optimal x = {x.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Optimal y = {y.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Minimum value = {objective.value:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"Status: {problem.status}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Optimal x = 0.500000<br>
+Optimal y = 0.500000<br>
+Minimum value = 0.500000<br>
+Status: optimal
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp3.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp5.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>

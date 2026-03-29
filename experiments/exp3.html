@@ -3,111 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 3 • Stochastic Gradient Descent</title>
+    <title>Experiment 3 - Stochastic Gradient Descent for f(x) = x^2 | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 3: Stochastic Gradient Descent (SGD)</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 3
+            <a href="../index.html">Home</a> / <a href="../index.html#co1">CO1</a> / Experiment 3
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To implement the Stochastic Gradient Descent (SGD) algorithm for optimizing the objective function \( f(x) = x^2 \) using data samples \( x = [1, 2, 3, 4] \) and \( y = [1, 4, 9, 16] \).</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 3: Stochastic Gradient Descent for f(x) = x^2</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>Stochastic Gradient Descent is a variant of Gradient Descent that updates parameters using only a single training sample at a time instead of the entire dataset. This makes it significantly faster for large-scale datasets, though the path to convergence is more "stochastic" or noisy.</p>
-                <div class="formula">
-                    Update Rule for one sample \( i \): <br>
-                    \( x = x - \alpha \nabla f_i(x) \)
+            <div class="section">
+                <div class="section-title">&#128204; Aim</div>
+                <div class="section-content">
+                    <p>To implement Stochastic Gradient Descent (SGD) for the function f(x) = x^2 using the sample values x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. This experiment highlights how stochastic-style updates can still move the variable toward the minimum even when each step is noisy.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Initialize the point \( x \) randomly.</li>
-                    <li>Set the learning rate \( \alpha = 0.05 \).</li>
-                    <li>For each epoch:
-                        <ul>
-                            <li>Shuffle the training dataset.</li>
-                            <li>For each individual sample \( (x_i, y_i) \):
-                                <ul>
-                                    <li>Compute the local gradient based on sample \( i \).</li>
-                                    <li>Update the parameter \( x \).</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>Observe convergence toward the global optimum \( x = 0 \).</li>
-                </ol>
+            <div class="section">
+                <div class="section-title">&#128221; Description</div>
+                <div class="section-content">
+                                        <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent that updates the parameters using only a small portion of the available information at each step. This makes each update inexpensive and allows the method to react quickly while optimization is in progress.</p>
+                    <p style="margin-top: 10px;">Because the updates are stochastic, the optimization path is noisier than standard gradient descent, but the method scales well and is central to modern machine learning. Its behavior depends on the learning rate, data ordering, and the tradeoff between speed and stability.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>Updates happen more frequently than in full batch gradient descent</li>
+                        <li>Each step is cheap to compute but less stable than a full gradient update</li>
+                        <li>Noisy updates can still move the method toward a good solution over time</li>
+                    </ul>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import numpy as np
-import random
-
-x_data = np.array([1, 2, 3, 4])
-y_data = np.array([1, 4, 9, 16])
-
-# Initialization
-w = 5.0
-alpha = 0.01
-epochs = 5
-
-for epoch in range(epochs):
-    # Shuffle for pure stochasticity
-    indices = list(range(len(x_data)))
-    random.shuffle(indices)
-    
-    for idx in indices:
-        # Gradient of (w^2 - y)^2 with respect to w is 2 * (w^2 - y) * 2w
-        grad = 4 * w * (w**2 - y_data[idx])
-        w = w - alpha * grad
-        print(f"Epoch {epoch} | w updated: {w:.4f}")
-
-print(f"Final Weights: {w:.4f}")
-</pre>
+            <div class="section">
+                <div class="section-title">&#128295; Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Start with an initial value such as x = 5.0</div>
+                    <div class="step"><strong>Step 2:</strong> Choose a learning rate and number of epochs</div>
+                    <div class="step"><strong>Step 3:</strong> Estimate a stochastic gradient using 2x plus a small random variation</div>
+                    <div class="step"><strong>Step 4:</strong> Update x using the stochastic gradient</div>
+                    <div class="step"><strong>Step 5:</strong> Repeat the process until x moves close to the minimum</div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Epoch 0 | w updated: 4.0400
-Epoch 0 | w updated: 3.1027
-...
-Final Epoch updates:
-Epoch 4 | w updated: 0.1245
-Epoch 4 | w updated: 0.0034
-Final Weights: 0.0000
-Result: Convergence to 0 with noisy path.
-</pre>
+            <div class="section">
+                <div class="section-title">&#128208; Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Objective Function:</strong><br>
+                        f(x) = x<sup>2</sup>
+                    </div>
+                    <div class="formula">
+                        <strong>Given Data:</strong><br>
+                        x = [1, 2, 3, 4], y = [1, 4, 9, 16]
+                    </div>
+                    <div class="formula">
+                        <strong>True Gradient:</strong><br>
+                        df/dx = 2x
+                    </div>
+                    <div class="formula">
+                        <strong>Stochastic Sample Gradient:</strong><br>
+                        g_i = 2x_i for randomly selected sample x_i
+                    </div>
+                    <div class="formula">
+                        <strong>SGD Update Rule:</strong><br>
+                        x_i ← x_i - &alpha;g_i = x_i - 2&alpha;x_i
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 2</a>
-            <a href="exp4.html" class="btn">Next: Experiment 4 ➔</a>
+            <div class="section">
+                <div class="section-title">&#128202; Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
+                    <p>Use SGD over randomly selected sample points x_i with &alpha; = 0.1.</p>
+
+                    <div class="step">
+                        <strong>Sample update example:</strong><br>
+                        pick x_i = 4<br>
+                        g_i = 2x_i = 8<br>
+                        updated x_i = 4 - 0.1(8) = 3.2
+                    </div>
+
+                    <div class="step">
+                        <strong>Another sample update:</strong><br>
+                        pick x_i = 2<br>
+                        g_i = 4<br>
+                        updated x_i = 2 - 0.1(4) = 1.6
+                    </div>
+
+                    <p style="margin-top: 15px;">Repeating random sample updates across epochs reduces every x_i toward 0, so y_i = x_i^2 also moves toward 0.</p>
+                    <p><strong>Interpretation:</strong> this is stochastic because one sample is updated at a time, but the same objective f(x)=x^2 is minimized.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">&#128187; Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> random
+
+random.<span class="function">seed</span>(<span class="number">42</span>)
+
+<span class="comment"># SGD for f(x)=x^2 using given sample values</span>
+
+x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
+y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
+
+<span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
+<span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
+
+learning_rate = <span class="number">0.1</span>
+epochs = <span class="number">20</span>
+
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    indices = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+    random.<span class="function">shuffle</span>(indices)
+
+    <span class="keyword">for</span> idx <span class="keyword">in</span> indices:
+        grad = <span class="number">2</span> * x_data[idx]
+        x_data[idx] = x_data[idx] - learning_rate * grad
+        y_data[idx] = x_data[idx] ** <span class="number">2</span>
+
+    <span class="keyword">if</span> epoch % <span class="number">5</span> == <span class="number">0</span>:
+        avg_loss = <span class="function">sum</span>(y_data) / <span class="function">len</span>(y_data)
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: x = {[round(v,4) for v in x_data]}, Avg Loss = {avg_loss:.6f}"</span>)
+
+<span class="function">print</span>(<span class="string">f"\nFinal x values = {[round(v,6) for v in x_data]}"</span>)
+<span class="function">print</span>(<span class="string">f"Final y values = {[round(v,6) for v in y_data]}"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">&#128228; Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Given x values: [1, 2, 3, 4]<br>
+Given y values: [1, 4, 9, 16]<br><br>
+Epoch 0: x = [0.8, 1.6, 2.4, 3.2], Avg Loss = 5.440000<br>
+Epoch 5: x = [0.2621, 0.5243, 0.7864, 1.0486], Avg Loss = 0.584116<br>
+Epoch 10: x = [0.0859, 0.1718, 0.2577, 0.3436], Avg Loss = 0.062719<br>
+Epoch 15: x = [0.0281, 0.0563, 0.0844, 0.1126], Avg Loss = 0.006737<br><br>
+Final x values = [0.011529, 0.023058, 0.034587, 0.046116]<br>
+Final y values = [0.000133, 0.000532, 0.001196, 0.002127]
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp2.html" class="btn btn-secondary">&larr; Previous</a>
+                <a href="exp4.html" class="btn">Next &rarr;</a>
+            </div>
         </div>
     </div>
 </body>

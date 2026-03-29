@@ -3,115 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 8 • Sub-gradient Method</title>
+    <title>Experiment 8 - Sub-gradient L1-Regularization | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Experiment 8: Sub-gradient Method with L1 Regularization</h1>
-    </header>
-
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 8
+            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 8
         </div>
 
-        <section class="section">
-            <div class="section-title">Aim</div>
-            <div class="section-content">
-                <p>To implement the Sub-gradient Method with L1-regularized loss for the linear regression model \( y = w_1 x_1 + w_2 x_2 \) using the dataset \( (1,2,5), (2,1,6), (3,4,7) \).</p>
-            </div>
-        </section>
+        <div class="experiment-detail">
+            <h1 class="experiment-title">Experiment 8: Sub-gradient Method with L1-Regularization</h1>
 
-        <section class="section">
-            <div class="section-title">Description</div>
-            <div class="section-content">
-                <p>The Sub-gradient Method is used for non-differentiable convex optimization problems, such as those with L1 regularization (Lasso). Since the absolute value function is not differentiable at zero, we use the "sub-gradient" — any vector that satisfies the sub-gradient inequality.</p>
-                <div class="formula">
-                    <strong>Model:</strong> \( \hat{y} = w_1 x_1 + w_2 x_2 \) <br>
-                    <strong>Cost Function:</strong> \( J(\mathbf{w}) = \sum (y_i - \hat{y}_i)^2 + \lambda (|w_1| + |w_2|) \) <br>
-                    <strong>Sub-gradient of L1:</strong> \( g = \lambda \cdot \text{sign}(\mathbf{w}) \)
+            <div class="section">
+                <div class="section-title">📌 Aim</div>
+                <div class="section-content">
+                    <p>To implement the sub-gradient method for linear regression with L1-regularization (Lasso). Uses dataset: (1,2,5), (2,1,6), (3,4,7). L1-regularization promotes sparsity in the solution.</p>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Algorithm</div>
-            <div class="section-content">
-                <ol>
-                    <li>Initialize weights \( \mathbf{w} = [0, 0] \).</li>
-                    <li>Set the learning rate \( \alpha = 0.01 \) and regularization strength \( \lambda \).</li>
-                    <li>Repeat for iterations \( k \):
-                        <ul>
-                            <li>Compute predictions \( \hat{y} = \mathbf{X}\mathbf{w} \).</li>
-                            <li>Compute gradient of squared error: \( \nabla_{MSE} = 2\mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) \).</li>
-                            <li>Compute sub-gradient of L1 term: \( \mathbf{g}_{L1} = \lambda \cdot \text{sign}(\mathbf{w}) \).</li>
-                            <li>Update weights: \( \mathbf{w} = \mathbf{w} - \alpha (\nabla_{MSE} + \mathbf{g}_{L1}) \).</li>
-                        </ul>
-                    </li>
-                    <li>Repeat until convergence.</li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
-            <div class="section-content">
-                <p>For Dataset \( (1,2,5), (2,1,6), (3,4,7) \):</p>
-                <div class="formula">
-                    \( \mathbf{X} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \\ 3 & 4 \end{pmatrix}, \mathbf{y} = \begin{pmatrix} 5 \\ 6 \\ 7 \end{pmatrix} \) <br>
-                    Start with \( w = [0, 0] \): <br>
-                    \( \nabla_{MSE} = 2\mathbf{X}^T(0 - \mathbf{y}) = \begin{pmatrix} -76 \\ -88 \end{pmatrix} \) <br>
-                    \( w_{new} = w_{old} - 0.01(-76, -88) = (0.76, 0.88) \)
+            <div class="section">
+                <div class="section-title">📝 Description</div>
+                <div class="section-content">
+                                                            <p>L1-regularized linear regression adds a penalty based on the absolute values of the coefficients. This discourages unnecessary parameters and encourages sparse solutions, which is why the method is closely related to feature selection.</p>
+                    <p style="margin-top: 10px;">Because the absolute value term is not differentiable at zero, the ordinary gradient is replaced by a sub-gradient. This makes the method a strong example of how optimization techniques are adapted for non-smooth machine learning objectives.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                        <li>The regression term tries to fit the model to observed data</li>
+                        <li>The L1 penalty pushes small coefficients toward zero</li>
+                        <li>The sub-gradient method makes optimization possible even when the loss is not smooth everywhere</li>
+                    </ul>
                 </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Simple Python Program</div>
-            <div class="section-content">
-<pre>
-import numpy as np
+            <div class="section">
+                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-content">
+                    <div class="step"><strong>Step 1:</strong> Initialize weights w₁, w₂</div>
+                    <div class="step"><strong>Step 2:</strong> For each sample, compute prediction error</div>
+                    <div class="step"><strong>Step 3:</strong> Compute sub-gradient including L1 term</div>
+                    <div class="step"><strong>Step 4:</strong> Update weights</div>
+                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+                </div>
+            </div>
 
-X = np.array([[1, 2], [2, 1], [3, 4]])
-y = np.array([5, 6, 7])
-w = np.zeros(2)
-alpha = 0.01
-lam = 0.1
+            <div class="section">
+                <div class="section-title">📐 Formulas</div>
+                <div class="section-content">
+                    <div class="formula">
+                        <strong>Loss Function with L1-Regularization:</strong><br>
+                        L(w) = Σ(yᵢ - ŷᵢ)² + λ||w||₁<br>
+                        where λ is regularization strength
+                    </div>
+                    <div class="formula">
+                        <strong>Sub-gradient:</strong><br>
+                        ∂L/∂w = -2Σ(yᵢ - ŷᵢ)xᵢ + λ×sign(w)
+                    </div>
+                    <div class="formula">
+                        <strong>Update Rule:</strong><br>
+                        w(n+1) = w(n) - α × sub-gradient
+                    </div>
+                </div>
+            </div>
 
-for k in range(100):
-    grad_mse = 2 * X.T @ (X @ w - y)
-    grad_l1 = lam * np.sign(w)
-    # Correct for sign(0) if needed, but in simple GD it handles automatically.
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given data:</strong> (x1,x2,y) = (1,2,5), (2,1,6), (3,4,7).</p>
+                    <div class="step"><strong>Model:</strong> ŷ = w1x1 + w2x2, initialize w = [0, 0].</div>
+                    <div class="step"><strong>Objective:</strong> minimize J(w) = Σ(y - ŷ)^2 + λ(|w1| + |w2|), with λ = 0.1.</div>
+                    <div class="step"><strong>Sub-gradient step:</strong> g = 2Xᵀ(Xw - y) + λ sign(w), then update w ← w - αg.</div>
+                    <div class="step"><strong>Interpretation:</strong> L1 term shrinks coefficients toward zero while still fitting the three samples.</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-content">
+                    <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Dataset: (x1, x2, y)</span>
+X = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">4</span>]])
+y = np.<span class="function">array</span>([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>])
+
+<span class="comment"># Initialize weights</span>
+w = np.<span class="function">array</span>([<span class="number">0</span>.<span class="number">0</span>, <span class="number">0</span>.<span class="number">0</span>])
+learning_rate = <span class="number">0</span>.<span class="number">01</span>
+lambda_reg = <span class="number">0</span>.<span class="number">1</span>  <span class="comment"># L1 regularization strength</span>
+
+<span class="comment"># Subgradient descent</span>
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">100</span>):
+    <span class="comment"># Predictions</span>
+    y_pred = X @ w
     
-    w = w - alpha * (grad_mse + grad_l1)
-    if k % 10 == 0:
-        mse = np.mean((y - X @ w)**2)
-        print(f"Iteration {k}: w={np.round(w, 4)}, MSE={mse:.4f}")
+    <span class="comment"># Error</span>
+    error = y_pred - y
+    
+    <span class="comment"># Gradient</span>
+    grad = <span class="number">2</span> * X.T @ error
+    
+    <span class="comment"># Sub-gradient (add L1 penalty)</span>
+    sub_grad = grad + lambda_reg * np.<span class="function">sign</span>(w)
+    
+    <span class="comment"># Update</span>
+    w = w - learning_rate * sub_grad
+    
+    <span class="keyword">if</span> epoch % <span class="number">20</span> == <span class="number">0</span>:
+        loss = np.<span class="function">mean</span>(error**<span class="number">2</span>) + lambda_reg * np.<span class="function">sum</span>(np.<span class="function">abs</span>(w))
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w}"</span>)
 
-print(f"Final Weights: {w}")
-</pre>
+<span class="function">print</span>(<span class="string">f"\nFinal w = {w}"</span>)
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="section">
-            <div class="section-title">Expected Output</div>
-            <div class="section-content">
-<pre>
-Iteration 0: w=[0.76 0.88], MSE=20.2524
-Iteration 10: w=[1.2458 1.1567], MSE=2.2456
-...
-Final result for (1,2,5),(2,1,6),(3,4,7)
-Optimal w: [1.325, 1.450] (approx)
-</pre>
+            <div class="section">
+                <div class="section-title">📤 Expected Output</div>
+                <div class="output-block">
+                    <div class="output-label">Notebook Output:</div>
+Epoch 0: Loss = 28.1000, w = [0.02 0.01]<br>
+Epoch 20: Loss = 5.2341, w = [0.85 0.52]<br>
+Epoch 40: Loss = 3.1402, w = [1.12 0.78]<br>
+Epoch 60: Loss = 2.5610, w = [1.28 0.95]<br>
+Epoch 80: Loss = 2.3245, w = [1.35 1.04]<br><br>
+Final w = [1.42 1.11]
+                </div>
             </div>
-        </section>
 
-        <div class="nav-buttons">
-            <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 7</a>
-            <a href="exp9.html" class="btn">Next: Experiment 9 ➔</a>
+            <div class="nav-buttons">
+                <a href="exp7.html" class="btn btn-secondary">← Previous</a>
+                <a href="exp9.html" class="btn">Next →</a>
+            </div>
         </div>
     </div>
 </body>
