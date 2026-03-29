@@ -18,15 +18,15 @@
             <div class="section">
                 <div class="section-title">&#128204; Aim</div>
                 <div class="section-content">
-                    <p>To implement Stochastic Gradient Descent (SGD) for the function f(x) = x^2. This experiment highlights how stochastic-style updates can still move the variable toward the minimum even when each step is noisy.</p>
+                    <p>To implement Stochastic Gradient Descent (SGD) for the function f(x) = x^2 using the sample values x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. This experiment highlights how stochastic-style updates can still move the variable toward the minimum even when each step is noisy.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                    <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent in which updates are made using limited information at each step instead of using the full objective in one exact update. For this experiment, we apply that idea to f(x) = x^2 and simulate the stochastic behavior with small random variation in the gradient.</p>
-                    <p style="margin-top: 10px;">Because each update is based on a noisy estimate, the optimization path is less smooth than standard gradient descent. Even so, the overall trend still moves x toward 0, helping illustrate how SGD behaves while minimizing the function f(x) = x^2.</p>
+                    <p>Stochastic Gradient Descent (SGD) is a variation of gradient descent in which updates are made using limited information at each step instead of using the full objective in one exact update. For this experiment, we apply that idea to f(x) = x^2 and use the sample values x = [1, 2, 3, 4] with y = [1, 4, 9, 16] as reference values from the function.</p>
+                    <p style="margin-top: 10px;">Because each update is based on a noisy estimate, the optimization path is less smooth than standard gradient descent. Even so, the overall trend still moves x toward 0, and the given data confirms that y = x^2 for the sampled inputs.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>Updates happen more frequently than in batch gradient descent</li>
                         <li>Each step is cheap to compute but less stable</li>
@@ -54,6 +54,10 @@
                         f(x) = x<sup>2</sup>
                     </div>
                     <div class="formula">
+                        <strong>Given Data:</strong><br>
+                        x = [1, 2, 3, 4], y = [1, 4, 9, 16]
+                    </div>
+                    <div class="formula">
                         <strong>True Gradient:</strong><br>
                         df/dx = 2x
                     </div>
@@ -71,7 +75,8 @@
             <div class="section">
                 <div class="section-title">&#128202; Mathematical Procedure</div>
                 <div class="section-content">
-                    <p>Suppose x = 5.0 and &alpha; = 0.05.</p>
+                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
+                    <p>Suppose the optimization variable starts at x = 5.0 and &alpha; = 0.05.</p>
 
                     <div class="step">
                         <strong>Update 1:</strong><br>
@@ -103,6 +108,12 @@ random.<span class="function">seed</span>(<span class="number">42</span>)
 <span class="comment"># Stochastic Gradient Descent for f(x) = x^2</span>
 <span class="comment"># Random noise is added to simulate a stochastic gradient.</span>
 
+x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
+y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
+
+<span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
+<span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
+
 <span class="keyword">def</span> <span class="function">stochastic_gradient_descent</span>(x_start, learning_rate, epochs):
     x = x_start
 
@@ -127,6 +138,8 @@ final_x = <span class="function">stochastic_gradient_descent</span>(<span class=
                 <div class="section-title">&#128228; Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
+Given x values: [1, 2, 3, 4]<br>
+Given y values: [1, 4, 9, 16]<br><br>
 Epoch 0: x = 4.493029, Loss = 20.187307<br>
 Epoch 10: x = 1.616364, Loss = 2.612633<br>
 Epoch 20: x = 0.575873, Loss = 0.331629<br>

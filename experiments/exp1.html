@@ -18,15 +18,15 @@
             <div class="section">
                 <div class="section-title">&#128204; Aim</div>
                 <div class="section-content">
-                    <p>To understand and implement gradient descent for the function f(x) = x^2. This experiment shows how repeated movement in the direction of the negative gradient leads to the minimum value of the function.</p>
+                    <p>To understand and implement gradient descent for the function f(x) = x^2 using the sample values x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. This experiment shows how repeated movement in the direction of the negative gradient leads to the minimum value of the function.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">&#128221; Description</div>
                 <div class="section-content">
-                    <p>Gradient descent is a first-order optimization method used to minimize a function by repeatedly moving in the direction of steepest decrease. In this experiment, we apply it to the simple function f(x) = x^2 and observe how the value of x moves toward the minimum.</p>
-                    <p style="margin-top: 10px;">For f(x) = x^2, the gradient is 2x, so each update step pushes x closer to 0, which is the global minimum. This makes Experiment 1 a clear starting point for understanding gradients, learning rate, and convergence in optimization.</p>
+                    <p>Gradient descent is a first-order optimization method used to minimize a function by repeatedly moving in the direction of steepest decrease. In this experiment, we apply it to the simple function f(x) = x^2 and use the sample values x = [1, 2, 3, 4] with y = [1, 4, 9, 16] to confirm the function values.</p>
+                    <p style="margin-top: 10px;">Since y = x^2 for the given samples, the pairs (1,1), (2,4), (3,9), and (4,16) match the objective function exactly. The gradient is 2x, so each update step pushes the optimization variable closer to 0, which is the global minimum.</p>
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
                         <li>The gradient tells how the function changes at the current point</li>
                         <li>The learning rate controls how large each update step is</li>
@@ -67,6 +67,10 @@
                         f(x) = x<sup>2</sup>
                     </div>
                     <div class="formula">
+                        <strong>Given Data:</strong><br>
+                        x = [1, 2, 3, 4], y = [1, 4, 9, 16]
+                    </div>
+                    <div class="formula">
                         <strong>Gradient:</strong><br>
                         df/dx = 2x
                     </div>
@@ -80,7 +84,8 @@
             <div class="section">
                 <div class="section-title">&#128202; Mathematical Procedure</div>
                 <div class="section-content">
-                    <p><strong>Example:</strong> start with x = 5.0 and learning rate &alpha; = 0.1.</p>
+                    <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
+                    <p><strong>Example:</strong> start gradient descent with x = 5.0 and learning rate &alpha; = 0.1.</p>
 
                     <div class="step">
                         <strong>Iteration 0:</strong><br>
@@ -120,6 +125,12 @@
                     <div class="code-block">
 <span class="comment"># Gradient Descent for f(x) = x^2</span>
 
+x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
+y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
+
+<span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
+<span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
+
 <span class="keyword">def</span> <span class="function">gradient_descent</span>(x_start, learning_rate, iterations):
     x = x_start
 
@@ -144,6 +155,8 @@ final_x = <span class="function">gradient_descent</span>(<span class="number">5.
                 <div class="section-title">&#128228; Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
+Given x values: [1, 2, 3, 4]<br>
+Given y values: [1, 4, 9, 16]<br><br>
 Iteration 0: x = 4.0000, f(x) = 16.0000<br>
 Iteration 10: x = 0.4295, f(x) = 0.1845<br>
 Iteration 20: x = 0.0461, f(x) = 0.0021<br>
