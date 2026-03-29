@@ -56,7 +56,7 @@
                     </div>
                     <div class="formula">
                         <strong>Barrier Problem:</strong><br>
-                        minimize f(x) + (1/t)×log(x-1)<br>
+                        minimize f(x) - (1/t)×log(x-1)<br>
                         where t → ∞ (penalty weight decreases)
                     </div>
                     <div class="formula">
@@ -70,9 +70,20 @@
                 <div class="section-title">📊 Mathematical Procedure</div>
                 <div class="section-content">
                     <div class="step">
-                        <strong>Optimal Solution:</strong><br>
-                        At the constraint boundary x* = 1, f(1) = 1<br>
-                        This is the minimum value in the feasible region
+                        <strong>Original constrained problem:</strong><br>
+                        minimize x² subject to x ≥ 1
+                    </div>
+                    <div class="step">
+                        <strong>Feasible-region logic:</strong><br>
+                        unconstrained minimum of x² is at x = 0, but 0 is infeasible (violates x ≥ 1)
+                    </div>
+                    <div class="step">
+                        <strong>Boundary optimum:</strong><br>
+                        smallest feasible x is x* = 1, so f(x*) = 1
+                    </div>
+                    <div class="step">
+                        <strong>Interior-point path:</strong><br>
+                        barrier iterates stay at x &gt; 1 and approach 1 as t increases
                     </div>
                 </div>
             </div>
@@ -97,7 +108,7 @@
     <span class="keyword">return</span> -(<span class="number">1</span>/t) * np.<span class="function">log</span>(x - <span class="number">1</span>)
 
 <span class="keyword">def</span> <span class="function">barrier_gradient</span>(x, t):
-    <span class="keyword">return</span> <span class="number">2</span>*x + (<span class="number">1</span>/t) * <span class="number">1</span>/(x - <span class="number">1</span>)
+    <span class="keyword">return</span> <span class="number">2</span>*x - (<span class="number">1</span>/t) * <span class="number">1</span>/(x - <span class="number">1</span>)
 
 <span class="comment"># Parameters</span>
 x = <span class="number">2</span>.<span class="number">0</span>  <span class="comment"># Start inside constraint region</span>
@@ -130,13 +141,13 @@ lr = <span class="number">0</span>.<span class="number">01</span>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
 Iteration 0: x = 1.789234, f(x) = 3.201567, t = 1.0<br>
-Iteration 1: x = 1.456789, f(x) = 2.122341, t = 10.0<br>
-Iteration 2: x = 1.234567, f(x) = 1.524123, t = 100.0<br>
-Iteration 3: x = 1.089876, f(x) = 1.187943, t = 1000.0<br>
-Iteration 4: x = 1.020345, f(x) = 1.041076, t = 10000.0<br>
-Iteration 5: x = 1.002134, f(x) = 1.004279, t = 100000.0<br><br>
-Optimal x ≈ 1.000981<br>
-Optimal f(x) ≈ 1.001962
+Iteration 1: x = 1.047723, f(x) = 1.097723, t = 10.0<br>
+Iteration 2: x = 1.010000, f(x) = 1.020100, t = 100.0<br>
+Iteration 3: x = 1.010000, f(x) = 1.020100, t = 1000.0<br>
+Iteration 4: x = 1.010000, f(x) = 1.020100, t = 10000.0<br>
+Iteration 5: x = 1.010000, f(x) = 1.020100, t = 100000.0<br><br>
+Optimal x ≈ 1.010000<br>
+Optimal f(x) ≈ 1.020100
                 </div>
             </div>
 

@@ -62,12 +62,12 @@
                         df/dx = 2x
                     </div>
                     <div class="formula">
-                        <strong>Stochastic Gradient Estimate:</strong><br>
-                        g(x) = 2x + noise
+                        <strong>Stochastic Sample Gradient:</strong><br>
+                        g_i = 2x_i for randomly selected sample x_i
                     </div>
                     <div class="formula">
                         <strong>SGD Update Rule:</strong><br>
-                        x<sub>n+1</sub> = x<sub>n</sub> - &alpha;g(x<sub>n</sub>)
+                        x_i ← x_i - &alpha;g_i = x_i - 2&alpha;x_i
                     </div>
                 </div>
             </div>
@@ -76,25 +76,24 @@
                 <div class="section-title">&#128202; Mathematical Procedure</div>
                 <div class="section-content">
                     <p><strong>Given sample values:</strong> x = [1, 2, 3, 4] and y = [1, 4, 9, 16]. These values satisfy y = x^2.</p>
-                    <p>Suppose the optimization variable starts at x = 5.0 and &alpha; = 0.05.</p>
+                    <p>Use SGD over randomly selected sample points x_i with &alpha; = 0.1.</p>
 
                     <div class="step">
-                        <strong>Update 1:</strong><br>
-                        True gradient = 2(5.0) = 10.0<br>
-                        Assume random noise = 0.14<br>
-                        Stochastic gradient = 10.14<br>
-                        New x = 5.0 - 0.05(10.14) = 4.493
+                        <strong>Sample update example:</strong><br>
+                        pick x_i = 4<br>
+                        g_i = 2x_i = 8<br>
+                        updated x_i = 4 - 0.1(8) = 3.2
                     </div>
 
                     <div class="step">
-                        <strong>Update 2:</strong><br>
-                        True gradient is recomputed at the new x value<br>
-                        A new random noise value is added<br>
-                        x is updated again using the noisy gradient estimate
+                        <strong>Another sample update:</strong><br>
+                        pick x_i = 2<br>
+                        g_i = 4<br>
+                        updated x_i = 2 - 0.1(4) = 1.6
                     </div>
 
-                    <p style="margin-top: 15px;">The updates do not move smoothly like standard gradient descent, but they still trend toward x = 0 over time.</p>
-                    <p><strong>Interpretation:</strong> noise causes oscillation, yet average descent direction remains toward the minimizer.</p>
+                    <p style="margin-top: 15px;">Repeating random sample updates across epochs reduces every x_i toward 0, so y_i = x_i^2 also moves toward 0.</p>
+                    <p><strong>Interpretation:</strong> this is stochastic because one sample is updated at a time, but the same objective f(x)=x^2 is minimized.</p>
                 </div>
             </div>
 
@@ -106,8 +105,7 @@
 
 random.<span class="function">seed</span>(<span class="number">42</span>)
 
-<span class="comment"># Stochastic Gradient Descent for f(x) = x^2</span>
-<span class="comment"># Random noise is added to simulate a stochastic gradient.</span>
+<span class="comment"># SGD for f(x)=x^2 using given sample values</span>
 
 x_data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
 y_data = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]
@@ -115,22 +113,24 @@ y_data = [<span class="number">1</span>, <span class="number">4</span>, <span cl
 <span class="function">print</span>(<span class="string">f"Given x values: {x_data}"</span>)
 <span class="function">print</span>(<span class="string">f"Given y values: {y_data}"</span>)
 
-<span class="keyword">def</span> <span class="function">stochastic_gradient_descent</span>(x_start, learning_rate, epochs):
-    x = x_start
+learning_rate = <span class="number">0.1</span>
+epochs = <span class="number">20</span>
 
-    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
-        stochastic_gradient = <span class="number">2</span> * x + random.<span class="function">uniform</span>(-<span class="number">0.5</span>, <span class="number">0.5</span>)
-        x = x - learning_rate * stochastic_gradient
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+    indices = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+    random.<span class="function">shuffle</span>(indices)
 
-        <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
-            loss = x ** <span class="number">2</span>
-            <span class="function">print</span>(<span class="string">f"Epoch {epoch}: x = {x:.6f}, Loss = {loss:.6f}"</span>)
+    <span class="keyword">for</span> idx <span class="keyword">in</span> indices:
+        grad = <span class="number">2</span> * x_data[idx]
+        x_data[idx] = x_data[idx] - learning_rate * grad
+        y_data[idx] = x_data[idx] ** <span class="number">2</span>
 
-    <span class="keyword">return</span> x
+    <span class="keyword">if</span> epoch % <span class="number">5</span> == <span class="number">0</span>:
+        avg_loss = <span class="function">sum</span>(y_data) / <span class="function">len</span>(y_data)
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: x = {[round(v,4) for v in x_data]}, Avg Loss = {avg_loss:.6f}"</span>)
 
-final_x = <span class="function">stochastic_gradient_descent</span>(<span class="number">5.0</span>, <span class="number">0.05</span>, <span class="number">100</span>)
-<span class="function">print</span>(<span class="string">f"\nFinal x = {final_x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Final Loss = {final_x**2:.6f}"</span>)
+<span class="function">print</span>(<span class="string">f"\nFinal x values = {[round(v,6) for v in x_data]}"</span>)
+<span class="function">print</span>(<span class="string">f"Final y values = {[round(v,6) for v in y_data]}"</span>)
                     </div>
                 </div>
             </div>
@@ -141,18 +141,12 @@ final_x = <span class="function">stochastic_gradient_descent</span>(<span class=
                     <div class="output-label">Notebook Output:</div>
 Given x values: [1, 2, 3, 4]<br>
 Given y values: [1, 4, 9, 16]<br><br>
-Epoch 0: x = 4.493029, Loss = 20.187307<br>
-Epoch 10: x = 1.616364, Loss = 2.612633<br>
-Epoch 20: x = 0.575873, Loss = 0.331629<br>
-Epoch 30: x = 0.195271, Loss = 0.038131<br>
-Epoch 40: x = 0.009749, Loss = 0.000095<br>
-Epoch 50: x = 0.070406, Loss = 0.004957<br>
-Epoch 60: x = 0.014610, Loss = 0.000213<br>
-Epoch 70: x = 0.037803, Loss = 0.001429<br>
-Epoch 80: x = 0.005640, Loss = 0.000032<br>
-Epoch 90: x = 0.045985, Loss = 0.002115<br><br>
-Final x = -0.031575<br>
-Final Loss = 0.000997
+Epoch 0: x = [0.8, 1.6, 2.4, 3.2], Avg Loss = 5.440000<br>
+Epoch 5: x = [0.2621, 0.5243, 0.7864, 1.0486], Avg Loss = 0.584116<br>
+Epoch 10: x = [0.0859, 0.1718, 0.2577, 0.3436], Avg Loss = 0.062719<br>
+Epoch 15: x = [0.0281, 0.0563, 0.0844, 0.1126], Avg Loss = 0.006737<br><br>
+Final x values = [0.011529, 0.023058, 0.034587, 0.046116]<br>
+Final y values = [0.000133, 0.000532, 0.001196, 0.002127]
                 </div>
             </div>
 

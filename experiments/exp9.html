@@ -61,6 +61,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given data:</strong> (2,3,8), (1,4,7), (3,2,9).</p>
+                    <div class="step"><strong>Model:</strong> ŷ = w1x1 + w2x2 with initial w = [0, 0].</div>
+                    <div class="step"><strong>Objective:</strong> J(w) = Σ(y - ŷ)^2 + λ(|w1| + |w2|), here λ = 0.05.</div>
+                    <div class="step"><strong>Sub-gradient update:</strong> w ← w - α(2Xᵀ(Xw - y) + λ sign(w)).</div>
+                    <div class="step"><strong>Expected behavior:</strong> training loss decreases and weights stabilize while L1 regularization controls coefficient magnitude.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">

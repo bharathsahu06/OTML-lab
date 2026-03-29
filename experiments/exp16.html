@@ -59,6 +59,18 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Goal:</strong> compare L1, L2, and Elastic Net on the same regression dataset.</p>
+                    <div class="step"><strong>Dataset:</strong> X has two features (x1, x2) and target y.</div>
+                    <div class="step"><strong>L1 (Lasso):</strong> optimize MSE + λ||w||₁, encouraging sparse/shrunk coefficients.</div>
+                    <div class="step"><strong>L2 (Ridge):</strong> optimize MSE + λ||w||₂², smoothing coefficient magnitudes.</div>
+                    <div class="step"><strong>Elastic Net:</strong> optimize MSE + λ₁||w||₁ + λ₂||w||₂², balancing sparsity and stability.</div>
+                    <div class="step"><strong>Comparison:</strong> fit all three models and compare (w1, w2, intercept) to observe regularization effects.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">

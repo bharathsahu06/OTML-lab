@@ -60,9 +60,19 @@
                     </div>
                     <div class="formula">
                         <strong>Gradient:</strong><br>
-                        ∂f/∂x = 1 + (1/t)×1/(x-1)<br>
-                        ∂f/∂y = 1 + (1/t)×1/(y-1)
+                        ∂f/∂x = 1 - (1/t)×1/(x-1)<br>
+                        ∂f/∂y = 1 - (1/t)×1/(y-1)
                     </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <div class="step"><strong>Original problem:</strong> minimize f(x,y) = x + y with constraints x ≥ 1, y ≥ 1.</div>
+                    <div class="step"><strong>Feasibility:</strong> the smallest feasible values are x = 1 and y = 1.</div>
+                    <div class="step"><strong>Optimal point:</strong> (x*, y*) = (1, 1), and f(x*,y*) = 1 + 1 = 2.</div>
+                    <div class="step"><strong>Interior-point interpretation:</strong> barrier updates keep x &gt; 1, y &gt; 1 and converge toward (1,1) as t increases.</div>
                 </div>
             </div>
 
@@ -81,8 +91,8 @@
 
 <span class="keyword">def</span> <span class="function">barrier_gradient</span>(x, y, t):
     <span class="comment"># Gradient of barrier function</span>
-    gx = <span class="number">1</span> + (<span class="number">1</span>/t) / (x - <span class="number">1</span>)
-    gy = <span class="number">1</span> + (<span class="number">1</span>/t) / (y - <span class="number">1</span>)
+    gx = <span class="number">1</span> - (<span class="number">1</span>/t) / (x - <span class="number">1</span>)
+    gy = <span class="number">1</span> - (<span class="number">1</span>/t) / (y - <span class="number">1</span>)
     <span class="keyword">return</span> np.<span class="function">array</span>([gx, gy])
 
 <span class="comment"># Initialize</span>
@@ -115,14 +125,14 @@ lr = <span class="number">0</span>.<span class="number">01</span>
                 <div class="section-title">📤 Expected Output</div>
                 <div class="output-block">
                     <div class="output-label">Notebook Output:</div>
-Iter 0: x=2.9234, y=2.9234, f=5.8468, t=0.1<br>
-Iter 1: x=2.3412, y=2.3412, f=4.6824, t=1.0<br>
-Iter 2: x=1.5678, y=1.5678, f=3.1356, t=10.0<br>
-Iter 3: x=1.1234, y=1.1234, f=2.2468, t=100.0<br>
-Iter 4: x=1.0156, y=1.0156, f=2.0312, t=1000.0<br>
-Iter 5: x=1.0012, y=1.0012, f=2.0024, t=10000.0<br><br>
-Optimal: x=1.0001, y=1.0001<br>
-Optimal value = 2.0002
+Iter 0: x=5.1854, y=5.1854, f=10.3709, t=0.1<br>
+Iter 1: x=4.4483, y=4.4483, f=8.8966, t=1.0<br>
+Iter 2: x=3.4823, y=3.4823, f=6.9645, t=10.0<br>
+Iter 3: x=2.4874, y=2.4874, f=4.9748, t=100.0<br>
+Iter 4: x=1.4885, y=1.4885, f=2.9770, t=1000.0<br>
+Iter 5: x=1.0100, y=1.0100, f=2.0200, t=10000.0<br><br>
+Optimal: x=1.0100, y=1.0100<br>
+Optimal value = 2.0200
                 </div>
             </div>
 

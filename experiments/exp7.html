@@ -44,6 +44,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <div class="step"><strong>Problem:</strong> minimize z = 3x + 2y subject to x + y ≥ 4, x ≥ 0, y ≥ 0.</div>
+                    <div class="step"><strong>Manual method:</strong> evaluate objective at feasible corner points (0,4) and (4,0).</div>
+                    <div class="step"><strong>Corner values:</strong> z(0,4)=8 and z(4,0)=12, so minimum is at (0,4).</div>
+                    <div class="step"><strong>PuLP method:</strong> formulate the same objective/constraints and solve with CBC solver.</div>
+                    <div class="step"><strong>Verification:</strong> both manual and PuLP methods return x=0, y=4, z*=8.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program - With PuLP</div>
                 <div class="section-content">
                     <p><strong>Install: pip install pulp</strong></p>

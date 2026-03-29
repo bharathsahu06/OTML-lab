@@ -62,6 +62,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given data:</strong> x₁=[1,2], x₂=[2,1], x₃=[1,1], x₄=[1,1], y=[9,10].</p>
+                    <div class="step"><strong>Grouping:</strong> define feature groups g₁,...,g₄ (one feature per group in this demo).</div>
+                    <div class="step"><strong>Objective:</strong> minimize MSE(w) + λΣ||w_g||₂.</div>
+                    <div class="step"><strong>Optimization:</strong> solve for w using numerical minimization (L-BFGS-B) of the grouped objective.</div>
+                    <div class="step"><strong>Interpretation:</strong> groups with tiny norms are suppressed; active groups remain selected together.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">

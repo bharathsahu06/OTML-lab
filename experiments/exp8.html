@@ -66,6 +66,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <p><strong>Given data:</strong> (x1,x2,y) = (1,2,5), (2,1,6), (3,4,7).</p>
+                    <div class="step"><strong>Model:</strong> ŷ = w1x1 + w2x2, initialize w = [0, 0].</div>
+                    <div class="step"><strong>Objective:</strong> minimize J(w) = Σ(y - ŷ)^2 + λ(|w1| + |w2|), with λ = 0.1.</div>
+                    <div class="step"><strong>Sub-gradient step:</strong> g = 2Xᵀ(Xw - y) + λ sign(w), then update w ← w - αg.</div>
+                    <div class="step"><strong>Interpretation:</strong> L1 term shrinks coefficients toward zero while still fitting the three samples.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">

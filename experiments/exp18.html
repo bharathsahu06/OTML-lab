@@ -68,6 +68,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <div class="step"><strong>Problem:</strong> solve Ax=b with A=[[4,1],[1,3]] and b=[1,2]ᵀ.</div>
+                    <div class="step"><strong>Initialization:</strong> choose x₀=[0,0]ᵀ, then r₀=b-Ax₀=b and p₀=r₀.</div>
+                    <div class="step"><strong>Iteration:</strong> compute α, update x and residual r, then compute β and new direction p.</div>
+                    <div class="step"><strong>Convergence:</strong> for this 2×2 SPD system, CG reaches the exact solution in at most 2 iterations.</div>
+                    <div class="step"><strong>Result:</strong> x*=[1/11, 7/11]ᵀ≈[0.0909, 0.6364], verified by Ax*=b.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <div class="code-block">

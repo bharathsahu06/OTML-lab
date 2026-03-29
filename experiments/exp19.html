@@ -68,6 +68,17 @@
             </div>
 
             <div class="section">
+                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-content">
+                    <div class="step"><strong>Objective:</strong> minimize f(x₁,x₂)=x₁²+2x₂².</div>
+                    <div class="step"><strong>Stationary condition:</strong> ∇f=[2x₁,4x₂]ᵀ=0 gives x₁=0, x₂=0.</div>
+                    <div class="step"><strong>Optimality check:</strong> Hessian [[2,0],[0,4]] is positive definite, so (0,0) is the unique global minimum.</div>
+                    <div class="step"><strong>BFGS process:</strong> start from x₀=[5,5], use gradient-based quasi-Newton updates to approach (0,0).</div>
+                    <div class="step"><strong>Expected result:</strong> final point near [0,0] with very small function value and gradient norm.</div>
+                </div>
+            </div>
+
+            <div class="section">
                 <div class="section-title">💻 Simple Python Program</div>
                 <div class="section-content">
                     <p><strong>Easy approach using scipy:</strong></p>
