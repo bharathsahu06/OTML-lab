@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 12 - Mini-batch Gradient Descent | OTML Lab</title>
+    <title>Experiment 12 - Minibatch Gradient Descent | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,137 +12,217 @@
             <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 12
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 12: Mini-batch Gradient Descent</h1>
-
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 12: Minibatch Gradient Descent for Linear Regression</h1>
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To minimize the loss function of linear regression using mini-batch gradient descent for dataset x=[1,2,3,4], y=[3,5,7,9]. Mini-batch GD is a compromise between batch and stochastic methods.</p>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
-                <div class="section-content">
-                                                            <p>Mini-batch gradient descent is a compromise between batch gradient descent and stochastic gradient descent. Instead of using the full dataset or a single sample for each update, it computes gradients on small groups of samples called mini-batches.</p>
-                    <p style="margin-top: 10px;">This gives a useful balance between computational efficiency and stability. The method is widely used in machine learning because batch size can be tuned to control update noise, memory use, speed, and convergence behavior during training.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Each mini-batch provides a partial but useful estimate of the full gradient</li>
-                        <li>Repeated epochs gradually improve the model parameters</li>
-                        <li>Batch size affects computational cost, stability, and convergence behavior</li>
+                    Minimize the loss function of linear regression using minibatch gradient descent for:
+                    <ul style="margin-left: 20px;">
+                        <li>$x=[1,2,3,4]$</li>
+                        <li>$y=[3,5,7,9]$</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize weights randomly</div>
-                    <div class="step"><strong>Step 2:</strong> Divide data into mini-batches</div>
-                    <div class="step"><strong>Step 3:</strong> For each batch, compute gradient</div>
-                    <div class="step"><strong>Step 4:</strong> Update weights</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat for multiple epochs</div>
+                    <p>In this experiment, we train a linear regression model using minibatch gradient descent. The model is taken as $\hat{y}=wx+b$, and the objective is to reduce the Mean Squared Error (MSE) between predicted and actual values. Minibatch gradient descent updates the parameters using a small group of samples at a time, which is more stable than pure stochastic updates and faster than full-batch computation on large datasets.</p>
+                    <p>The method followed is: split data into minibatches, compute predictions and errors for each minibatch, and calculate gradients of loss with respect to $w$ and $b$. Then update parameters after each minibatch and repeat across multiple epochs until loss becomes small and stable. Finally, report learned parameters, final MSE, and predicted outputs for all input points.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Linear Model:</strong><br>
-                        ŷ = wx + b
-                    </div>
-                    <div class="formula">
-                        <strong>Loss (MSE):</strong><br>
-                        L = (1/m) × Σ(yᵢ - ŷᵢ)²
-                    </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        ∂L/∂w = -(2/m) × Σ(yᵢ - ŷᵢ) × xᵢ
-                    </div>
+                    <p>Model: $$\hat{y}_i = wx_i + b$$</p>
+                    <p>Minibatch MSE (batch size $m$): $$J_B(w,b)=\frac{1}{m}\sum_{i\in B}(\hat{y}_i-y_i)^2$$</p>
+                    <p>Gradients for minibatch $B$: $$\frac{\partial J_B}{\partial w}=\frac{2}{m}\sum_{i\in B}(\hat{y}_i-y_i)x_i, \qquad \frac{\partial J_B}{\partial b}=\frac{2}{m}\sum_{i\in B}(\hat{y}_i-y_i)$$</p>
+                    <p>Update rules: $$w\leftarrow w-\alpha\frac{\partial J_B}{\partial w}, \qquad b\leftarrow b-\alpha\frac{\partial J_B}{\partial b}$$</p>
+                    <p>Final full-data MSE: $$J(w,b)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">4) Important Functions Used</div>
                 <div class="section-content">
-                    <p><strong>Model derivation from data:</strong> x=[1,2,3,4], y=[3,5,7,9] follows y = 2x + 1.</p>
-                    <div class="step"><strong>Check:</strong> 2(1)+1=3, 2(2)+1=5, 2(3)+1=7, 2(4)+1=9.</div>
-                    <div class="step"><strong>Target parameters:</strong> w*=2, b*=1.</div>
-                    <div class="step"><strong>Optimization:</strong> mini-batch updates (batch size 2) gradually recover w and b from random initialization.</div>
+                    <ul style="margin-left: 20px;">
+                        <li><code>minibatch_gradient_descent(...)</code>: performs minibatch parameter updates.</li>
+                        <li><code>mse_loss(...)</code>: computes full-dataset MSE.</li>
+                        <li><code>np.random.default_rng(...).shuffle(...)</code>: shuffles indices each epoch.</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="code-block">
+                    <ol style="margin-left: 20px;">
+                        <li>Initialize $w=0$, $b=0$.</li>
+                        <li>Choose learning rate, epochs, and minibatch size.</li>
+                        <li>Shuffle training samples each epoch.</li>
+                        <li>Split samples into minibatches.</li>
+                        <li>For each minibatch, compute predictions and errors.</li>
+                        <li>Compute gradients $\partial J_B/\partial w$ and $\partial J_B/\partial b$.</li>
+                        <li>Update $w$ and $b$.</li>
+                        <li>Repeat for all minibatches and epochs.</li>
+                        <li>Compute final MSE and predicted outputs.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">6) Mathematical Procedure (Complete Step-by-Step)</div>
+                <div class="section-content">
+                    <p>Given: Data points $(1,3),(2,5),(3,7),(4,9)$, Initial $w_0=0$, $b_0=0$, $\alpha=0.01$, batch size $m=2$</p>
+                    <p>Assume first epoch batches: $B_1=\{(1,3),(2,5)\}$ and $B_2=\{(3,7),(4,9)\}$.</p>
+                    <div class="step">
+                        <strong>1. Batch $B_1$ predictions:</strong>
+                        $$\hat{y}_1=0,\;\hat{y}_2=0$$
+                        Errors: $e_1=-3$, $e_2=-5$.
+                    </div>
+                    <div class="step">
+                        <strong>2. Batch $B_1$ gradients:</strong>
+                        $$\frac{\partial J_{B_1}}{\partial w}=\frac{2}{2}[(-3)(1)+(-5)(2)]=-13$$
+                        $$\frac{\partial J_{B_1}}{\partial b}=\frac{2}{2}[(-3)+(-5)]=-8$$
+                    </div>
+                    <div class="step">
+                        <strong>3. Update after $B_1$:</strong>
+                        $$w=0-0.01(-13)=0.13,\qquad b=0-0.01(-8)=0.08$$
+                    </div>
+                    <div class="step">
+                        <strong>4. Batch $B_2$ predictions with updated parameters:</strong>
+                        $$\hat{y}_3=0.13(3)+0.08=0.47,\qquad \hat{y}_4=0.13(4)+0.08=0.60$$
+                        Errors: $e_3=0.47-7=-6.53$, $e_4=0.60-9=-8.40$.
+                    </div>
+                    <div class="step">
+                        <strong>5. Batch $B_2$ gradients:</strong>
+                        $$\frac{\partial J_{B_2}}{\partial w}=\frac{2}{2}[(-6.53)(3)+(-8.40)(4)]=-53.19$$
+                        $$\frac{\partial J_{B_2}}{\partial b}=\frac{2}{2}[(-6.53)+(-8.40)]=-14.93$$
+                    </div>
+                    <div class="step">
+                        <strong>6. Update after $B_2$:</strong>
+                        $$w=0.13-0.01(-53.19)=0.6619,\qquad b=0.08-0.01(-14.93)=0.2293$$
+                    </div>
+                    <p>7. Repeat this two-batch sequence for all epochs until final MSE becomes very small.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">7) Given Input</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li>$x=[1,2,3,4]$</li>
+                        <li>$y=[3,5,7,9]$</li>
+                        <li>Learning rate $\alpha=0.01$</li>
+                        <li>Epochs $=1000$</li>
+                        <li>Minibatch size $=2$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Mini-batch Gradient Descent for Linear Regression</span>
-X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]).<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">1</span>)
-y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
+<span class="comment"># Given input</span>
+x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
+y = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>], dtype=float)
 
-<span class="comment"># Initialize</span>
-w = <span class="number">0</span>.<span class="number">0</span>
-b = <span class="number">0</span>.<span class="number">0</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
+
+<span class="keyword">def</span> <span class="function">mse_loss</span>(x, y, w, b):
+    y_pred = w * x + b
+    <span class="keyword">return</span> np.mean((y_pred - y) ** <span class="number">2</span>)
+
+
+<span class="keyword">def</span> <span class="function">minibatch_gradient_descent</span>(x, y, alpha=<span class="number">0.01</span>, epochs=<span class="number">1000</span>, batch_size=<span class="number">2</span>, seed=<span class="number">42</span>):
+    w, b = <span class="number">0.0</span>, <span class="number">0.0</span>
+    n = <span class="keyword">len</span>(x)
+    rng = np.random.default_rng(seed)
+    loss_history = []
+
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="keyword">range</span>(epochs):
+        indices = np.arange(n)
+        rng.shuffle(indices)
+
+        <span class="keyword">for</span> start <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">0</span>, n, batch_size):
+            batch_idx = indices[start:start + batch_size]
+            xb = x[batch_idx]
+            yb = y[batch_idx]
+            m = <span class="keyword">len</span>(xb)
+
+            y_pred = w * xb + b
+            error = y_pred - yb
+
+            <span class="comment"># Minibatch gradients</span>
+            dw = (<span class="number">2.0</span> / m) * np.sum(error * xb)
+            db = (<span class="number">2.0</span> / m) * np.sum(error)
+
+            <span class="comment"># Update parameters</span>
+            w -= alpha * dw
+            b -= alpha * db
+
+        loss_history.append(mse_loss(x, y, w, b))
+
+    <span class="keyword">return</span> w, b, loss_history
+
+
+alpha = <span class="number">0.01</span>
+epochs = <span class="number">1000</span>
 batch_size = <span class="number">2</span>
-epochs = <span class="number">50</span>
 
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
-    <span class="comment"># Shuffle data</span>
-    indices = np.<span class="function">random</span>.<span class="function">permutation</span>(<span class="function">len</span>(X))
-    X_shuffled = X[indices]
-    y_shuffled = y[indices]
-    
-    <span class="comment"># Mini-batches</span>
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(X), batch_size):
-        X_batch = X_shuffled[i:i+batch_size]
-        y_batch = y_shuffled[i:i+batch_size]
-        
-        <span class="comment"># Predictions</span>
-        y_pred = w*X_batch + b
-        
-        <span class="comment"># Gradients</span>
-        dw = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>((y_batch - y_pred) * X_batch)
-        db = -<span class="number">2</span>/batch_size * np.<span class="function">sum</span>(y_batch - y_pred)
-        
-        <span class="comment"># Update</span>
-        w -= lr * dw
-        b -= lr * db
-    
-    <span class="comment"># Loss</span>
-    y_pred_all = w*X + b
-    loss = np.<span class="function">mean</span>((y - y_pred_all)**<span class="number">2</span>)
-    
-    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss = {loss:.4f}, w = {w:.4f}, b = {b:.4f}"</span>)
+w, b, loss_history = minibatch_gradient_descent(x, y, alpha=alpha, epochs=epochs, batch_size=batch_size)
+y_final = w * x + b
+final_loss = mse_loss(x, y, w, b)
 
-<span class="function">print</span>(<span class="string">f"\nFinal: y = {w:.4f}x + {b:.4f}"</span>)
-                    </div>
-                </div>
-            </div>
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"x ="</span>, x)
+print(<span class="string">"y ="</span>, y)
+print(<span class="function">f</span><span class="string">"learning rate = </span>{alpha}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"epochs = </span>{epochs}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"batch size = </span>{batch_size}<span class="string">"</span>)
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+print(<span class="string">"\nOUTPUT"</span>)
+print(<span class="function">f</span><span class="string">"Learned weight (w): </span>{w:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Learned bias (b): </span>{b:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Final MSE Loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="string">"Predicted y:"</span>, np.round(y_final, <span class="number">6</span>))
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss = 20.8512, w = 0.2234, b = 0.1567<br>
-Epoch 10: Loss = 2.1234, w = 1.8234, b = 0.5612<br>
-Epoch 20: Loss = 0.3456, w = 1.9876, b = 0.9234<br>
-Epoch 30: Loss = 0.0567, w = 1.9987, b = 0.9876<br>
-Epoch 40: Loss = 0.0089, w = 1.9998, b = 0.9987<br><br>
-Final: y = 2.0000x + 1.0000
+INPUT
+x = [1. 2. 3. 4.]
+y = [3. 5. 7. 9.]
+learning rate = 0.01
+epochs = 1000
+batch size = 2
+
+OUTPUT
+Learned weight (w): 2.000233
+Learned bias (b): 0.999317
+Final MSE Loss: 0.000000
+Predicted y: [2.99955  4.999783 7.000016 9.000249]
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp11.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp13.html" class="btn">Next →</a>
+                <a href="exp11.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp13.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

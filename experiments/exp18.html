@@ -9,153 +9,207 @@
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 18
+            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 18
         </div>
 
-        <div class="experiment-detail">
+        <div class="experiment-detail animate-in">
             <h1 class="experiment-title">Experiment 18: Conjugate Gradient Method</h1>
-
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To solve a system of linear equations Ax = b using the Conjugate Gradient method, a fundamental algorithm for solving large sparse linear systems.</p>
-                    <p>Given: A = [[4, 1], [1, 3]], b = [[1], [2]]</p>
+                    Implement the Conjugate Gradient (CG) method to solve the linear system:
+                    $$Ax=b$$
+                    with interpreted input:
+                    $$A=\begin{bmatrix}4 & 1\\1 & 3\end{bmatrix}, \qquad b=\begin{bmatrix}1\\2\end{bmatrix}$$
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                                                            <p>Conjugate Gradient (CG) is an iterative method for solving symmetric positive definite linear systems and can also be understood from an optimization viewpoint. Instead of moving along ordinary steepest-descent directions, it builds conjugate directions that reuse curvature information more efficiently.</p>
-                    <p style="margin-top: 10px;">This usually gives faster progress than basic gradient descent, especially on large sparse problems where direct matrix factorizations can be expensive. CG is therefore a central method in numerical linear algebra, scientific computing, and optimization.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The residual measures how far the current estimate is from the exact solution</li>
-                        <li>Conjugate directions avoid undoing progress made in earlier steps</li>
-                        <li>The method is well suited to large sparse systems in scientific computing</li>
+                    <p>The Conjugate Gradient method is an iterative algorithm for solving symmetric positive definite (SPD) linear systems. It is efficient because it avoids explicit matrix inversion and converges in at most $n$ steps (in exact arithmetic) for an $n\times n$ SPD matrix. In this experiment, we solve a 2-variable system using CG and verify that the computed solution satisfies $Ax \approx b$.</p>
+                    <p>The method followed is: start with an initial guess, compute initial residual and search direction, then update solution using step size computed from residual and matrix-direction products. After each update, a new conjugate direction is built using the residual ratio, and iterations continue until residual norm is below tolerance. This gives an accurate numerical solution with clear step-by-step updates.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>System: $$Ax=b$$</p>
+                    <p>Initialize: $$x_0=0, \quad r_0=b-Ax_0, \quad p_0=r_0$$</p>
+                    <p>Step size: $$\alpha_k=\frac{r_k^Tr_k}{p_k^TAp_k}$$</p>
+                    <p>Solution update: $$x_{k+1}=x_k+\alpha_k p_k$$</p>
+                    <p>Residual update: $$r_{k+1}=r_k-\alpha_kAp_k$$</p>
+                    <p>Direction coefficient: $$\beta_k=\frac{r_{k+1}^Tr_{k+1}}{r_k^Tr_k}$$</p>
+                    <p>Direction update: $$p_{k+1}=r_{k+1}+\beta_k p_k$$</p>
+                    <p>Stopping condition: $$\|r_k\|_2 < \varepsilon$$</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Functions Used</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li><code>conjugate_gradient(A, b, x0, tol, max_iter)</code>: implements CG iterations.</li>
+                        <li><code>np.dot(...)</code>: inner products for $\alpha$ and $\beta$.</li>
+                        <li><code>np.linalg.norm(...)</code>: residual norm for stopping.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Start with initial guess x₀</div>
-                    <div class="step"><strong>Step 2:</strong> Compute residual r₀ = b - Ax₀</div>
-                    <div class="step"><strong>Step 3:</strong> Set direction p₀ = r₀</div>
-                    <div class="step"><strong>Step 4:</strong> For each iteration k:</div>
-                    <div class="step"><strong>Step 5:</strong> Compute step size α</div>
-                    <div class="step"><strong>Step 6:</strong> Update x and residual</div>
-                    <div class="step"><strong>Step 7:</strong> Compute new direction using β</div>
+                    <ol style="margin-left: 20px;">
+                        <li>Choose initial guess $x_0$.</li>
+                        <li>Compute residual $r_0=b-Ax_0$.</li>
+                        <li>Set search direction $p_0=r_0$.</li>
+                        <li>Compute $\alpha_k$.</li>
+                        <li>Update $x_{k+1}$ and $r_{k+1}$.</li>
+                        <li>If residual norm is small, stop.</li>
+                        <li>Compute $\beta_k$.</li>
+                        <li>Update direction $p_{k+1}$.</li>
+                        <li>Repeat until convergence.</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">6) Mathematical Procedure (First Iteration)</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Linear System:</strong><br>
-                        Ax = b
+                    <p>Take $x_0=[0,0]^T$. Then: $r_0=b-Ax_0=b=\begin{bmatrix}1\\2\end{bmatrix}, \quad p_0=r_0$</p>
+                    <div class="step">
+                        <strong>Compute:</strong>
+                        $$Ap_0=\begin{bmatrix}4 & 1\\1 & 3\end{bmatrix} \begin{bmatrix}1\\2\end{bmatrix} = \begin{bmatrix}6\\7\end{bmatrix}$$
                     </div>
-                    <div class="formula">
-                        <strong>CG Update (iteration k):</strong><br>
-                        α_k = (r_k^T r_k) / (p_k^T A p_k)<br>
-                        x_{k+1} = x_k + α_k × p_k<br>
-                        r_{k+1} = r_k - α_k × A × p_k<br>
-                        β_k = (r_{k+1}^T r_{k+1}) / (r_k^T r_k)<br>
-                        p_{k+1} = r_{k+1} + β_k × p_k
+                    <div class="step">
+                        <strong>Step size:</strong>
+                        $$\alpha_0=\frac{r_0^Tr_0}{p_0^TAp_0} = \frac{1^2+2^2}{[1,2]\cdot[6,7]} = \frac{5}{20}=0.25$$
                     </div>
+                    <div class="step">
+                        <strong>Update:</strong>
+                        $$x_1=x_0+0.25p_0 = \begin{bmatrix}0.25\\0.5\end{bmatrix}$$
+                        $$r_1=r_0-0.25Ap_0 = \begin{bmatrix}1\\2\end{bmatrix}-0.25 \begin{bmatrix}6\\7\end{bmatrix} = \begin{bmatrix}-0.5\\0.25\end{bmatrix}$$
+                    </div>
+                    <p>Continue similarly until residual is sufficiently small.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">7) Given Input</div>
                 <div class="section-content">
-                    <div class="step"><strong>Problem:</strong> solve Ax=b with A=[[4,1],[1,3]] and b=[1,2]ᵀ.</div>
-                    <div class="step"><strong>Initialization:</strong> choose x₀=[0,0]ᵀ, then r₀=b-Ax₀=b and p₀=r₀.</div>
-                    <div class="step"><strong>Iteration:</strong> compute α, update x and residual r, then compute β and new direction p.</div>
-                    <div class="step"><strong>Convergence:</strong> for this 2×2 SPD system, CG reaches the exact solution in at most 2 iterations.</div>
-                    <div class="step"><strong>Result:</strong> x*=[1/11, 7/11]ᵀ≈[0.0909, 0.6364], verified by Ax*=b.</div>
+                    <ul style="margin-left: 20px;">
+                        <li>$A=\begin{bmatrix}4&1\\1&3\end{bmatrix}$</li>
+                        <li>$b=\begin{bmatrix}1\\2\end{bmatrix}$</li>
+                        <li>Initial guess: $x_0=[0,0]^T$</li>
+                        <li>Tolerance: $10^{-10}$</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <div class="code-block">
+                <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Conjugate Gradient Method</span>
-A = np.<span class="function">array</span>([[<span class="number">4</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">3</span>]])
-b = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>])
+<span class="comment"># Interpreted input from the aim text</span>
+A = np.array([[<span class="number">4.0</span>, <span class="number">1.0</span>],
+              [<span class="number">1.0</span>, <span class="number">3.0</span>]])
+b = np.array([<span class="number">1.0</span>, <span class="number">2.0</span>])
 
-<span class="keyword">def</span> <span class="function">conjugate_gradient</span>(A, b, x0=<span class="keyword">None</span>, tol=<span class="number">1e-6</span>, max_iter=<span class="number">100</span>):
-    n = <span class="function">len</span>(b)
-    <span class="keyword">if</span> x0 <span class="keyword">is</span> <span class="keyword">None</span>:
-        x = np.<span class="function">zeros</span>(n)
-    <span class="keyword">else</span>:
-        x = x0.<span class="function">copy</span>()
-    
+
+<span class="keyword">def</span> <span class="function">conjugate_gradient</span>(A, b, x0=<span class="keyword">None</span>, tol=<span class="number">1e-10</span>, max_iter=<span class="number">100</span>):
+    n = <span class="keyword">len</span>(b)
+    x = np.zeros(n) <span class="keyword">if</span> x0 <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">else</span> np.array(x0, dtype=float)
+
     r = b - A @ x
-    p = r.<span class="function">copy</span>()
-    
-    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="function">range</span>(max_iter):
-        <span class="comment"># Compute alpha</span>
+    p = r.copy()
+    rs_old = np.dot(r, r)
+
+    history = []
+
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">1</span>, max_iter + <span class="number">1</span>):
         Ap = A @ p
-        alpha = np.<span class="function">dot</span>(r, r) / np.<span class="function">dot</span>(p, Ap)
-        
-        <span class="comment"># Update x</span>
+        alpha = rs_old / np.dot(p, Ap)
+
         x = x + alpha * p
-        
-        <span class="comment"># Update residual</span>
-        r_new = r - alpha * Ap
-        
-        <span class="comment"># Check convergence</span>
-        <span class="keyword">if</span> np.<span class="function">linalg</span>.<span class="function">norm</span>(r_new) < tol:
-            <span class="function">print</span>(<span class="string">f"Converged at iteration {k}"</span>)
+        r = r - alpha * Ap
+
+        rs_new = np.dot(r, r)
+        res_norm = np.sqrt(rs_new)
+        history.append((k, x.copy(), res_norm))
+
+        <span class="keyword">if</span> res_norm < tol:
             <span class="keyword">break</span>
-        
-        <span class="comment"># Compute beta</span>
-        beta = np.<span class="function">dot</span>(r_new, r_new) / np.<span class="function">dot</span>(r, r)
-        
-        <span class="comment"># Update direction</span>
-        p = r_new + beta * p
-        r = r_new
-        
-        <span class="keyword">if</span> k % <span class="number">1</span> == <span class="number">0</span>:
-            <span class="function">print</span>(<span class="string">f"Iter {k}: x = {x}, residual = {np.<span class="function">linalg</span>.<span class="function">norm</span>(r):.6f}"</span>)
-    
-    <span class="keyword">return</span> x
 
-<span class="comment"># Solve</span>
-solution = <span class="function">conjugate_gradient</span>(A, b)
-direct = np.<span class="function">linalg</span>.<span class="function">solve</span>(A, b)
-<span class="function">print</span>(<span class="string">f"\nSolution x = {solution}"</span>)
-<span class="function">print</span>(<span class="string">f"Direct solve = {direct}"</span>)
-<span class="function">print</span>(<span class="string">f"Verification: Ax = {A @ solution}"</span>)
-<span class="function">print</span>(<span class="string">f"Target b = {b}"</span>)
-                    </div>
-                </div>
-            </div>
+        beta = rs_new / rs_old
+        p = r + beta * p
+        rs_old = rs_new
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+    <span class="keyword">return</span> x, history
+
+
+x0 = np.array([<span class="number">0.0</span>, <span class="number">0.0</span>])
+tol = <span class="number">1e-10</span>
+max_iter = <span class="number">100</span>
+
+x_star, steps = conjugate_gradient(A, b, x0=x0, tol=tol, max_iter=max_iter)
+b_est = A @ x_star
+residual = b - b_est
+
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"A ="</span>)
+print(A)
+print(<span class="string">"b ="</span>, b)
+print(<span class="string">"Initial guess x0 ="</span>, x0)
+print(<span class="function">f</span><span class="string">"Tolerance = </span>{tol}<span class="string">"</span>)
+
+print(<span class="string">"\nITERATION SUMMARY"</span>)
+<span class="keyword">for</span> k, xk, rn <span class="keyword">in</span> steps:
+    print(<span class="function">f</span><span class="string">"Iter </span>{k}<span class="string">: x = </span>{np.round(xk, <span class="number">10</span>)}<span class="string">, residual_norm = </span>{rn:<span class="number">.3</span>e}<span class="string">"</span>)
+
+print(<span class="string">\nOUTPUT"</span>)
+print(<span class="string">"Solution x* ="</span>, np.round(x_star, <span class="number">10</span>))
+print(<span class="string">"A @ x* ="</span>, np.round(b_est, <span class="number">10</span>))
+print(<span class="string">"Residual (b - A@x*) ="</span>, np.round(residual, <span class="number">12</span>))
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Iter 0: x = [0.25 0.5 ], residual = 0.559017<br>
-Iter 1: x = [0.09090909 0.63636364], residual = 0.000000<br>
-Converged at iteration 1<br><br>
-Solution x = [0.09090909 0.63636364]<br>
-Direct solve = [0.09090909 0.63636364]<br>
-Verification: Ax = [1. 2.]<br>
-Target b = [1 2]
+INPUT
+A =
+[[4. 1.]
+ [1. 3.]]
+b = [1. 2.]
+Initial guess x0 = [0. 0.]
+Tolerance = 1e-10
+
+ITERATION SUMMARY
+Iter 1: x = [0.25 0.5 ], residual_norm = 5.590e-01
+Iter 2: x = [0.09090909 0.63636364], residual_norm = 0.000e+00
+
+OUTPUT
+Solution x* = [0.09090909 0.63636364]
+A @ x* = [1. 2.]
+Residual (b - A@x*) = [0. 0.]
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp17.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp19.html" class="btn">Next →</a>
+                <a href="exp17.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp19.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

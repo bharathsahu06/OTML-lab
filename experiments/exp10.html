@@ -12,150 +12,218 @@
             <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 10
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 10: Interior Point Method</h1>
-
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 10: Interior Point Method for Non-Linear Constrained Optimization</h1>
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To solve a non-linear constrained optimization problem using the interior point method: minimize f(x) = x² subject to x ≥ 1. The interior point method is a powerful technique for constrained optimization.</p>
+                    Solve the constrained optimization problem using interior point method:
+                    $$\min f(x)=x^2 \quad \text{subject to} \quad x\ge1$$
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                                                            <p>Interior point methods solve constrained optimization problems by approaching the optimum from inside the feasible region and using barrier terms to discourage moves toward the constraint boundaries. Instead of stepping outside the allowed region, the search remains feasible throughout the iterations.</p>
-                    <p style="margin-top: 10px;">As the barrier parameter changes, the iterates move closer to the true constrained optimum while preserving the structure of the problem. This makes interior point methods important tools in modern constrained and large-scale optimization.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The barrier function discourages constraint violation</li>
-                        <li>The search starts and stays inside the feasible set</li>
-                        <li>The method is widely used in constrained and large-scale optimization</li>
+                    <p>This experiment solves a non-linear constrained optimization problem using the interior point (barrier) approach. The idea is to convert the constrained problem into a sequence of unconstrained problems by adding a logarithmic barrier term that prevents the iterate from crossing the boundary $x=1$. Instead of solving directly on the boundary, we start from a strictly feasible point ($x>1$) and move toward the optimum by minimizing the barrier objective repeatedly.</p>
+                    <p>The method followed is: define a barrier function for the inequality constraint, then use Newton updates to minimize the barrier objective for a fixed barrier parameter $t$. After inner convergence, increase $t$ so that the barrier effect reduces and the solution gets closer to the true constrained optimum. This process is repeated until the duality-gap style stopping condition is satisfied, and final $x$ and $f(x)$ are reported.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>Original problem: $$\min_{x}\; x^2 \quad \text{s.t.} \quad x\ge1$$</p>
+                    <p>Write constraint as: $$g(x)=x-1>0$$</p>
+                    <p>Barrier objective (for parameter $t>0$): $$\phi_t(x)=t\,x^2-\log(x-1), \quad x>1$$</p>
+                    <p>Gradient and Hessian: $$\phi_t'(x)=2tx-\frac{1}{x-1}$$ $$\phi_t''(x)=2t+\frac{1}{(x-1)^2}$$</p>
+                    <p>Newton update: $$x_{k+1}=x_k-\frac{\phi_t'(x_k)}{\phi_t''(x_k)}$$</p>
+                    <p>Outer stopping criterion (single inequality, $m=1$): $$\frac{m}{t}<\varepsilon$$</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Functions Used</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li><code>barrier_phi(x, t)</code>: barrier objective value.</li>
+                        <li><code>barrier_grad(x, t)</code>: gradient of barrier objective.</li>
+                        <li><code>barrier_hess(x, t)</code>: Hessian (second derivative).</li>
+                        <li><code>interior_point_1d(...)</code>: performs outer barrier loop and inner Newton iterations.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Start with feasible point inside constraint region (x=2)</div>
-                    <div class="step"><strong>Step 2:</strong> Add barrier function: f(x) + (1/t)×log(x-1)</div>
-                    <div class="step"><strong>Step 3:</strong> Minimize modified objective</div>
-                    <div class="step"><strong>Step 4:</strong> Increase t (reduce barrier weight)</div>
-                    <div class="step"><strong>Step 5:</strong> Repeat until convergence</div>
+                    <ol style="margin-left: 20px;">
+                        <li>Choose strictly feasible initial point $x_0>1$.</li>
+                        <li>Initialize barrier parameter $t$ and scaling factor $\mu>1$.</li>
+                        <li>For fixed $t$, minimize $\phi_t(x)$ by Newton method.</li>
+                        <li>Use backtracking to keep all iterates feasible ($x>1$).</li>
+                        <li>When inner Newton converges, increase $t\leftarrow\mu t$.</li>
+                        <li>Repeat until $1/t<\varepsilon$.</li>
+                        <li>Return final $x^*$ and objective $f(x^*)=x^{*2}$.</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">6) Mathematical Procedure (First Inner Newton Step)</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Original Problem:</strong><br>
-                        minimize f(x) = x²<br>
-                        subject to x ≥ 1
+                    <p>Take initial $x_0=2$, $t=1$.</p>
+                    <div class="step">
+                        <strong>Compute gradient:</strong>
+                        $$\phi_t'(2)=2(1)(2)-\frac{1}{2-1}=4-1=3$$
                     </div>
-                    <div class="formula">
-                        <strong>Barrier Problem:</strong><br>
-                        minimize f(x) - (1/t)×log(x-1)<br>
-                        where t → ∞ (penalty weight decreases)
+                    <div class="step">
+                        <strong>Compute Hessian:</strong>
+                        $$\phi_t''(2)=2(1)+\frac{1}{(2-1)^2}=2+1=3$$
                     </div>
-                    <div class="formula">
-                        <strong>Barrier Gradient:</strong><br>
-                        ∇f_barrier = 2x - (1/t)×1/(x-1)
+                    <div class="step">
+                        <strong>Newton step:</strong>
+                        $$\Delta x=-\frac{\phi_t'(2)}{\phi_t''(2)}=-\frac{3}{3}=-1$$
                     </div>
+                    <div class="step">
+                        <strong>Candidate update:</strong>
+                        $$x_1=x_0+\Delta x=2-1=1$$
+                    </div>
+                    <p>Since $x=1$ is on boundary and barrier needs $x>1$, backtracking reduces step size and keeps $x_1>1$.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">7) Given Input</div>
                 <div class="section-content">
-                    <div class="step">
-                        <strong>Original constrained problem:</strong><br>
-                        minimize x² subject to x ≥ 1
-                    </div>
-                    <div class="step">
-                        <strong>Feasible-region logic:</strong><br>
-                        unconstrained minimum of x² is at x = 0, but 0 is infeasible (violates x ≥ 1)
-                    </div>
-                    <div class="step">
-                        <strong>Boundary optimum:</strong><br>
-                        smallest feasible x is x* = 1, so f(x*) = 1
-                    </div>
-                    <div class="step">
-                        <strong>Interior-point path:</strong><br>
-                        barrier iterates stay at x &gt; 1 and approach 1 as t increases
-                    </div>
+                    <ul style="margin-left: 20px;">
+                        <li>Objective: $f(x)=x^2$</li>
+                        <li>Constraint: $x\ge1$</li>
+                        <li>Initial point: $x_0=2.0$</li>
+                        <li>Initial barrier parameter: $t_0=1.0$</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <div class="code-block">
+                <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Interior Point Method</span>
-<span class="comment"># Minimize: f(x) = x²</span>
-<span class="comment"># Subject to: x >= 1</span>
-
-<span class="keyword">def</span> <span class="function">objective</span>(x):
+<span class="keyword">def</span> <span class="function">f</span>(x):
     <span class="keyword">return</span> x**<span class="number">2</span>
 
-<span class="keyword">def</span> <span class="function">barrier</span>(x, t):
-    <span class="comment"># Barrier function: -log(x-1)</span>
-    <span class="keyword">if</span> x <= <span class="number">1</span>:
-        <span class="keyword">return</span> <span class="number">float</span>(<span class="string">'inf'</span>)
-    <span class="keyword">return</span> -(<span class="number">1</span>/t) * np.<span class="function">log</span>(x - <span class="number">1</span>)
 
-<span class="keyword">def</span> <span class="function">barrier_gradient</span>(x, t):
-    <span class="keyword">return</span> <span class="number">2</span>*x - (<span class="number">1</span>/t) * <span class="number">1</span>/(x - <span class="number">1</span>)
+<span class="keyword">def</span> <span class="function">barrier_phi</span>(x, t):
+    <span class="keyword">return</span> t * (x**<span class="number">2</span>) - np.log(x - <span class="number">1.0</span>)
 
-<span class="comment"># Parameters</span>
-x = <span class="number">2</span>.<span class="number">0</span>  <span class="comment"># Start inside constraint region</span>
-t = <span class="number">1</span>.<span class="number">0</span>   <span class="comment"># Initial barrier parameter</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
 
-<span class="comment"># Iterations</span>
-<span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
-    <span class="comment"># Minimize with current barrier</span>
-    <span class="keyword">for</span> inner <span class="keyword">in</span> <span class="function">range</span>(<span class="number">50</span>):
-        grad = <span class="function">barrier_gradient</span>(x, t)
-        x = x - lr * grad
-        
-        <span class="keyword">if</span> x <= <span class="number">1</span>.<span class="number">01</span>:
-            x = <span class="number">1</span>.<span class="number">01</span>
-    
-    obj_val = <span class="function">objective</span>(x)
-    <span class="function">print</span>(<span class="string">f"Iteration {iteration}: x = {x:.6f}, f(x) = {obj_val:.6f}, t = {t}"</span>)
-    
-    t *= <span class="number">10</span>  <span class="comment"># Increase t</span>
+<span class="keyword">def</span> <span class="function">barrier_grad</span>(x, t):
+    <span class="keyword">return</span> <span class="number">2.0</span> * t * x - <span class="number">1.0</span> / (x - <span class="number">1.0</span>)
 
-<span class="function">print</span>(<span class="string">f"\nOptimal x ≈ {x:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal f(x) ≈ {objective(x):.6f}"</span>)
-                    </div>
-                </div>
-            </div>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+<span class="keyword">def</span> <span class="function">barrier_hess</span>(x, t):
+    <span class="keyword">return</span> <span class="number">2.0</span> * t + <span class="number">1.0</span> / ((x - <span class="number">1.0</span>) ** <span class="number">2</span>)
+
+
+<span class="keyword">def</span> <span class="function">interior_point_1d</span>(x0=<span class="number">2.0</span>, t0=<span class="number">1.0</span>, mu=<span class="number">10.0</span>, eps=<span class="number">1e-6</span>, newton_tol=<span class="number">1e-10</span>, max_outer=<span class="number">20</span>, max_inner=<span class="number">50</span>):
+    x = float(x0)
+    t = float(t0)
+    m = <span class="number">1</span>  <span class="comment"># number of inequality constraints</span>
+    history = []
+
+    <span class="keyword">if</span> x <= <span class="number">1.0</span>:
+        <span class="keyword">raise</span> ValueError(<span class="string">"Initial point must satisfy x > 1."</span>)
+
+    <span class="keyword">for</span> outer <span class="keyword">in</span> range(<span class="number">1</span>, max_outer + <span class="number">1</span>):
+        <span class="keyword">for</span> inner <span class="keyword">in</span> range(<span class="number">1</span>, max_inner + <span class="number">1</span>):
+            g = barrier_grad(x, t)
+            h = barrier_hess(x, t)
+
+            <span class="keyword">if</span> abs(g) < newton_tol:
+                <span class="keyword">break</span>
+
+            <span class="comment"># Newton step</span>
+            delta = -g / h
+            step = <span class="number">1.0</span>
+
+            <span class="comment"># Backtracking to maintain feasibility x > 1</span>
+            <span class="keyword">while</span> x + step * delta <= <span class="number">1.0</span>:
+                step *= <span class="number">0.5</span>
+
+            <span class="comment"># Armijo-style sufficient decrease (simple form)</span>
+            <span class="keyword">while</span> barrier_phi(x + step * delta, t) > barrier_phi(x, t) + <span class="number">1e-4</span> * step * g * delta:
+                step *= <span class="number">0.5</span>
+                <span class="keyword">if</span> step < <span class="number">1e-12</span>:
+                    <span class="keyword">break</span>
+
+            x = x + step * delta
+            history.append((outer, inner, t, x, f(x), abs(g)))
+
+        <span class="keyword">if</span> m / t < eps:
+            <span class="keyword">break</span>
+
+        t *= mu
+
+    <span class="keyword">return</span> x, f(x), history
+
+
+<span class="comment"># Given input parameters</span>
+x0 = <span class="number">2.0</span>
+t0 = <span class="number">1.0</span>
+mu = <span class="number">10.0</span>
+eps = <span class="number">1e-6</span>
+
+x_star, f_star, steps = interior_point_1d(x0=x0, t0=t0, mu=mu, eps=eps)
+
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"Objective: minimize f(x) = x^2"</span>)
+print(<span class="string">"Constraint: x >= 1"</span>)
+print(<span class="function">f</span><span class="string">"Initial x0: </span>{x0}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Initial barrier parameter t0: </span>{t0}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Barrier update factor mu: </span>{mu}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Stopping epsilon: </span>{eps}<span class="string">"</span>)
+
+print(<span class="string">"\nOUTPUT"</span>)
+print(<span class="function">f</span><span class="string">"Optimal x*: </span>{x_star:<span class="number">.8</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Minimum objective value f(x*): </span>{f_star:<span class="number">.8</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Constraint check (x* >= 1): </span>{x_star >= <span class="number">1.0</span>}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Distance from boundary (x* - 1): </span>{x_star - <span class="number">1.0</span>:<span class="number">.8</span>e}<span class="string">"</span>)
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Iteration 0: x = 1.789234, f(x) = 3.201567, t = 1.0<br>
-Iteration 1: x = 1.047723, f(x) = 1.097723, t = 10.0<br>
-Iteration 2: x = 1.010000, f(x) = 1.020100, t = 100.0<br>
-Iteration 3: x = 1.010000, f(x) = 1.020100, t = 1000.0<br>
-Iteration 4: x = 1.010000, f(x) = 1.020100, t = 10000.0<br>
-Iteration 5: x = 1.010000, f(x) = 1.020100, t = 100000.0<br><br>
-Optimal x ≈ 1.010000<br>
-Optimal f(x) ≈ 1.020100
+INPUT
+Objective: minimize f(x) = x^2
+Constraint: x >= 1
+Initial x0: 2.0
+Initial barrier parameter t0: 1.0
+Barrier update factor mu: 10.0
+Stopping epsilon: 1e-06
+
+OUTPUT
+Optimal x*: 1.00000005
+Minimum objective value f(x*): 1.00000010
+Constraint check (x* >= 1): True
+Distance from boundary (x* - 1): 4.99999975e-08
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp9.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp11.html" class="btn">Next →</a>
+                <a href="exp9.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp11.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

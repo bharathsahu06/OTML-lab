@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 15 - Distributed GD (Dataset 2) | OTML Lab</title>
+    <title>Experiment 15 - Distributed Gradient Descent | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,116 +12,217 @@
             <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 15
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 15: Distributed Gradient Descent (Dataset 2)</h1>
-
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 15: Simple Distributed Gradient Descent Simulation</h1>
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To simulate distributed gradient descent on another dataset: x=[1,2,3,4], y=[3,5,7,9]. This shows how the distributed approach generalizes across datasets.</p>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📝 Description</div>
-                <div class="section-content">
-                                                            <p>Distributed gradient descent applies optimization across multiple workers that each process only part of the data. Every worker computes a local gradient, and those local updates are then aggregated into a shared global update.</p>
-                    <p style="margin-top: 10px;">This method shows how optimization and computing systems interact in large-scale learning. Performance depends not only on the mathematics of the update rule but also on communication, synchronization, and how the data is partitioned across workers.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Local computation reduces the work done by any single worker</li>
-                        <li>Aggregation combines information from all partitions into one update</li>
-                        <li>The method illustrates how scalable learning systems coordinate local and global computation</li>
+                    Simulate a simple distributed gradient descent algorithm for:
+                    <ul style="margin-left: 20px;">
+                        <li>$x=[1,2,3,4]$</li>
+                        <li>$y=[3,5,7,9]$</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize global parameters</div>
-                    <div class="step"><strong>Step 2:</strong> Partition data to workers</div>
-                    <div class="step"><strong>Step 3:</strong> Each worker processes its data partition</div>
-                    <div class="step"><strong>Step 4:</strong> Workers send gradients to server</div>
-                    <div class="step"><strong>Step 5:</strong> Server averages gradients</div>
-                    <div class="step"><strong>Step 6:</strong> Update global model</div>
+                    <p>This experiment simulates distributed training of a linear regression model using gradient descent. The model is $\hat{y}=wx+b$, and the objective is to minimize MSE loss. In distributed gradient descent, data is partitioned across workers, each worker computes local gradients, and a central server aggregates these gradients to update global model parameters. This setup is a simple representation of parallel learning in practical distributed systems.</p>
+                    <p>The method followed is: split the dataset into worker partitions, send current global parameters to all workers, and let each worker compute local gradients from its own data. Then aggregate gradients at the server by averaging, and update global $w$ and $b$ once per epoch. Repeating this synchronize-and-update process produces a distributed optimization flow for linear regression.</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p><strong>Model derivation:</strong> dataset x=[1,2,3,4], y=[3,5,7,9] follows y = 2x + 1.</p>
-                    <div class="step"><strong>Two-worker split:</strong> W1={(1,3),(2,5)}, W2={(3,7),(4,9)}.</div>
-                    <div class="step"><strong>Local-to-global updates:</strong> each worker computes (dw,db), server averages and applies update.</div>
-                    <div class="step"><strong>Convergence goal:</strong> w -&gt; 2 and b -&gt; 1 with decreasing MSE.</div>
+                    <p>Model: $$\hat{y}_i = wx_i + b$$</p>
+                    <p>Global MSE: $$J(w,b)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
+                    <p>Local gradients at worker $k$ with $n_k$ samples: $$\frac{\partial J_k}{\partial w}=\frac{2}{n_k}\sum_{i\in D_k}(\hat{y}_i-y_i)x_i, \qquad \frac{\partial J_k}{\partial b}=\frac{2}{n_k}\sum_{i\in D_k}(\hat{y}_i-y_i)$$</p>
+                    <p>Server aggregation for $K$ workers: $$\bar{g}_w=\frac{1}{K}\sum_{k=1}^{K} g_w^{(k)}, \qquad \bar{g}_b=\frac{1}{K}\sum_{k=1}^{K} g_b^{(k)}$$</p>
+                    <p>Update rules: $$w\leftarrow w-\alpha\bar{g}_w, \qquad b\leftarrow b-\alpha\bar{g}_b$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
+                <div class="section-title">4) Important Functions Used</div>
                 <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                    <ul style="margin-left: 20px;">
+                        <li><code>split_workers(...)</code>: partitions data across workers.</li>
+                        <li><code>local_gradient(...)</code>: computes worker-local gradients.</li>
+                        <li><code>distributed_gradient_descent(...)</code>: performs server-worker update loop.</li>
+                        <li><code>mse_loss(...)</code>: computes full-data MSE.</li>
+                    </ul>
+                </div>
+            </div>
 
-<span class="comment"># Distributed GD - Dataset 2</span>
-X = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
-y = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
+            <div class="section">
+                <div class="section-title">5) Algorithm (Step by Step)</div>
+                <div class="section-content">
+                    <ol style="margin-left: 20px;">
+                        <li>Initialize global parameters $w=0$, $b=0$.</li>
+                        <li>Split data into worker subsets (here, 2 workers).</li>
+                        <li>Broadcast $(w,b)$ to all workers.</li>
+                        <li>Each worker computes local gradients.</li>
+                        <li>Server averages local gradients.</li>
+                        <li>Server updates global parameters.</li>
+                        <li>Compute global loss.</li>
+                        <li>Repeat for fixed epochs.</li>
+                        <li>Return final parameters and predictions.</li>
+                    </ol>
+                </div>
+            </div>
 
-num_workers = <span class="number">2</span>
-n = <span class="function">len</span>(X) // num_workers
-
-<span class="comment"># Partition data</span>
-workers = [
-    (X[:n], y[:n]),
-    (X[n:], y[n:])
-]
-
-w, b = <span class="number">0</span>.<span class="number">0</span>, <span class="number">0</span>.<span class="number">0</span>
-lr = <span class="number">0</span>.<span class="number">01</span>
-
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">40</span>):
-    <span class="comment"># Collect gradients</span>
-    grads_w, grads_b = [], []
-    
-    <span class="keyword">for</span> X_Worker, y_worker <span class="keyword">in</span> workers:
-        y_pred = w*X_Worker + b
-        dw = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>((y_worker - y_pred) * X_Worker)
-        db = -<span class="number">2</span>/len(X_Worker) * np.<span class="function">sum</span>(y_worker - y_pred)
-        grads_w.<span class="function">append</span>(dw)
-        grads_b.<span class="function">append</span>(db)
-    
-    <span class="comment"># Average and update</span>
-    w -= lr * np.<span class="function">mean</span>(grads_w)
-    b -= lr * np.<span class="function">mean</span>(grads_b)
-    
-    <span class="keyword">if</span> epoch % <span class="number">10</span> == <span class="number">0</span>:
-        y_pred = w*X + b
-        loss = np.<span class="function">mean</span>((y - y_pred)**<span class="number">2</span>)
-        <span class="function">print</span>(<span class="string">f"Epoch {epoch}: Loss={loss:.4f}, w={w:.4f}, b={b:.4f}"</span>)
-
-<span class="function">print</span>(<span class="string">f"\nFinal model: y = {w:.4f}x + {b:.4f}"</span>)
+            <div class="section">
+                <div class="section-title">6) Mathematical Procedure (First Epoch)</div>
+                <div class="section-content">
+                    <p>Take worker-1 data: $(1,3),(2,5)$ and worker-2 data: $(3,7),(4,9)$. Initial $w=0$, $b=0$.</p>
+                    <div class="step">
+                        <strong>Worker-1:</strong>
+                        $\hat{y}=[0,0],\quad e=[-3,-5]$
+                        $$g_w^{(1)}=\frac{2}{2}[(-3)(1)+(-5)(2)]=-13, \quad g_b^{(1)}=\frac{2}{2}[(-3)+(-5)]=-8$$
+                    </div>
+                    <div class="step">
+                        <strong>Worker-2:</strong>
+                        $\hat{y}=[0,0],\quad e=[-7,-9]$
+                        $$g_w^{(2)}=\frac{2}{2}[(-7)(3)+(-9)(4)]=-57, \quad g_b^{(2)}=\frac{2}{2}[(-7)+(-9)]=-16$$
+                    </div>
+                    <div class="step">
+                        <strong>Average gradients:</strong>
+                        $$\bar{g}_w=\frac{-13-57}{2}=-35, \quad \bar{g}_b=\frac{-8-16}{2}=-12$$
+                    </div>
+                    <div class="step">
+                        <strong>With $\alpha=0.01$:</strong>
+                        $$w=0-0.01(-35)=0.35, \quad b=0-0.01(-12)=0.12$$
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+                <div class="section-title">7) Given Input</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li>$x=[1,2,3,4]$</li>
+                        <li>$y=[3,5,7,9]$</li>
+                        <li>Number of workers: $2$</li>
+                        <li>Learning rate: $\alpha=0.01$</li>
+                        <li>Epochs: $1000$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Given input</span>
+x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
+y = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>], dtype=float)
+
+
+<span class="keyword">def</span> <span class="function">mse_loss</span>(x, y, w, b):
+    y_pred = w * x + b
+    <span class="keyword">return</span> np.mean((y_pred - y) ** <span class="number">2</span>)
+
+
+<span class="keyword">def</span> <span class="function">split_workers</span>(x, y, num_workers=<span class="number">2</span>):
+    indices = np.array_split(np.arange(<span class="keyword">len</span>(x)), num_workers)
+    <span class="keyword">return</span> [(x[idx], y[idx]) <span class="keyword">for</span> idx <span class="keyword">in</span> indices]
+
+
+<span class="keyword">def</span> <span class="function">local_gradient</span>(x_local, y_local, w, b):
+    n_local = <span class="keyword">len</span>(x_local)
+    y_pred = w * x_local + b
+    error = y_pred - y_local
+    dw = (<span class="number">2.0</span> / n_local) * np.sum(error * x_local)
+    db = (<span class="number">2.0</span> / n_local) * np.sum(error)
+    <span class="keyword">return</span> dw, db
+
+
+<span class="keyword">def</span> <span class="function">distributed_gradient_descent</span>(x, y, alpha=<span class="number">0.01</span>, epochs=<span class="number">1000</span>, num_workers=<span class="number">2</span>):
+    w, b = <span class="number">0.0</span>, <span class="number">0.0</span>
+    worker_data = split_workers(x, y, num_workers=num_workers)
+    loss_history = []
+
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="keyword">range</span>(epochs):
+        local_grads = []
+
+        <span class="comment"># Local gradients at each worker</span>
+        <span class="keyword">for</span> x_local, y_local <span class="keyword">in</span> worker_data:
+            dw_k, db_k = local_gradient(x_local, y_local, w, b)
+            local_grads.append((dw_k, db_k))
+
+        <span class="comment"># Server-side aggregation (average)</span>
+        avg_dw = np.mean([g[<span class="number">0</span>] <span class="keyword">for</span> g <span class="keyword">in</span> local_grads])
+        avg_db = np.mean([g[<span class="number">1</span>] <span class="keyword">for</span> g <span class="keyword">in</span> local_grads])
+
+        <span class="comment"># Global update</span>
+        w -= alpha * avg_dw
+        b -= alpha * avg_db
+
+        loss_history.append(mse_loss(x, y, w, b))
+
+    <span class="keyword">return</span> w, b, loss_history
+
+
+alpha = <span class="number">0.01</span>
+epochs = <span class="number">1000</span>
+num_workers = <span class="number">2</span>
+
+w, b, loss_history = distributed_gradient_descent(
+    x, y, alpha=alpha, epochs=epochs, num_workers=num_workers
+)
+
+y_final = w * x + b
+final_loss = mse_loss(x, y, w, b)
+
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"x ="</span>, x)
+print(<span class="string">"y ="</span>, y)
+print(<span class="function">f</span><span class="string">"number of workers = </span>{num_workers}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"learning rate = </span>{alpha}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"epochs = </span>{epochs}<span class="string">"</span>)
+
+print(<span class="string">"\nOUTPUT"</span>)
+print(<span class="function">f</span><span class="string">"Learned weight (w): </span>{w:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Learned bias (b): </span>{b:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Final MSE Loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="string">"Predicted y:"</span>, np.round(y_final, <span class="number">6</span>))
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Epoch 0: Loss=20.8512, w=0.1234, b=0.0567<br>
-Epoch 10: Loss=2.1456, w=1.8234, b=0.5123<br>
-Epoch 20: Loss=0.3789, w=1.9834, b=0.9123<br>
-Epoch 30: Loss=0.0612, w=1.9956, b=0.9876<br>
-Epoch 40: Loss=0.0098, w=1.9989, b=0.9987<br><br>
-Final model: y = 2.0001x + 1.0001
+INPUT
+x = [1. 2. 3. 4.]
+y = [3. 5. 7. 9.]
+number of workers = 2
+learning rate = 0.01
+epochs = 1000
+
+OUTPUT
+Learned weight (w): 2.004861
+Learned bias (b): 0.985708
+Final MSE Loss: 0.000034
+Predicted y: [2.990569 4.99543  7.000291 9.005152]
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp14.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp16.html" class="btn">Next →</a>
+                <a href="exp14.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp16.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

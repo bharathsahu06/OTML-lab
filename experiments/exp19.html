@@ -3,144 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 19 - Quasi-Newton Method | OTML Lab</title>
+    <title>Experiment 19 - Quasi-Newton Method (BFGS) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 19
+            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 19
         </div>
 
-        <div class="experiment-detail">
+        <div class="experiment-detail animate-in">
             <h1 class="experiment-title">Experiment 19: Quasi-Newton Method (BFGS)</h1>
-
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To minimize a multivariate function f(x₁,x₂) = x₁² + 2x₂² using the Quasi-Newton method (BFGS algorithm). BFGS approximates the Hessian without computing second derivatives explicitly.</p>
+                    Minimize the function:
+                    $$f(x_1,x_2)=x_1^2+2x_2^2$$
+                    using Quasi-Newton method.
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                                                            <p>BFGS is a Quasi-Newton method that builds an approximation to the inverse Hessian using gradient information from previous steps. This gives it much of the speed advantage of Newton's method without requiring explicit second derivatives.</p>
-                    <p style="margin-top: 10px;">As the iterations proceed, the approximation improves and the search direction becomes more informed by the local curvature of the objective function. That is why BFGS is a popular general-purpose optimizer for smooth unconstrained problems and is widely used in practical optimization libraries.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>Gradient differences reveal how the curvature is changing</li>
-                        <li>The inverse-Hessian approximation improves the search direction over time</li>
-                        <li>BFGS is often faster and more stable than basic gradient descent for smooth problems</li>
+                    <p>This experiment solves an unconstrained optimization problem using a Quasi-Newton approach. Unlike standard gradient descent, Quasi-Newton methods use gradient information to build an approximation of second-order curvature (inverse Hessian), which usually gives faster convergence. Here we use the BFGS update, one of the most common Quasi-Newton methods.</p>
+                    <p>The method followed is: start from an initial point and identity inverse-Hessian approximation, compute gradient, and take a search direction using the approximate inverse Hessian. Then perform a line search to choose step size and update the position. After each step, update the inverse-Hessian approximation using BFGS formula and continue until gradient norm becomes very small. Finally, report optimum point, function value, and convergence status.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>Objective: $$f(x)=x_1^2+2x_2^2, \quad x=\begin{bmatrix}x_1\\x_2\end{bmatrix}$$</p>
+                    <p>Gradient: $$\nabla f(x)=\begin{bmatrix}2x_1\\4x_2\end{bmatrix}$$</p>
+                    <p>Search direction: $$p_k=-H_k\nabla f(x_k)$$ where $H_k$ is inverse Hessian approximation.</p>
+                    <p>Point update: $$x_{k+1}=x_k+\alpha_k p_k$$</p>
+                    <p>Define: $$s_k=x_{k+1}-x_k, \qquad y_k=\nabla f(x_{k+1})-\nabla f(x_k)$$</p>
+                    <p>BFGS inverse-Hessian update: $$H_{k+1}=(I-\rho_k s_k y_k^T)H_k(I-\rho_k y_k s_k^T)+\rho_k s_k s_k^T, \quad \rho_k=\frac{1}{y_k^Ts_k}$$</p>
+                    <p>Stopping condition: $$\|\nabla f(x_k)\|_2<\varepsilon$$</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Functions Used</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li><code>f(x)</code>: objective value.</li>
+                        <li><code>grad_f(x)</code>: gradient computation.</li>
+                        <li><code>backtracking_line_search(...)</code>: finds step size satisfying Armijo condition.</li>
+                        <li><code>bfgs_quasi_newton(...)</code>: performs full BFGS iterations.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Initialize position and Hessian approximation H</div>
-                    <div class="step"><strong>Step 2:</strong> Compute gradient ∇f</div>
-                    <div class="step"><strong>Step 3:</strong> Compute Newton-like direction: p = -H ∇f</div>
-                    <div class="step"><strong>Step 4:</strong> Line search to find step size</div>
-                    <div class="step"><strong>Step 5:</strong> Update position</div>
-                    <div class="step"><strong>Step 6:</strong> Update Hessian approximation (BFGS formula)</div>
-                    <div class="step"><strong>Step 7:</strong> Repeat until convergence</div>
+                    <ol style="margin-left: 20px;">
+                        <li>Initialize point $x_0$, inverse-Hessian approximation $H_0=I$.</li>
+                        <li>Compute gradient $g_k=\nabla f(x_k)$.</li>
+                        <li>Compute descent direction $p_k=-H_k g_k$.</li>
+                        <li>Perform backtracking line search for $\alpha_k$.</li>
+                        <li>Update point $x_{k+1}=x_k+\alpha_k p_k$.</li>
+                        <li>Compute $s_k$ and $y_k$.</li>
+                        <li>Update inverse-Hessian approximation using BFGS formula.</li>
+                        <li>Repeat until gradient norm is below tolerance.</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">6) Mathematical Procedure (First Iteration)</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Objective Function:</strong><br>
-                        f(x₁, x₂) = x₁² + 2x₂²
+                    <p>Take initial point $x_0=[2,2]^T$ and $H_0=I$.</p>
+                    <div class="step">
+                        <strong>Gradient:</strong>
+                        $$g_0=\nabla f(x_0)=\begin{bmatrix}4\\8\end{bmatrix}$$
                     </div>
-                    <div class="formula">
-                        <strong>Gradient:</strong><br>
-                        ∇f = [2x₁, 4x₂]^T
+                    <div class="step">
+                        <strong>Direction:</strong>
+                        $$p_0=-H_0g_0=-\begin{bmatrix}4\\8\end{bmatrix}$$
                     </div>
-                    <div class="formula">
-                        <strong>BFGS Update (Hessian approximation):</strong><br>
-                        H_{k+1} = H_k - (H_k s s^T H_k)/(s^T H_k s) + (y y^T)/(y^T s)<br>
-                        where s = x_{k+1} - x_k, y = ∇f(x_{k+1}) - ∇f(x_k)
+                    <div class="step">
+                        <strong>With step $\alpha_0$ from line search:</strong>
+                        $x_1=x_0+\alpha_0p_0$.
+                    </div>
+                    <div class="step">
+                        <strong>Then compute:</strong>
+                        $s_0=x_1-x_0, \qquad y_0=g_1-g_0$ and update $H_1$ by BFGS formula.
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">7) Given Input</div>
                 <div class="section-content">
-                    <div class="step"><strong>Objective:</strong> minimize f(x₁,x₂)=x₁²+2x₂².</div>
-                    <div class="step"><strong>Stationary condition:</strong> ∇f=[2x₁,4x₂]ᵀ=0 gives x₁=0, x₂=0.</div>
-                    <div class="step"><strong>Optimality check:</strong> Hessian [[2,0],[0,4]] is positive definite, so (0,0) is the unique global minimum.</div>
-                    <div class="step"><strong>BFGS process:</strong> start from x₀=[5,5], use gradient-based quasi-Newton updates to approach (0,0).</div>
-                    <div class="step"><strong>Expected result:</strong> final point near [0,0] with very small function value and gradient norm.</div>
+                    <ul style="margin-left: 20px;">
+                        <li>Function: $f(x_1,x_2)=x_1^2+2x_2^2$</li>
+                        <li>Initial point: $x_0=[2,2]^T$</li>
+                        <li>Tolerance: $10^{-8}$</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <p><strong>Easy approach using scipy:</strong></p>
-                    <div class="code-block">
+                <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
-<span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize
 
-<span class="comment"># Objective function</span>
-<span class="keyword">def</span> <span class="function">objective</span>(x):
-    <span class="keyword">return</span> x[<span class="number">0</span>]**<span class="number">2</span> + <span class="number">2</span>*x[<span class="number">1</span>]**<span class="number">2</span>
+<span class="comment"># Objective and gradient</span>
 
-<span class="comment"># Gradient</span>
-<span class="keyword">def</span> <span class="function">gradient</span>(x):
-    <span class="keyword">return</span> np.<span class="function">array</span>([<span class="number">2</span>*x[<span class="number">0</span>], <span class="number">4</span>*x[<span class="number">1</span>]])
+<span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x[<span class="number">0</span>] ** <span class="number">2</span> + <span class="number">2.0</span> * x[<span class="number">1</span>] ** <span class="number">2</span>
 
-<span class="comment"># Initial point</span>
-x0 = np.<span class="function">array</span>([<span class="number">5</span>.<span class="number">0</span>, <span class="number">5</span>.<span class="number">0</span>])
 
-history = []
-<span class="keyword">def</span> <span class="function">callback</span>(xk):
-    history.<span class="function">append</span>(xk.<span class="function">copy</span>())
+<span class="keyword">def</span> <span class="function">grad_f</span>(x):
+    <span class="keyword">return</span> np.array([<span class="number">2.0</span> * x[<span class="number">0</span>], <span class="number">4.0</span> * x[<span class="number">1</span>]])
 
-<span class="comment"># Optimize using BFGS</span>
-result = <span class="function">minimize</span>(
-    objective,
-    x0,
-    method=<span class="string">'BFGS'</span>,
-    jac=gradient,
-    callback=callback,
-    options={<span class="string">'disp'</span>: <span class="keyword">True</span>}
-)
 
-<span class="function">print</span>(<span class="string">f"\nOptimal point: {result.x}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal value: {result.fun:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Iterations: {result.nit}"</span>)
-<span class="function">print</span>(<span class="string">f"Gradient norm: {np.linalg.norm(gradient(result.x)):.2e}"</span>)
-<span class="function">print</span>(<span class="string">f"Success: {result.success}"</span>)
-                    </div>
-                </div>
-            </div>
+<span class="keyword">def</span> <span class="function">backtracking_line_search</span>(x, p, g, alpha0=<span class="number">1.0</span>, c=<span class="number">1e-4</span>, tau=<span class="number">0.5</span>):
+    alpha = alpha0
+    fx = f(x)
+    <span class="comment"># Armijo condition</span>
+    <span class="keyword">while</span> f(x + alpha * p) > fx + c * alpha * np.dot(g, p):
+        alpha *= tau
+        <span class="keyword">if</span> alpha < <span class="number">1e-12</span>:
+            <span class="keyword">break</span>
+    <span class="keyword">return</span> alpha
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+
+<span class="keyword">def</span> <span class="function">bfgs_quasi_newton</span>(x0, tol=<span class="number">1e-8</span>, max_iter=<span class="number">200</span>):
+    x = np.array(x0, dtype=float)
+    n = <span class="keyword">len</span>(x)
+    H = np.eye(n)
+    history = []
+
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">1</span>, max_iter + <span class="number">1</span>):
+        g = grad_f(x)
+        gnorm = np.linalg.norm(g)
+        history.append((k, x.copy(), f(x), gnorm))
+
+        <span class="keyword">if</span> gnorm < tol:
+            <span class="keyword">break</span>
+
+        p = -H @ g
+        alpha = backtracking_line_search(x, p, g)
+        x_new = x + alpha * p
+
+        s = x_new - x
+        y = grad_f(x_new) - g
+
+        ys = np.dot(y, s)
+        <span class="keyword">if</span> ys > <span class="number">1e-12</span>:
+            rho = <span class="number">1.0</span> / ys
+            I = np.eye(n)
+            H = (I - rho * np.outer(s, y)) @ H @ (I - rho * np.outer(y, s)) + rho * np.outer(s, s)
+
+        x = x_new
+
+    <span class="keyword">return</span> x, f(x), history
+
+
+<span class="comment"># Given input</span>
+x0 = np.array([<span class="number">2.0</span>, <span class="number">2.0</span>])
+tol = <span class="number">1e-8</span>
+max_iter = <span class="number">200</span>
+
+x_star, f_star, steps = bfgs_quasi_newton(x0, tol=tol, max_iter=max_iter)
+
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"Function: f(x1, x2) = x1^2 + 2*x2^2"</span>)
+print(<span class="function">f</span><span class="string">"Initial point x0: </span>{x0}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Tolerance: </span>{tol}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Max iterations: </span>{max_iter}<span class="string">"</span>)
+
+print(<span class="string">"\nITERATION SUMMARY"</span>)
+<span class="keyword">for</span> k, xk, fk, gk <span class="keyword">in</span> steps[:<span class="number">10</span>]:
+    print(<span class="function">f</span><span class="string">"Iter </span>{k}<span class="string">: x = </span>{np.round(xk, <span class="number">8</span>)}<span class="string">, f(x) = </span>{fk:<span class="number">.10</span>f}<span class="string">, ||grad|| = </span>{gk:<span class="number">.3</span>e}<span class="string">"</span>)
+<span class="keyword">if</span> <span class="keyword">len</span>(steps) > <span class="number">10</span>:
+    print(<span class="string">"..."</span>)
+
+print(<span class="string">"\nOUTPUT"</span>)
+print(<span class="string">"Optimal point x* ="</span>, np.round(x_star, <span class="number">10</span>))
+print(<span class="function">f</span><span class="string">"Minimum function value f(x*) = </span>{f_star:<span class="number">.12</span>f}<span class="string">"</span>)
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output (BFGS with scipy):</div>
-Optimization terminated successfully.<br>
-     Current function value: 0.000000<br>
-        Iterations: 9<br>
-        Function evaluations: 10<br><br>
-    Optimal point: [1.11e-08 3.52e-09]<br>
-    Optimal value: 0.000000<br>
-    Iterations: 9<br>
-    Gradient norm: 2.04e-08<br>
-Success: True
+INPUT
+Function: f(x1, x2) = x1^2 + 2*x2^2
+Initial point x0: [2. 2.]
+Tolerance: 1e-08
+Max iterations: 200
+
+ITERATION SUMMARY
+Iter 1: x = [2. 2.], f(x) = 12.0000000000, ||grad|| = 8.944e+00
+Iter 2: x = [ 0. -2.], f(x) = 8.0000000000, ||grad|| = 8.000e+00
+Iter 3: x = [-1.08641975  0.27160494], f(x) = 1.3278463649, ||grad|| = 2.429e+00
+Iter 4: x = [0.64868015 0.15511917], f(x) = 0.4689098440, ||grad|| = 1.438e+00
+Iter 5: x = [-0.0033333  -0.02482535], f(x) = 0.0012437069, ||grad|| = 9.952e-02
+Iter 6: x = [-0.00115139  0.00208598], f(x) = 0.0000100283, ||grad|| = 8.656e-03
+Iter 7: x = [ 2.294e-05 -9.300e-07], f(x) = 0.0000000005, ||grad|| = 4.603e-05
+Iter 8: x = [-2.8e-07 -8.0e-08], f(x) = 0.0000000000, ||grad|| = 6.359e-07
+Iter 9: x = [0. 0.], f(x) = 0.0000000000, ||grad|| = 8.775e-10
+
+OUTPUT
+Optimal point x* = [0.e+00 2.e-10]
+Minimum function value f(x*) = 0.000000000000
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp18.html" class="btn btn-secondary">← Previous</a>
-                <a href="../index.html" class="btn">Back to Home</a>
+                <a href="exp18.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="../index.html" class="btn">Home &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

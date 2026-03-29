@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 5 - Linear Optimization with CVXPY | OTML Lab</title>
+    <title>Experiment 5 - Linear Optimization | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,133 +12,154 @@
             <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 5
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 5: Linear Programming with CVXPY</h1>
-
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 5: Linear Objective with Linear Constraints Using CVXPY</h1>
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To solve a linear programming problem using CVXPY: minimize f(x,y) = 3x + 2y subject to constraints x+y ≥ 4, x ≥ 0, y ≥ 0. This demonstrates standard linear optimization.</p>
+                    Minimize the linear objective function
+                    $$f(x,y)=3x+2y$$
+                    subject to constraints:
+                    $$x+y\ge 4,\quad x\ge 0,\quad y\ge 0$$
+                    using CVXPY.
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                                                            <p>Linear programming studies optimization problems in which both the objective function and the constraints are linear. These models are widely used in planning, scheduling, transportation, and resource allocation because they capture decisions with simple but powerful structure.</p>
-                    <p style="margin-top: 10px;">The feasible set formed by the constraints has a strong geometric interpretation, and optimal solutions often occur at boundary or corner points. CVXPY makes the model easy to formulate while keeping the optimization logic clear and mathematically transparent.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>The objective can represent cost, time, loss, or profit</li>
-                        <li>The constraints encode limits such as capacity, balance, or non-negativity</li>
-                        <li>Efficient solvers exploit the linear structure of the problem</li>
+                    <p>This experiment solves a linear programming problem where both objective and constraints are linear. The goal is to find feasible values of $x$ and $y$ that satisfy all inequalities while giving the smallest possible value of $3x+2y$. CVXPY is used to model the optimization problem in a direct mathematical way and then solve it using a suitable LP solver.</p>
+                    <p>The method followed is: define decision variables, construct the linear objective, add all given constraints, and solve the optimization model. After obtaining the result, we check whether the solution satisfies each constraint and then report the minimum objective value. Since this is a convex linear program, the solver returns a global optimum over the feasible region.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>Objective: $$\min_{x,y}\; 3x+2y$$</p>
+                    <p>Constraints: $$x+y\ge 4, \quad x\ge 0, \quad y\ge 0$$</p>
+                    <p>CVXPY form: $$\text{Minimize}(3x+2y)\quad \text{subject to}\quad [x+y\ge4,\;x\ge0,\;y\ge0]$$</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Functions Used</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li><code>cp.Variable()</code>: creates optimization variables.</li>
+                        <li><code>cp.Minimize(expr)</code>: defines minimization objective.</li>
+                        <li><code>cp.Problem(objective, constraints)</code>: creates optimization problem.</li>
+                        <li><code>problem.solve()</code>: solves problem using available solver.</li>
+                        <li><code>problem.status</code>, <code>problem.value</code>: solution status and optimal value.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="step"><strong>Step 1:</strong> Define decision variables</div>
-                    <div class="step"><strong>Step 2:</strong> Define linear objective function</div>
-                    <div class="step"><strong>Step 3:</strong> Add linear constraints</div>
-                    <div class="step"><strong>Step 4:</strong> Solve using CVXPY</div>
-                    <div class="step"><strong>Step 5:</strong> Extract optimal solution</div>
+                    <ol style="margin-left: 20px;">
+                        <li>Import CVXPY library.</li>
+                        <li>Create decision variables $x$ and $y$.</li>
+                        <li>Define linear objective $3x+2y$.</li>
+                        <li>Add constraints $x+y\ge4$, $x\ge0$, $y\ge0$.</li>
+                        <li>Build optimization problem.</li>
+                        <li>Solve using <code>problem.solve()</code>.</li>
+                        <li>Read optimal $x$, $y$, and minimum objective.</li>
+                        <li>Verify constraints and print results.</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📐 Formulas</div>
+                <div class="section-title">6) Mathematical Procedure</div>
                 <div class="section-content">
-                    <div class="formula">
-                        <strong>Minimize:</strong><br>
-                        f(x,y) = 3x + 2y
-                    </div>
-                    <div class="formula">
-                        <strong>Subject to:</strong><br>
-                        x + y ≥ 4<br>
-                        x ≥ 0<br>
-                        y ≥ 0
-                    </div>
+                    <p>Given: $$\min 3x+2y\quad \text{s.t.}\quad x+y\ge4,\;x\ge0,\;y\ge0$$</p>
+                    <p>From $x+y\ge4$, write $y=4-x$ on boundary (candidate optimum line), with $0\le x\le4$.</p>
+                    <p>Substitute into objective: $$f(x)=3x+2(4-x)=x+8$$</p>
+                    <p>Since $f(x)=x+8$ increases with $x$, minimum occurs at smallest feasible $x$, i.e. $x=0$.</p>
+                    <p>Then: $$y=4$$</p>
+                    <p>Minimum value: $$f(0,4)=3(0)+2(4)=8$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">7) Given Input</div>
                 <div class="section-content">
-                    <p><strong>Problem from Aim:</strong> minimize f(x,y)=3x+2y subject to x+y≥4, x≥0, y≥0.</p>
-                    
-                    <div class="step">
-                        <strong>Constraint Analysis:</strong><br>
-                        The feasible region is unbounded and defined by:<br>
-                        - x + y ≥ 4 (above the line from (0,4) to (4,0))<br>
-                        - x ≥ 0 (right of y-axis)<br>
-                        - y ≥ 0 (above x-axis)
-                    </div>
-
-                    <div class="step">
-                        <strong>Corner points (vertices):</strong><br>
-                        (0, 4): f = 3(0) + 2(4) = 8<br>
-                        (4, 0): f = 3(4) + 2(0) = 12<br>
-                        Optimal is at (0, 4) with minimum value = 8
-                    </div>
-
-                    <div class="step">
-                        <strong>Optimal Solution:</strong><br>
-                        x* = 0, y* = 4<br>
-                        Minimum value = 8
-                    </div>
+                    <ul style="margin-left: 20px;">
+                        <li>Objective: $f(x,y)=3x+2y$</li>
+                        <li>Constraints: $x+y\ge4$, $x\ge0$, $y\ge0$</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program</div>
-                <div class="section-content">
-                    <div class="code-block">
+                <div class="code-block">
 <span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
 
-<span class="comment"># Define variables</span>
-x = cp.<span class="function">Variable</span>()
-y = cp.<span class="function">Variable</span>()
+<span class="comment"># Decision variables</span>
+x = cp.Variable()
+y = cp.Variable()
 
-<span class="comment"># Define objective: minimize 3x + 2y</span>
-objective = cp.<span class="function">Minimize</span>(<span class="number">3</span>*x + <span class="number">2</span>*y)
+<span class="comment"># Objective and constraints</span>
+objective = cp.Minimize(<span class="number">3</span> * x + <span class="number">2</span> * y)
+constraints = [x + y >= <span class="number">4</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
 
-<span class="comment"># Define constraints</span>
-constraints = [
-    x + y >= <span class="number">4</span>,    <span class="comment"># x + y >= 4</span>
-    x >= <span class="number">0</span>,         <span class="comment"># x >= 0</span>
-    y >= <span class="number">0</span>          <span class="comment"># y >= 0</span>
-]
+<span class="comment"># Build and solve optimization problem</span>
+problem = cp.Problem(objective, constraints)
+optimal_value = problem.solve()
 
-<span class="comment"># Create and solve</span>
-problem = cp.<span class="function">Problem</span>(objective, constraints)
-problem.<span class="function">solve</span>()
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"Objective: minimize f(x, y) = 3x + 2y"</span>)
+print(<span class="string">"Constraints: x + y >= 4, x >= 0, y >= 0"</span>)
 
-<span class="comment"># Results</span>
-<span class="function">print</span>(<span class="string">f"Optimal x = {x.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal y = {y.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum value = {objective.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Status: {problem.status}"</span>)
-                    </div>
-                </div>
-            </div>
+print(<span class="string">"\nOUTPUT"</span>)
+print(<span class="string">"Status:"</span>, problem.status)
+print(<span class="function">f</span><span class="string">"Optimal x: </span>{x.value:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Optimal y: </span>{y.value:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Minimum objective value: </span>{optimal_value:<span class="number">.6</span>f}<span class="string">"</span>)
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+print(<span class="string">"\nConstraint Check"</span>)
+print(<span class="function">f</span><span class="string">"x + y = </span>{(x.value + y.value):<span class="number">.6</span>f}<span class="string"> (>= 4)"</span>)
+print(<span class="function">f</span><span class="string">"x >= 0 -> </span>{x.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"y >= 0 -> </span>{y.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output:</div>
-Optimal x = 0.000000<br>
-Optimal y = 4.000000<br>
-Minimum value = 8.000000<br>
+INPUT
+Objective: minimize f(x, y) = 3x + 2y
+Constraints: x + y >= 4, x >= 0, y >= 0
+
+OUTPUT
 Status: optimal
+Optimal x: 0.000000
+Optimal y: 4.000000
+Minimum objective value: 8.000000
+
+Constraint Check
+x + y = 4.000000 (>= 4)
+x >= 0 -> True
+y >= 0 -> True
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp4.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp6.html" class="btn">Next →</a>
+                <a href="exp4.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp6.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

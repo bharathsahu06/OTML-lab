@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 7 - Linear Programming with PuLP | OTML Lab</title>
+    <title>Experiment 7 - Linear Programming | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,138 +12,242 @@
             <a href="../index.html">Home</a> / <a href="../index.html#co2">CO2</a> / Experiment 7
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">Experiment 7: Linear Programming with PuLP</h1>
-
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 7: Linear Programming Using PuLP and Without PuLP</h1>
+            
             <div class="section">
-                <div class="section-title">📌 Aim</div>
+                <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    <p>To implement linear programming both with PuLP library and without it (manual implementation) to understand how optimization solvers work internally.</p>
+                    <p>a) Implementation of linear programming using PuLP.</p>
+                    <p>b) Implementation of linear programming without PuLP.</p>
+                    <p>For demonstration, solve: $$\min Z=3x+2y$$ subject to: $$x+y\ge 4,\quad x\ge 0,\quad y\ge 0$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📝 Description</div>
+                <div class="section-title">2) Description</div>
                 <div class="section-content">
-                                                            <p>Linear programming can be understood from two complementary perspectives: modeling the problem with a solver library such as PuLP and understanding the logic behind a manual implementation. PuLP offers a high-level way to define decision variables, objectives, and constraints without dealing directly with solver internals.</p>
-                    <p style="margin-top: 10px;">At the same time, a manual approach helps reveal what the solver is conceptually doing when it evaluates feasibility and searches for an optimum. Comparing both views builds stronger intuition about how optimization software connects theory with computation.</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
-                        <li>PuLP is useful for formulating practical optimization models quickly</li>
-                        <li>A manual method helps explain the internal logic of the solution process</li>
-                        <li>Together they connect mathematical modeling, implementation, and interpretation</li>
+                    <p>This experiment demonstrates two methods to solve the same linear programming (LP) problem. In part (a), PuLP is used to model the objective and constraints directly, then a solver finds the optimum automatically. In part (b), the LP is solved without PuLP by using the geometric/vertex idea for two-variable LP.</p>
+                    <p>The method followed is: first formulate the LP in standard mathematical form, then solve it with PuLP to get an optimal solution and objective value. Next, solve the same LP without PuLP by finding intersection points of boundary lines, testing feasibility, and evaluating objective values at feasible corner points. Finally, compare both results to confirm that both methods return the same optimal solution.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>Objective: $$\min Z=3x+2y$$</p>
+                    <p>Constraints: $$x+y\ge4, \quad x\ge0, \quad y\ge0$$</p>
+                    <p>LP principle for 2-variable case: Optimum occurs at a feasible corner (extreme) point.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Functions Used</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li><code>LpProblem</code>, <code>LpVariable</code>, <code>LpMinimize</code>, <code>value</code> from PuLP.</li>
+                        <li><code>problem.solve()</code> to run LP solver in PuLP.</li>
+                        <li><code>numpy.linalg.solve()</code> for line intersections (without PuLP).</li>
+                        <li>Feasibility checks using constraint conditions.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">🔧 Algorithm</div>
+                <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
-                    <div class="step"><strong>With PuLP:</strong> Define problem → Add variables → Add constraints → Solve</div>
-                    <div class="step"><strong>Without PuLP:</strong> Use direct calculation or check corner points</div>
+                    <h3>Part A: Using PuLP</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Define LP minimization problem.</li>
+                        <li>Create variables $x, y \ge 0$.</li>
+                        <li>Set objective $3x+2y$.</li>
+                        <li>Add constraint $x+y\ge4$.</li>
+                        <li>Solve and read $x^*, y^*, Z^*$.</li>
+                    </ol>
+                    <h3 style="margin-top: 20px;">Part B: Without PuLP (Vertex Method)</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Write boundary lines: $x=0$, $y=0$, $x+y=4$.</li>
+                        <li>Compute pairwise intersections.</li>
+                        <li>Keep only feasible points satisfying all constraints.</li>
+                        <li>Evaluate objective $Z=3x+2y$ at feasible points.</li>
+                        <li>Select point with minimum $Z$.</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">📊 Mathematical Procedure</div>
+                <div class="section-title">6) Mathematical Procedure</div>
                 <div class="section-content">
-                    <div class="step"><strong>Problem:</strong> minimize z = 3x + 2y subject to x + y ≥ 4, x ≥ 0, y ≥ 0.</div>
-                    <div class="step"><strong>Manual method:</strong> evaluate objective at feasible corner points (0,4) and (4,0).</div>
-                    <div class="step"><strong>Corner values:</strong> z(0,4)=8 and z(4,0)=12, so minimum is at (0,4).</div>
-                    <div class="step"><strong>PuLP method:</strong> formulate the same objective/constraints and solve with CBC solver.</div>
-                    <div class="step"><strong>Verification:</strong> both manual and PuLP methods return x=0, y=4, z*=8.</div>
+                    <p>From constraint boundary $x+y=4$, write: $$y=4-x,\quad 0\le x\le4$$</p>
+                    <p>Substitute into objective: $$Z=3x+2(4-x)=x+8$$</p>
+                    <p>Since $Z=x+8$ increases with $x$, minimum occurs at smallest feasible $x$, i.e. $x=0$.</p>
+                    <p>Then: $$y=4$$</p>
+                    <p>Minimum value: $$Z_{\min}=3(0)+2(4)=8$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Simple Python Program - With PuLP</div>
+                <div class="section-title">7) Given Input</div>
                 <div class="section-content">
-                    <p><strong>Install: pip install pulp</strong></p>
-                    <div class="code-block">
-<span class="keyword">from</span> pulp <span class="keyword">import</span> *
-
-<span class="comment"># Create problem</span>
-prob = <span class="function">LpProblem</span>(<span class="string">"Linear_Programming"</span>, LpMinimize)
-
-<span class="comment"># Variables</span>
-x = <span class="function">LpVariable</span>(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
-y = <span class="function">LpVariable</span>(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
-
-<span class="comment"># Objective: minimize 3x + 2y</span>
-prob += <span class="number">3</span>*x + <span class="number">2</span>*y, <span class="string">"objective"</span>
-
-<span class="comment"># Constraints: x + y >= 4</span>
-prob += x + y >= <span class="number">4</span>, <span class="string">"constraint1"</span>
-
-<span class="comment"># Solve</span>
-prob.<span class="function">solve</span>()
-
-<span class="comment"># Results</span>
-<span class="function">print</span>(<span class="string">f"Status: {LpStatus[prob.status]}"</span>)
-<span class="function">print</span>(<span class="string">f"x = {value(x):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"y = {value(y):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum = {value(prob.objective):.6f}"</span>)
-                    </div>
+                    <ul style="margin-left: 20px;">
+                        <li>Objective: $Z=3x+2y$</li>
+                        <li>Constraints: $x+y\ge4$, $x\ge0$, $y\ge0$</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">💻 Manual Implementation (Without PuLP)</div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="comment"># Manual Linear Programming - Check corner points</span>
-<span class="comment"># Minimize: 3x + 2y</span>
+                <div class="code-block">
+<span class="keyword">import</span> itertools
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># -----------------------------</span>
+<span class="comment"># Problem definition</span>
+<span class="comment"># -----------------------------</span>
+<span class="comment"># Minimize Z = 3x + 2y</span>
 <span class="comment"># Subject to: x + y >= 4, x >= 0, y >= 0</span>
 
-<span class="comment"># Corner points of feasible region</span>
-corners = [
-    (<span class="number">0</span>, <span class="number">4</span>),   <span class="comment"># (0, 4)</span>
-    (<span class="number">4</span>, <span class="number">0</span>)    <span class="comment"># (4, 0)</span>
-]
 
-<span class="comment"># Objective function</span>
 <span class="keyword">def</span> <span class="function">objective</span>(x, y):
-    <span class="keyword">return</span> <span class="number">3</span>*x + <span class="number">2</span>*y
+    <span class="keyword">return</span> <span class="number">3</span> * x + <span class="number">2</span> * y
 
-<span class="comment"># Evaluate at each corner</span>
-best_value = <span class="number">float</span>(<span class="string">'inf'</span>)
-best_point = <span class="keyword">None</span>
 
-<span class="keyword">for</span> point <span class="keyword">in</span> corners:
-    value = <span class="function">objective</span>(point[<span class="number">0</span>], point[<span class="number">1</span>])
-    <span class="function">print</span>(<span class="string">f"Point {point}: value = {value}"</span>)
-    
-    <span class="keyword">if</span> value < best_value:
-        best_value = value
-        best_point = point
+<span class="keyword">def</span> <span class="function">is_feasible</span>(x, y, tol=<span class="number">1e-9</span>):
+    <span class="keyword">return</span> (x + y >= <span class="number">4</span> - tol) <span class="keyword">and</span> (x >= -tol) <span class="keyword">and</span> (y >= -tol)
 
-<span class="function">print</span>(<span class="string">f"\nOptimal point: {best_point}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal value: {best_value}"</span>)
-                    </div>
-                </div>
-            </div>
 
-            <div class="section">
-                <div class="section-title">📤 Expected Output</div>
+<span class="comment"># -----------------------------</span>
+<span class="comment"># Part A: Using PuLP</span>
+<span class="comment"># -----------------------------</span>
+<span class="keyword">def</span> <span class="function">solve_with_pulp</span>():
+    <span class="keyword">import</span> pulp
+
+    model = pulp.LpProblem(<span class="string">"LP_Using_PuLP"</span>, pulp.LpMinimize)
+    x = pulp.LpVariable(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
+    y = pulp.LpVariable(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
+
+    model += <span class="number">3</span> * x + <span class="number">2</span> * y
+    model += x + y >= <span class="number">4</span>
+
+    model.solve(pulp.PULP_CBC_CMD(msg=<span class="keyword">False</span>))
+
+    x_opt = pulp.value(x)
+    y_opt = pulp.value(y)
+    z_opt = pulp.value(model.objective)
+    status = pulp.LpStatus[model.status]
+
+    <span class="keyword">return</span> status, x_opt, y_opt, z_opt
+
+
+<span class="comment"># -----------------------------</span>
+<span class="comment"># Part B: Without PuLP</span>
+<span class="comment"># Vertex/intersection method for 2 variables</span>
+<span class="comment"># -----------------------------</span>
+<span class="keyword">def</span> <span class="function">solve_without_pulp</span>():
+    <span class="comment"># Boundary lines in the form a*x + b*y = c</span>
+    lines = [
+        (<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),  <span class="comment"># x = 0</span>
+        (<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>),  <span class="comment"># y = 0</span>
+        (<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">4.0</span>),  <span class="comment"># x + y = 4</span>
+    ]
+
+    candidate_points = []
+
+    <span class="keyword">for</span> (a1, b1, c1), (a2, b2, c2) <span class="keyword">in</span> itertools.combinations(lines, <span class="number">2</span>):
+        A = np.array([[a1, b1], [a2, b2]], dtype=float)
+        b = np.array([c1, c2], dtype=float)
+
+        <span class="keyword">if</span> abs(np.linalg.det(A)) < <span class="number">1e-12</span>:
+            <span class="keyword">continue</span>
+
+        x_pt, y_pt = np.linalg.solve(A, b)
+        <span class="keyword">if</span> is_feasible(x_pt, y_pt):
+            candidate_points.append((float(x_pt), float(y_pt)))
+
+    <span class="keyword">if</span> <span class="keyword">not</span> candidate_points:
+        <span class="keyword">raise</span> ValueError(<span class="string">"No feasible corner points found."</span>)
+
+    <span class="comment"># Remove duplicates due to numerical precision</span>
+    unique_points = []
+    <span class="keyword">for</span> p <span class="keyword">in</span> candidate_points:
+        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">any</span>(np.allclose(p, q, atol=<span class="number">1e-9</span>) <span class="keyword">for</span> q <span class="keyword">in</span> unique_points):
+            unique_points.append(p)
+
+    best_point = <span class="keyword">min</span>(unique_points, key=<span class="keyword">lambda</span> p: objective(p[<span class="number">0</span>], p[<span class="number">1</span>]))
+    best_value = objective(best_point[<span class="number">0</span>], best_point[<span class="number">1</span>])
+
+    <span class="keyword">return</span> unique_points, best_point, best_value
+
+
+print(<span class="string">"INPUT"</span>)
+print(<span class="string">"Objective: Minimize Z = 3x + 2y"</span>)
+print(<span class="string">"Constraints: x + y >= 4, x >= 0, y >= 0"</span>)
+
+print(<span class="string">"\nPART A: USING PULP"</span>)
+<span class="keyword">try</span>:
+    status, x1, y1, z1 = solve_with_pulp()
+    print(<span class="string">"Status:"</span>, status)
+    print(<span class="function">f</span><span class="string">"Optimal x: </span>{x1:<span class="number">.6</span>f}<span class="string">"</span>)
+    print(<span class="function">f</span><span class="string">"Optimal y: </span>{y1:<span class="number">.6</span>f}<span class="string">"</span>)
+    print(<span class="function">f</span><span class="string">"Minimum Z: </span>{z1:<span class="number">.6</span>f}<span class="string">"</span>)
+<span class="keyword">except</span> ModuleNotFoundError:
+    print(<span class="string">"PuLP is not installed in this kernel. Install it to run Part A."</span>)
+    x1 = y1 = z1 = <span class="keyword">None</span>
+
+print(<span class="string">"\nPART B: WITHOUT PULP (VERTEX METHOD)"</span>)
+points, (x2, y2), z2 = solve_without_pulp()
+formatted_points = [(round(px, <span class="number">6</span>), round(py, <span class="number">6</span>)) <span class="keyword">for</span> px, py <span class="keyword">in</span> points]
+print(<span class="string">"Feasible corner points:"</span>, formatted_points)
+print(<span class="function">f</span><span class="string">"Optimal x: </span>{x2:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Optimal y: </span>{y2:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Minimum Z: </span>{z2:<span class="number">.6</span>f}<span class="string">"</span>)
+
+print(<span class="string">"\nCOMPARISON"</span>)
+<span class="keyword">if</span> z1 <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+    print(<span class="string">"Both methods produce the same optimum:"</span>, np.isclose(z1, z2))
+<span class="keyword">else</span>:
+    print(<span class="string">"Comparison skipped because PuLP result is unavailable."</span>)
+
+print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
-                    <div class="output-label">Notebook Output (PuLP):</div>
-Status: Optimal<br>
-x = 0.000000<br>
-y = 4.000000<br>
-Minimum = 8.000000<br><br>
+INPUT
+Objective: Minimize Z = 3x + 2y
+Constraints: x + y >= 4, x >= 0, y >= 0
 
-                    <div class="output-label">Notebook Output (Manual Method):</div>
-Point (0, 4): value = 8<br>
-Point (4, 0): value = 12<br><br>
-Optimal point: (0, 4)<br>
-Optimal value: 8
+PART A: USING PULP
+Status: Optimal
+Optimal x: 0.000000
+Optimal y: 4.000000
+Minimum Z: 8.000000
+
+PART B: WITHOUT PULP (VERTEX METHOD)
+Feasible corner points: [(0.0, 4.0), (4.0, 0.0)]
+Optimal x: 0.000000
+Optimal y: 4.000000
+Minimum Z: 8.000000
+
+COMPARISON
+Both methods produce the same optimum: True
+Program executed successfully.
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <a href="exp6.html" class="btn btn-secondary">← Previous</a>
-                <a href="exp8.html" class="btn">Next →</a>
+                <a href="exp6.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp8.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>
