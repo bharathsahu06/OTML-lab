@@ -3,102 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 08 • Sub-gradient Methods</title>
+    <title>Experiment 08 • Interior Point Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 08: Interior Point Method (Log-Barrier)</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO3 / Experiment 08
+            <a href="../index.html">Home</a> / Experiment 08
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Sub-gradient Methods for L1-Regularization</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement the Interior Point method using a logarithmic barrier function to solve a constrained optimization problem.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>The Interior Point method converts a constrained problem into an unconstrained one by adding a barrier term to the objective function. As the barrier parameter \( \mu \) approaches zero, the solution of the barrier problem converges to the solution of the original constrained problem.</p>
+                <p><strong>Problem:</strong> Minimize \( f(x) = x^2 \) subject to \( x > 1 \).</p>
+                <div class="formula">
+                    Barrier Objective: \( \phi(x; \mu) = x^2 - \mu \ln(x - 1) \)
                 </div>
-                <div class="section-content">
-                    <p>To implement the sub-gradient descent algorithm for optimizing non-differentiable objectives, specifically linear regression with an L1-norm penalty (Lasso).</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Choose an initial feasible point \( x_0 > 1 \) and initial \( \mu_0 > 0 \).</li>
+                    <li>While not converged:
+                        <ul>
+                            <li>Solve the unconstrained problem \( \min \phi(x; \mu) \) using Newton's method.
+                                <ul>
+                                    <li>Grad: \( \nabla \phi = 2x - \frac{\mu}{x-1} \)</li>
+                                    <li>Hessian: \( \nabla^2 \phi = 2 + \frac{\mu}{(x-1)^2} \)</li>
+                                </ul>
+                            </li>
+                            <li>Reduce \( \mu \) in stages (e.g., \( \mu = \mu \times 0.1 \)).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Newton step for fixed \( \mu \):</p>
+                <div class="formula">
+                    \( x_{new} = x - \frac{2x - \frac{\mu}{x-1}}{2 + \frac{\mu}{(x-1)^2}} \)
                 </div>
-            </section>
+                <p>Ensure \( x_{new} > 1 \) at each step to maintain feasibility inside the "interior".</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Objective Function</strong>
-                        <p>We minimize the sum of squared errors plus an L1 penalty:</p>
-                        <div class="formula">\( J(w) = \frac{1}{n} \sum_{i=1}^n (y_i - w x_i)^2 + \lambda |w| \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
 
-                    <div class="step">
-                        <strong>Part B: Sub-gradient Calculation</strong>
-                        <p>The L1 term \( |w| \) is not differentiable at \( w=0 \). We use the sub-gradient:</p>
-                        <div class="formula">
-                            \( \partial |w| = \text{sign}(w) \) if \( w \neq 0 \) <br>
-                            \( \partial |w| \in [-1, 1] \) if \( w = 0 \)
-                        </div>
-                    </div>
-                </div>
-            </section>
+x = 2.0  # Initial feasible point
+mu = 4.0 # Initial barrier parameter
+tol = 1e-8
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+print("Iter | mu | x")
+for k in range(12):
+    # Newton method for fixed mu
+    for _ in range(20):
+        grad = 2.0 * x - mu / (x - 1.0)
+        hess = 2.0 + mu / (x - 1.0)**2
+        x = x - grad / hess
+        if x <= 1.0: x = 1.1 # Stay in interior
 
-<span class="comment"># Dataset 1</span>
-X = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
-y = np.array([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>])
-
-w = <span class="number">0.0</span>
-alpha = <span class="number">0.01</span>
-lam = <span class="number">0.1</span>
-
-<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1000</span>):
-    <span class="comment"># Gradient of MSE part</span>
-    grad_mse = -<span class="number">2</span> * np.mean((y - w*X) * X)
+    print(f"{k} | {mu:.6g} | {x:.8f}")
     
-    <span class="comment"># Sub-gradient of L1 part</span>
-    subgrad_l1 = lam * np.sign(w) <span class="keyword">if</span> w != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
-    
-    w = w - alpha * (grad_mse + subgrad_l1)
+    if x - 1.0 < tol: break
+    # Reduce mu
+    if mu > 1.0: mu -= 1.0
+    else: mu *= 0.1
 
-<span class="function">print</span>(<span class="string">f"Optimal weight w: {w:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"MSE: {np.mean((y - w*X)**2):.6f}"</span>)
-                    </div>
-                </div>
-            </section>
+print(f"Final Solution: {x}")
+</pre>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Optimal weight w: 2.228571<br>
-MSE: 1.053061
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Iter | mu | x
+0 | 4 | 2.00000000
+...
+10 | 1e-07 | 1.00000005
+11 | 1e-08 | 1.00000000
+Final solution: 1.000000005
+</pre>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 07</a>
-                <a href="exp9.html" class="btn btn-primary">Proceed to Experiment 09 ➔</a>
-            </nav>
-        </article>
-
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+        <div class="nav-buttons">
+            <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 07</a>
+            <a href="exp9.html" class="btn">Next: Experiment 09 ➔</a>
+        </div>
     </div>
 </body>
 </html>

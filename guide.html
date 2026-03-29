@@ -3,244 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Start Guide | OTML Lab</title>
+    <title>OTML Lab • Guide</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <header>
+        <h1>Laboratory Quick Start Guide</h1>
+        <p>A step-by-step guide to using this repository and conducting experiments.</p>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
             <a href="index.html">Home</a> / Guide
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">📖 Quick Start Guide</h1>
+        <section class="section">
+            <div class="section-title">Getting Started</div>
+            <div class="section-content">
+                <p>This website is designed for hands-on learning of optimization algorithms. Follow these steps to maximize your learning experience:</p>
+                <ol>
+                    <li><strong>Browse Outcomes:</strong> Start at the Home page and select a Course Outcome (CO1-CO5).</li>
+                    <li><strong>Review Theory:</strong> Read the Aim and Description to understand the problem context.</li>
+                    <li><strong>Study the Algorithm:</strong> Follow the procedural steps before looking at the code.</li>
+                    <li><strong>Execute Code:</strong> Copy the provided simple Python programs into your local environment.</li>
+                </ol>
+            </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">🎯 How to Use This Website</div>
-                <div class="section-content">
-                    <p>This website is designed to teach optimization algorithms through hands-on experiments. Here's how to get the most out of it:</p>
+        <section class="section">
+            <div class="section-title">Prerequisites</div>
+            <div class="section-content">
+                <p>Ensure you have Python installed along with the following libraries:</p>
+                <div class="formula">
+                    <code>pip install numpy scipy scikit-learn cvxpy pulp</code>
                 </div>
             </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">1️⃣ Browse Experiments</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Start at the Home Page:</strong><br>
-                        Click on any course outcome (CO1-CO5) section to see experiments.
-                    </div>
-                    <div class="step">
-                        <strong>Choose Your Level:</strong><br>
-                        CO1-CO2: Beginner-friendly foundational methods<br>
-                        CO3-CO4: Intermediate techniques<br>
-                        CO5: Advanced optimization methods
-                    </div>
-                </div>
+        <section class="section">
+            <div class="section-title">Learning Progression</div>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Foundations (CO1):</strong> Understanding gradients and Newton's method.</li>
+                    <li><strong>Constraints (CO2):</strong> Solving problems with bounds and linear constraints.</li>
+                    <li><strong>Non-Smooth (CO3):</strong> Handling absolute values and barrier functions.</li>
+                    <li><strong>Distributed (CO4):</strong> Implementing large-scale optimization simulation.</li>
+                    <li><strong>Advanced (CO5):</strong> Exploring Quasi-Newton and Conjugate methods.</li>
+                </ul>
             </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">2️⃣ Read an Experiment</div>
-                <div class="section-content">
-                    <p>Each experiment page contains these sections:</p>
-                    
-                    <div class="step">
-                        <strong>📌 Aim:</strong><br>
-                        Describes what you'll learn and what problem you're solving
-                    </div>
-                    <div class="step">
-                        <strong>📝 Description:</strong><br>
-                        Explains the concept in plain language
-                    </div>
-                    <div class="step">
-                        <strong>🔧 Algorithm:</strong><br>
-                        Lists the step-by-step procedure
-                    </div>
-                    <div class="step">
-                        <strong>📐 Formulas:</strong><br>
-                        Shows the mathematical equations you'll use
-                    </div>
-                    <div class="step">
-                        <strong>📊 Mathematical Procedure:</strong><br>
-                        Works through a complete example calculation
-                    </div>
-                    <div class="step">
-                        <strong>💻 Python Program:</strong><br>
-                        Provides working, easy-to-understand code
-                    </div>
-                    <div class="step">
-                        <strong>📤 Expected Output:</strong><br>
-                        Shows what results you should get
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">3️⃣ Run the Code</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Install Dependencies:</strong><br>
-                        <code style="background: #f0f0f0; padding: 5px 10px; border-radius: 3px;">
-                            pip install numpy scipy scikit-learn cvxpy pulp
-                        </code>
-                    </div>
-                    <div class="step">
-                        <strong>Copy the Code:</strong><br>
-                        Select and copy the Python code from the program section
-                    </div>
-                    <div class="step">
-                        <strong>Run in a Terminal or IDE:</strong><br>
-                        Paste into Python, Jupyter, or your favorite IDE and run
-                    </div>
-                    <div class="step">
-                        <strong>Observe the Output:</strong><br>
-                        Compare with the expected output section
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">4️⃣ Experiment & Learn</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Modify Parameters:</strong><br>
-                        Try different learning rates, initial values, or datasets
-                    </div>
-                    <div class="step">
-                        <strong>Work Through Math:</strong><br>
-                        Manually calculate one iteration to verify understanding
-                    </div>
-                    <div class="step">
-                        <strong>Add Visualizations:</strong><br>
-                        Use matplotlib to plot convergence or optimization surfaces
-                    </div>
-                    <div class="step">
-                        <strong>Implement Variations:</strong><br>
-                        Try different algorithms on the same problem
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📚 Learning Paths</div>
-                <div class="section-content">
-                    <p><strong>Recommended Learning Progression:</strong></p>
-                    
-                    <div class="step">
-                        <strong>Week 1: Foundations (CO1)</strong><br>
-                        Exp 1 → Exp 2 → Exp 3<br>
-                        <em>Focus: Understanding gradients and optimization basics</em>
-                    </div>
-                    <div class="step">
-                        <strong>Week 2: Constraints (CO2)</strong><br>
-                        Exp 4 → Exp 5 → Exp 6 → Exp 7<br>
-                        <em>Focus: Solving constrained optimization problems</em>
-                    </div>
-                    <div class="step">
-                        <strong>Week 3: Advanced Methods (CO3)</strong><br>
-                        Exp 8 → Exp 9 → Exp 10 → Exp 11<br>
-                        <em>Focus: Non-smooth optimization and barrier methods</em>
-                    </div>
-                    <div class="step">
-                        <strong>Week 4: Scalability (CO4)</strong><br>
-                        Exp 12 → Exp 13 → Exp 14 → Exp 15<br>
-                        <em>Focus: Distributed and mini-batch methods</em>
-                    </div>
-                    <div class="step">
-                        <strong>Week 5: Advanced Topics (CO5)</strong><br>
-                        Exp 16 → Exp 17 → Exp 18 → Exp 19<br>
-                        <em>Focus: Regularization and advanced solvers</em>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">💡 Tips for Success</div>
-                <div class="section-content">
-                    <div class="formula">
-                        <strong>1. Start Simple:</strong> Understand gradient descent before moving to complex methods
-                    </div>
-                    <div class="formula">
-                        <strong>2. Don't Skip the Math:</strong> Work through calculations - it reinforces understanding
-                    </div>
-                    <div class="formula">
-                        <strong>3. Run Every Code Example:</strong> Seeing working code is different from reading it
-                    </div>
-                    <div class="formula">
-                        <strong>4. Modify and Experiment:</strong> Change one parameter and observe the effect
-                    </div>
-                    <div class="formula">
-                        <strong>5. Create Visualizations:</strong> Plot functions, convergence curves, and optimization paths
-                    </div>
-                    <div class="formula">
-                        <strong>6. Connect Concepts:</strong> Notice how different algorithms relate to each other
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">❓ Common Questions</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Q: What if I don't understand the math?</strong><br>
-                        A: Start with the Algorithm section (step-by-step), then read Mathematical Procedure (worked examples).
-                    </div>
-                    <div class="step">
-                        <strong>Q: Can I run the code without installing libraries?</strong><br>
-                        A: Some basic experiments yes (like Exp 1), but most require numpy. Try Google Colab for free online Python!
-                    </div>
-                    <div class="step">
-                        <strong>Q: Should I memorize all the formulas?</strong><br>
-                        A: No! Focus on understanding concepts. The formulas are references you can look up.
-                    </div>
-                    <div class="step">
-                        <strong>Q: In what order should I do the experiments?</strong><br>
-                        A: Follow CO1 → CO5 progression. They build on each other conceptually.
-                    </div>
-                    <div class="step">
-                        <strong>Q: How long does each experiment take?</strong><br>
-                        A: 30-60 minutes for reading, understanding, and running code. Practice modifying takes more time!
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Key Concepts Checklist</div>
-                <div class="section-content">
-                    <p><strong>By the end of all experiments, you should understand:</strong></p>
-                    <ul style="margin-left: 20px; line-height: 2;">
-                        <li>☐ How gradient descent works and why it converges</li>
-                        <li>☐ Difference between batch, mini-batch, and stochastic gradient descent</li>
-                        <li>☐ How to handle constraints in optimization</li>
-                        <li>☐ Purpose of regularization (L1, L2, Elastic Net)</li>
-                        <li>☐ Advanced methods: Newton, BFGS, Interior Point</li>
-                        <li>☐ Distributed optimization basics</li>
-                        <li>☐ How to implement optimization algorithms in Python</li>
-                        <li>☐ When to use which algorithm for which problem</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🔗 Navigation Tips</div>
-                <div class="section-content">
-                    <div class="formula">
-                        <strong>Breadcrumb Navigation:</strong> Shows your location (Home / CO / Exp)
-                    </div>
-                    <div class="formula">
-                        <strong>Previous/Next Buttons:</strong> Navigate between experiments sequentially
-                    </div>
-                    <div class="formula">
-                        <strong>Home Link:</strong> Click logo or "Home" to return to main page
-                    </div>
-                    <div class="formula">
-                        <strong>Search:</strong> Use browser find (Ctrl+F) to search within experiments
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="index.html" class="btn">← Back to Home</a>
-            </div>
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="index.html" class="btn">Return to Home Dashboard</a>
         </div>
     </div>
 </body>

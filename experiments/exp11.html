@@ -3,51 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 11 • IPM in 2D Space</title>
+    <title>Experiment 11 • Elastic Net</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 11: Elastic Net Regularization</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO3 / Experiment 11
+            <a href="../index.html">Home</a> / Experiment 11
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Interior Point Method in 2D Space</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Elastic Net Regularization, which combines L1 (LASSO) and L2 (Ridge) penalties to improve model robustness and handle correlated features.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Elastic Net is useful when there are multiple features which are correlated with one another. Lasso is likely to pick one of these at random, while Elastic Net is likely to pick both. It minimizes the following cost function:</p>
+                <div class="formula">
+                    \( J(w) = \frac{1}{n} \sum (y_i - \hat{y}_i)^2 + \lambda_1 \sum |w_j| + \lambda_2 \sum w_j^2 \)
                 </div>
-                <div class="section-content">
-                    <p>To extend the logarithmic barrier Interior Point Method to a multi-variable linear objective function with multiple inequality constraints.</p>
-                </div>
-            </section>
+                <p>This experiment uses 2 features \( x_1, x_2 \) and optimized coefficients \( w_1, w_2 \).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Linear Objective</strong>
-                        <p>Minimize \( f(x, y) = x + y \) subject to \( x \ge 1, y \ge 1 \).</p>
-                    </div>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize weights \( \mathbf{w} \) and hyperparameters \( \lambda_1, \lambda_2 \).</li>
+                    <li>For each epoch:
+                        <ul>
+                            <li>Compute predictions: \( \hat{\mathbf{y}} = \mathbf{X}\mathbf{w} \).</li>
+                            <li>Compute MSE gradient: \( \nabla_{MSE} = \frac{2}{n}\mathbf{X}^T(\hat{\mathbf{y}} - \mathbf{y}) \).</li>
+                            <li>Compute L1 gradient: \( \nabla_{L1} = \lambda_1 \cdot \text{sgn}(\mathbf{w}) \).</li>
+                            <li>Compute L2 gradient: \( \nabla_{L2} = 2\lambda_2 \cdot \mathbf{w} \).</li>
+                            <li>Update weights: \( \mathbf{w} = \mathbf{w} - \eta (\nabla_{MSE} + \nabla_{L1} + \nabla_{L2}) \).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Barrier Formulation</strong>
-                        <div class="formula">\( \phi(x, y) = x + y - \mu \ln(x - 1) - \mu \ln(y - 1) \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>The total gradient used for the update is:</p>
+                <div class="formula">
+                    \( \nabla J(\mathbf{w}) = \frac{2}{n}\mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) + \lambda_1 \text{sgn}(\mathbf{w}) + 2\lambda_2 \mathbf{w} \)
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp10.html" class="btn btn-secondary">⬅️ Experiment 10</a>
-                <a href="exp12.html" class="btn btn-primary">Proceed to Experiment 12 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+
+# Sample Data (2 features)
+X = np.array([[1, 2], [2, 1], [3, 4]], dtype=float)
+y = np.array([3, 4, 7], dtype=float)
+w = np.array([1.0, 1.0])
+l1_ratio, l2_ratio = 0.01, 0.05
+lr = 0.01
+
+for _ in range(500):
+    pred = X @ w
+    grad_mse = (2 / len(y)) * X.T @ (pred - y)
+    grad_l1 = l1_ratio * np.sign(w)
+    grad_l2 = 2 * l2_ratio * w
+    
+    w -= lr * (grad_mse + grad_l1 + grad_l2)
+
+print(f"Final Weights: {w}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Epoch 1: Loss = 4.0258, w = [1.0522 1.0456]
+...
+Final weights: w1 = 2.2864, w2 = 0.3507
+Final loss: 2.5607
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp10.html" class="btn btn-secondary">⬅️ Experiment 10</a>
+            <a href="exp12.html" class="btn">Next: Experiment 12 ➔</a>
+        </div>
     </div>
 </body>
 </html>

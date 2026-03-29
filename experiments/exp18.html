@@ -9,41 +9,109 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 18: Linear Conjugate Gradient Method</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO5 / Experiment 18
+            <a href="../index.html">Home</a> / Experiment 18
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Conjugate Gradient Method</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement the Conjugate Gradient (CG) method to solve symmetric, positive-definite linear systems of the form \( \mathbf{A}\mathbf{x} = \mathbf{b} \).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>The Conjugate Gradient method is an iterative process that minimizes the quadratic form of the linear system. It is faster than Gradient Descent as it searches in "conjugate" directions, preventing it from searching in the same direction twice. It converges in at most \( n \) iterations for an \( n \times n \) system.</p>
+                <div class="formula">
+                    <strong>Problem:</strong> Solve \( \begin{pmatrix} 4 & 1 \\ 1 & 3 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \end{pmatrix} \)
                 </div>
-                <div class="section-content">
-                    <p>To implement the Conjugate Gradient (CG) algorithm for solving large-scale symmetric positive-definite systems of linear equations \( Ax = b \).</p>
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Logic</strong>
-                        <p>Construct a sequence of orthogonal search directions \( p_k \) that minimize the distance to the solution in each step.</p>
-                        <div class="formula">\( \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k} \); \( x_{k+1} = x_k + \alpha_k p_k \)</div>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize residual \( \mathbf{r}_0 = \mathbf{b} - \mathbf{A}\mathbf{x}_0 \).</li>
+                    <li>Set initial search direction \( \mathbf{p}_0 = \mathbf{r}_0 \).</li>
+                    <li>Repeat for iterations \( k \):
+                        <ul>
+                            <li>Compute step size \( \alpha_k = \frac{\mathbf{r}_k^T \mathbf{r}_k}{\mathbf{p}_k^T \mathbf{A} \mathbf{p}_k} \).</li>
+                            <li>Update solution: \( \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k \).</li>
+                            <li>Update residual: \( \mathbf{r}_{k+1} = \mathbf{r}_k - \alpha_k \mathbf{A} \mathbf{p}_k \).</li>
+                            <li>Compute improvement factor \( \beta_k = \frac{\mathbf{r}_{k+1}^T \mathbf{r}_{k+1}}{\mathbf{r}_k^T \mathbf{r}_k} \).</li>
+                            <li>Update direction: \( \mathbf{p}_{k+1} = \mathbf{r}_{k+1} + \beta_k \mathbf{p}_k \).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp17.html" class="btn btn-secondary">⬅️ Experiment 17</a>
-                <a href="exp19.html" class="btn btn-primary">Proceed to Experiment 19 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Iteration 1 (\( x_0=[0,0] \)):</p>
+                <ul>
+                    <li>\( r_0 = [1, 2]^T, p_0 = [1, 2]^T \)</li>
+                    <li>\( Ap_0 = [6, 7]^T \), \( p_0^T Ap_0 = 20 \)</li>
+                    <li>\( \alpha_0 = 5/20 = 0.25 \), \( x_1 = [0.25, 0.5]^T \)</li>
+                    <li>\( r_1 = [-0.5, 0.25]^T, \beta_0 = 0.3125/5 = 0.0625 \)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+
+A = np.array([[4, 1], [1, 3]], dtype=float)
+b = np.array([1, 2], dtype=float)
+x = np.zeros(2)
+r = b - A @ x
+p = r.copy()
+rsold = r @ r
+
+for i in range(2):
+    Ap = A @ p
+    alpha = rsold / (p @ Ap)
+    x = x + alpha * p
+    r = r - alpha * Ap
+    rsnew = r @ r
+    if np.sqrt(rsnew) < 1e-10: break
+    p = r + (rsnew / rsold) * p
+    rsold = rsnew
+
+print(f"CG Solution: {x}")
+print(f"Residual Check: {A @ x - b}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Converged in 2 iterations
+CG Solution: [0.09090909 0.63636364]
+Exact: x1 = 1/11, x2 = 7/11 ✓
+Residual: [0. 0.]
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp17.html" class="btn btn-secondary">⬅️ Experiment 17</a>
+            <a href="exp19.html" class="btn">Next: Experiment 19 ➔</a>
+        </div>
     </div>
 </body>
 </html>

@@ -9,41 +9,107 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 15: Distributed System Staleness</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO4 / Experiment 15
+            <a href="../index.html">Home</a> / Experiment 15
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Modeling Distributed System Staleness</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To analyze the convergence properties and stability of distributed optimization in the presence of communication delays (staleness) between workers and the parameter server.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>In large-scale asynchronous distributed systems, workers can be "stragglers" (slow nodes). When a worker submits a gradient computed on an old version of the parameters, it is called a "stale gradient". This experiment models such staleness and its effect on the descent trajectory.</p>
+                <div class="formula">
+                    <strong>Stale Update:</strong> \( \mathbf{w}_{t+1} = \mathbf{w}_t - \eta \cdot \nabla L(\mathbf{w}_{t-\tau}) \)
                 </div>
-                <div class="section-content">
-                    <p>To analyze the convergence properties of distributed optimization in the presence of communication delays (staleness) between workers and the parameter server.</p>
-                </div>
-            </section>
+                <p>Where \( \tau \) is the staleness factor (number of steps lag).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Stale Gradient Update</strong>
-                        <div class="formula">\( w_{t+1} = w_t - \eta \cdot \nabla L(w_{t-\tau}) \)</div>
-                        <p>Where \( \tau \) represents the delay (number of steps) since the worker last pulled parameters from the server.</p>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize global parameters and a history log of parameter states.</li>
+                    <li>For each iteration:
+                        <ul>
+                            <li>Simulate an asynchronous worker by selecting a "stale" version of parameters from history.</li>
+                            <li>Compute the gradient based on the stale parameters.</li>
+                            <li>Update the current parameters using this stale gradient.</li>
+                            <li>Observe the oscillation or deviation from the true path of convergence.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp14.html" class="btn btn-secondary">⬅️ Experiment 14</a>
-                <a href="exp16.html" class="btn btn-primary">Proceed to Experiment 16 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Mathematical Analysis</div>
+            <div class="section-content">
+                <p>As staleness \( \tau \) increases, the model may diverge if the learning rate \( \eta \) is not reduced. The effective gradient becomes increasingly inaccurate as the current position \( \mathbf{w}_t \) moves away from the anchor point \( \mathbf{w}_{t-\tau} \).</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+
+def f(x): return x**2
+def grad_f(x): return 2*x
+
+x_history = [10.0]
+x_current = 10.0
+lr = 0.1
+staleness = 3 # Lag of 3 iterations
+
+for t in range(20):
+    # Determine the stale index (t - tau)
+    stale_idx = max(0, len(x_history) - 1 - staleness)
+    x_stale = x_history[stale_idx]
+    
+    # Compute gradient on STALE x
+    grad = grad_f(x_stale)
+    
+    # Update CURRENT x
+    x_current = x_current - lr * grad
+    x_history.append(x_current)
+    
+    print(f"t={t:2} | x_current={x_current:7.4f} | grad(x_stale)={grad:7.4f}")
+
+print(f"Final Value with staleness {staleness}: {x_current}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Output showing oscillation/lag:
+t= 0 | x_current= 8.0000 | grad(x_stale)= 20.0000
+t= 1 | x_current= 6.0000 | grad(x_stale)= 20.0000
+...
+Final result will converge more slowly than Batch GD (tau=0).
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp14.html" class="btn btn-secondary">⬅️ Experiment 14</a>
+            <a href="exp16.html" class="btn">Next: Experiment 16 ➔</a>
+        </div>
     </div>
 </body>
 </html>

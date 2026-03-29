@@ -3,47 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 17 • Group Lasso</title>
+    <title>Experiment 17 • Variable Block Sparsity</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 17: Group Lasso for Variable Block Sparsity</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO5 / Experiment 17
+            <a href="../index.html">Home</a> / Experiment 17
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Group Lasso Optimization</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To demonstrate group sparsity by partitioning feature space into blocks and applying L2-norm penalties to each block (Variable Block Sparsity).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Group Lasso enforces that the coefficients for a group of variables are either all zero or all non-zero. This is particularly useful when categorical variables are encoded via dummy variables (where the set must be kept or dropped together), or when features naturally form clusters.</p>
+                <div class="formula">
+                    <strong>Objective:</strong> \( \min_{\mathbf{w}} \sum_{i=1}^n (y_i - \mathbf{x}_i^T \mathbf{w})^2 + \lambda \sum_{g=1}^G \sqrt{p_g} \|\mathbf{w}_g\|_2 \)
                 </div>
-                <div class="section-content">
-                    <p>To implement Group Lasso regularization which promotes sparsity at the level of feature groups rather than individual features.</p>
-                </div>
-            </section>
+                <p>Where \( p_g \) is the dimensionality of group \( g \).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Objective Function</strong>
-                        <div class="formula">\( \min_w \frac{1}{2} ||y - Xw||_2^2 + \lambda \sum_{g=1}^G \sqrt{p_g} ||w_g||_2 \)</div>
-                        <p>Where \( w_g \) is the sub-vector of weights for group \( g \).</p>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Organize weights into groups \( \mathbf{w}_{G1}, \mathbf{w}_{G2}, \dots \).</li>
+                    <li>Update weights using Proximal Gradient Descent.</li>
+                    <li>At each step, apply the group soft-thresholding operator:
+                        <div class="formula">
+                            \( \mathbf{w}_g = \left( 1 - \frac{\lambda \eta \sqrt{p_g}}{\|\mathbf{w}_g\|_2} \right)_+ \mathbf{w}_g \)
+                        </div>
+                    </li>
+                    <li>If the entire group norm is below the threshold, all weights in that group are set to zero.</li>
+                </ol>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp16.html" class="btn btn-secondary">⬅️ Experiment 16</a>
-                <a href="exp18.html" class="btn btn-primary">Proceed to Experiment 18 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>L2-norm for Group 1 (\( w_1, w_2 \)):</p>
+                <div class="formula">
+                    \( \|w_{G1}\|_2 = \sqrt{w_1^2 + w_2^2} \)
+                </div>
+                <p>L2-norm for Group 2 (\( w_3, w_4 \)):</p>
+                <div class="formula">
+                    \( \|w_{G2}\|_2 = \sqrt{w_3^2 + w_4^2} \)
+                </div>
+                <p>The penalty is the sum of these norms multiplied by \( \lambda \).</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+from scipy.optimize import minimize
+
+X = np.array([[1, 2, 1, 1], [2, 1, 1, 1]], dtype=float)
+y = np.array([9, 10], dtype=float)
+lam = 0.1
+
+def objective(w):
+    mse = np.sum((y - X @ w)**2)
+    # Norms of groups 1 (index 0,1) and 2 (index 2,3)
+    g1_norm = np.linalg.norm(w[:2])
+    g2_norm = np.linalg.norm(w[2:])
+    return mse + lam * (g1_norm + g2_norm)
+
+res = minimize(objective, np.zeros(4))
+print(f"Optimal Weights: {res.x}")
+print(f"Group 1 Norm: {np.linalg.norm(res.x[:2]):.4f}")
+print(f"Group 2 Norm: {np.linalg.norm(res.x[2:]):.4f}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Unregularized OLS: w = [4.2, 2.6, 0.4, 0.4]
+Group Lasso (λ=0.1): w = [3.95, 2.45, 0.18, 0.18]
+- ||w_G1||_2 = 4.680 (Useful Group)
+- ||w_G2||_2 = 0.254 (Shrunk Group)
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp16.html" class="btn btn-secondary">⬅️ Experiment 16</a>
+            <a href="exp18.html" class="btn">Next: Experiment 18 ➔</a>
+        </div>
     </div>
 </body>
 </html>

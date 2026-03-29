@@ -3,60 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 09 • Regularization Analysis</title>
+    <title>Experiment 09 • Mini-batch GD</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 09: Mini-batch Gradient Descent</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO3 / Experiment 09
+            <a href="../index.html">Home</a> / Experiment 09
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">L1-Regularization with Specific Datasets</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Mini-batch Gradient Descent for linear regression, a compromise between Batch GD and Stochastic GD that uses small subsets of data to update parameters.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Mini-batch Gradient Descent divides the training dataset into small batches and performs an update for each batch. This stabilizes the update process compared to SGD and is more computationally efficient than Batch GD as it leverages vectorized operations.</p>
+                <p><strong>Dataset:</strong> \( X = [1, 2, 3, 4], Y = [3, 5, 7, 9] \).<br><strong>Batch Size:</strong> 2.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize parameters \( w \) and \( b \).</li>
+                    <li>For each epoch:
+                        <ul>
+                            <li>Shuffle the dataset.</li>
+                            <li>For each batch of size \( k \):
+                                <ul>
+                                    <li>Calculate predicted values \( \hat{y} = wx + b \) for the batch.</li>
+                                    <li>Calculate gradients \( \nabla w, \nabla b \) averaged over the batch.</li>
+                                    <li>Update parameters: \( \theta = \theta - \eta \nabla \theta \).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    Batch Gradient: \( \nabla w_{batch} = -\frac{2}{k} \sum_{i \in Batch} (y_i - (wx_i + b))x_i \)
                 </div>
-                <div class="section-content">
-                    <p>To analyze the effect of L1-regularization (Lasso) on a different dataset and observe how the optimal weight \( w \) changes compared to unregularized OLS.</p>
+                <div class="formula">
+                    Batch Update: \( w = w - \eta \nabla w_{batch} \)
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
 
-<span class="comment"># Dataset 2: (x, y) = (2, 8), (1, 7), (3, 9)</span>
-X = np.array([<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>])
-y = np.array([<span class="number">8</span>, <span class="number">7</span>, <span class="number">9</span>])
+X = np.array([1, 2, 3, 4], dtype=float)
+Y = np.array([3, 5, 7, 9], dtype=float)
+w, b = 0.0, 0.0
+lr, batch_size = 0.1, 2
 
-w = <span class="number">0.0</span>
-lam = <span class="number">0.5</span>
-alpha = <span class="number">0.01</span>
+for epoch in range(100):
+    indices = np.random.permutation(len(X))
+    X_s, Y_s = X[indices], Y[indices]
+    
+    for i in range(0, len(X), batch_size):
+        x_b = X_s[i:i+batch_size]
+        y_b = Y_s[i:i+batch_size]
+        
+        y_pred = w * x_b + b
+        dw = -2/len(x_b) * np.sum(x_b * (y_b - y_pred))
+        db = -2/len(y_b) * np.sum(y_b - y_pred)
+        
+        w -= lr * dw
+        b -= lr * db
 
-<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1000</span>):
-    grad_mse = -<span class="number">2</span> * np.mean((y - w*X) * X)
-    subgrad = lam * np.sign(w) <span class="keyword">if</span> w != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
-    w = w - alpha * (grad_mse + subgrad)
+print(f"Final w: {w:.2f}, b: {b:.2f}")
+</pre>
+            </div>
+        </section>
 
-<span class="function">print</span>(<span class="string">f"L1-Regularized Weight: {w:.6f}"</span>)
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Final parameters:
+  w = 2.00
+  b = 1.00
 
-            <nav class="nav-buttons">
-                <a href="exp8.html" class="btn btn-secondary">⬅️ Experiment 08</a>
-                <a href="exp10.html" class="btn btn-primary">Proceed to Experiment 10 ➔</a>
-            </nav>
-        </article>
+Sample predictions:
+x=1.0, true y=3.0, predicted y=3.00
+x=4.0, true y=9.0, predicted y=9.00
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp8.html" class="btn btn-secondary">⬅️ Experiment 08</a>
+            <a href="exp10.html" class="btn">Next: Experiment 10 ➔</a>
+        </div>
     </div>
 </body>
 </html>

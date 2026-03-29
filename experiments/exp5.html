@@ -3,118 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 05 • Linear Programming</title>
+    <title>Experiment 05 • Linear & Quadratic Programming</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 05: Linear and Quadratic Programming</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO2 / Experiment 05
+            <a href="../index.html">Home</a> / Experiment 05
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Linear Programming (CVXPY)</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement and solve Linear Programming Problems (LPP) using Graphical and Simplex methods, and Quadratic Programming Problems (QPP) using KKT conditions.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p><strong>Part 1: Linear Programming (LPP)</strong></p>
+                <p>Maximize \( Z = 6A + 5B \)</p>
+                <p>Subject to:</p>
+                <ul>
+                    <li>\( A + B \le 5 \)</li>
+                    <li>\( 3A + 2B \le 12 \)</li>
+                    <li>\( A, B \ge 0 \)</li>
+                </ul>
+                <p><strong>Part 2: Quadratic Programming (QPP)</strong></p>
+                <p>Minimize \( f(x, y) = x^2 + y^2 \)</p>
+                <p>Subject to:</p>
+                <ul>
+                    <li>\( x + y - 4 \le 0 \)</li>
+                    <li>\( x - 1 \le 0 \)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <p><strong>Graphical Method:</strong></p>
+                <ol>
+                    <li>Convert inequalities into equations.</li>
+                    <li>Plot the lines on a graph.</li>
+                    <li>Identify the feasible region.</li>
+                    <li>Find corner points of the region and evaluate the objective function.</li>
+                </ol>
+                <p><strong>KKT Method for QPP:</strong></p>
+                <ol>
+                    <li>Define the Lagrangian: \( L = f(x,y) + \lambda_1 g_1(x,y) + \lambda_2 g_2(x,y) \).</li>
+                    <li>Compute partial derivatives of \( L \) wrt \( x, y, \lambda_1, \lambda_2 \).</li>
+                    <li>Solve the system of equations.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    Maximize \( Z = \mathbf{c}^T \mathbf{x} \) s.t. \( \mathbf{Ax} \le \mathbf{b} \)
                 </div>
-                <div class="section-content">
-                    <p>To solve a standard Linear Programming (LP) problem where both the objective function and constraints are linear in the decision variables.</p>
+                <div class="formula">
+                    Lagrangian \( L(\mathbf{x}, \lambda) = f(\mathbf{x}) + \sum \lambda_i g_i(\mathbf{x}) \)
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Problem Formulation</strong>
-                        <p>Objective function: \( \text{minimize } f(x, y) = 3x + 2y \)</p>
-                        <p>Subject to:</p>
-                        <ul>
-                            <li>\( x + y \ge 4 \)</li>
-                            <li>\( x \ge 0, y \ge 0 \)</li>
-                        </ul>
-                    </div>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+import sympy as sp
 
-                    <div class="step">
-                        <strong>Part B: Corner Point Analysis</strong>
-                        <p>In linear programming, the optimum always lies at a vertex of the feasible region:</p>
-                        <ul>
-                            <li>At \((4, 0)\): \( 3(4) + 2(0) = 12 \)</li>
-                            <li>At \((0, 4)\): \( 3(0) + 2(4) = 8 \) (Minimum)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+# 1. Linear Programming (Simplex Table approach)
+t = np.array([
+    [1, 1, 1, 0, 5],
+    [3, 2, 0, 1, 12],
+    [-6, -5, 0, 0, 0]
+], float)
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
+while np.any(t[-1, :-1] < 0):
+    pc = np.argmin(t[-1, :-1])
+    ratios = t[:-1, -1] / t[:-1, pc]
+    pr = np.argmin(ratios)
+    t[pr] /= t[pr, pc]
+    for i in range(len(t)):
+        if i != pr: t[i] -= t[i, pc] * t[pr]
 
-<span class="comment"># Define variables</span>
-x = cp.Variable()
-y = cp.Variable()
+print(f"LPP Optimal Z: {t[-1, -1]}")
 
-<span class="comment"># Define objective</span>
-objective = cp.Minimize(<span class="number">3</span>*x + <span class="number">2</span>*y)
+# 2. Quadratic Programming (KKT using Sympy)
+x, y, l1, l2 = sp.symbols('x y l1 l2', real=True)
+f = x**2 + y**2
+L = f + l1*(x + y - 4) + l2*(x - 1)
+eqs = [sp.diff(L, x), sp.diff(L, y), x + y - 4, x - 1]
+sol = sp.solve(eqs, [x, y, l1, l2])
+print(f"QPP Optimal Point: {sol}")
+</pre>
+            </div>
+        </section>
 
-<span class="comment"># Define constraints</span>
-constraints = [x + y >= <span class="number">4</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+LPP Optimal Z: 27.0
+QPP Optimal Point: {l1: -6, l2: 4, x: 1, y: 3}
+Minimum Value: 10
+</pre>
+            </div>
+        </section>
 
-<span class="comment"># Solve problem</span>
-prob = cp.Problem(objective, constraints)
-prob.solve()
-
-<span class="function">print</span>(<span class="string">f"Status: {prob.status}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal x: {x.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal y: {y.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum objective: {prob.value:.6f}"</span>)
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Status: optimal<br>
-Optimal x: 0.000000<br>
-Optimal y: 4.000000<br>
-Minimum objective: 8.000000
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>✅</span> Result & Verification
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        Since the coefficient of \( y \) (2) is smaller than that of \( x \) (3), the algorithm chooses to maximize \( y \) within the constraint to achieve the lowest overall value.
-                    </div>
-                </div>
-            </section>
-
-            <nav class="nav-buttons">
-                <a href="exp4.html" class="btn btn-secondary">⬅️ Experiment 04</a>
-                <a href="exp6.html" class="btn btn-primary">Proceed to Experiment 06 ➔</a>
-            </nav>
-        </article>
-
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+        <div class="nav-buttons">
+            <a href="exp4.html" class="btn btn-secondary">⬅️ Experiment 04</a>
+            <a href="exp6.html" class="btn">Next: Experiment 06 ➔</a>
+        </div>
     </div>
 </body>
 </html>

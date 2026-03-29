@@ -3,289 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossary & Reference | OTML Lab</title>
+    <title>OTML Lab • Reference</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Glossary & Mathematical Reference</h1>
+        <p>A quick reference for optimization terminology and mathematical notation.</p>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
             <a href="index.html">Home</a> / Reference
         </div>
 
-        <div class="experiment-detail">
-            <h1 class="experiment-title">📚 Glossary & Reference</h1>
+        <section class="section">
+            <div class="section-title">Common Terms</div>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Objective Function:</strong> The function \( f(\mathbf{x}) \) that we aim to minimize or maximize.</li>
+                    <li><strong>Gradient (\( \nabla f \)):</strong> The vector of partial derivatives, indicating the direction of steepest increase.</li>
+                    <li><strong>Hessian (\( \mathbf{H} \)):</strong> The matrix of second-order partial derivatives, representing curvature.</li>
+                    <li><strong>Learning Rate (\( \eta \)):</strong> A scalar factor controlling the step size in iterative updates.</li>
+                    <li><strong>Convergence:</strong> The state where an algorithm approaches a stable, optimal solution.</li>
+                </ul>
+            </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">🔤 Optimization Terms</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Convergence:</strong> When an algorithm's iterations produce values that stabilize and approach the optimal solution
-                    </div>
-                    <div class="step">
-                        <strong>Gradient (∇f):</strong> Vector of partial derivatives pointing in direction of steepest increase
-                    </div>
-                    <div class="step">
-                        <strong>Hessian:</strong> Matrix of second partial derivatives; describes curvature of function
-                    </div>
-                    <div class="step">
-                        <strong>Learning Rate (α):</strong> Step size parameter; controls how much we move in gradient direction
-                    </div>
-                    <div class="step">
-                        <strong>Local Minimum:</strong> Point where function value is lower than nearby points (may not be global minimum)
-                    </div>
-                    <div class="step">
-                        <strong>Global Minimum:</strong> Point with lowest possible function value
-                    </div>
-                    <div class="step">
-                        <strong>Objective Function:</strong> The function we want to minimize or maximize
-                    </div>
-                    <div class="step">
-                        <strong>Constraints:</strong> Restrictions on where feasible solutions can be (e.g., x ≥ 0)
-                    </div>
-                    <div class="step">
-                        <strong>Feasible Region:</strong> Set of all points satisfying all constraints
-                    </div>
-                    <div class="step">
-                        <strong>Regularization:</strong> Adding penalty terms to prevent overfitting and control model complexity
-                    </div>
+        <section class="section">
+            <div class="section-title">Key Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    <strong>Gradient Descent:</strong> \( \mathbf{x}_{k+1} = \mathbf{x}_k - \eta \nabla f(\mathbf{x}_k) \)
+                </div>
+                <div class="formula">
+                    <strong>Newton's Update:</strong> \( \mathbf{x}_{k+1} = \mathbf{x}_k - \mathbf{H}^{-1} \nabla f(\mathbf{x}_k) \)
+                </div>
+                <div class="formula">
+                    <strong>MSE Loss:</strong> \( J = \frac{1}{n} \sum (y_i - \hat{y}_i)^2 \)
                 </div>
             </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">🧮 Mathematical Notation</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>∇f(x):</strong> Gradient of f at x; first derivative
-                    </div>
-                    <div class="step">
-                        <strong>∂f/∂x:</strong> Partial derivative of f with respect to x
-                    </div>
-                    <div class="step">
-                        <strong>||x||₁:</strong> L1 norm; sum of absolute values = |x₁| + |x₂| + ...
-                    </div>
-                    <div class="step">
-                        <strong>||x||₂:</strong> L2 norm (Euclidean); square root of sum of squares √(x₁² + x₂² + ...)
-                    </div>
-                    <div class="step">
-                        <strong>||x||²₂:</strong> L2 norm squared
-                    </div>
-                    <div class="step">
-                        <strong>Σ (summation):</strong> Sum over all elements
-                    </div>
-                    <div class="step">
-                        <strong>←:</strong> Assignment; replaces value on left with right-hand side
-                    </div>
-                    <div class="step">
-                        <strong>∈:</strong> Element of; belongs to a set
-                    </div>
-                    <div class="step">
-                        <strong>ℝⁿ:</strong> n-dimensional real numbers
-                    </div>
-                </div>
+        <section class="section">
+            <div class="section-title">Software Libraries</div>
+            <div class="section-content">
+                <p><strong>Numerical:</strong> NumPy, SciPy<br>
+                <strong>Optimization:</strong> CVXPY, PuLP<br>
+                <strong>Machine Learning:</strong> Scikit-Learn (Lasso, Ridge, ElasticNet)</p>
             </div>
+        </section>
 
-            <div class="section">
-                <div class="section-title">🎯 Algorithm Types</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Gradient Descent:</strong> Move in negative gradient direction with fixed step size
-                    </div>
-                    <div class="step">
-                        <strong>Stochastic GD (SGD):</strong> Use one random sample at a time; noisier but faster
-                    </div>
-                    <div class="step">
-                        <strong>Mini-batch GD:</strong> Balance between batch and stochastic; use small groups
-                    </div>
-                    <div class="step">
-                        <strong>Newton's Method:</strong> Use second-order (Hessian) information; faster convergence
-                    </div>
-                    <div class="step">
-                        <strong>Quasi-Newton (BFGS):</strong> Approximate Hessian; Newton-like speed without computing Hessian
-                    </div>
-                    <div class="step">
-                        <strong>Interior Point Method:</strong> Solve constrained problems with barrier functions
-                    </div>
-                    <div class="step">
-                        <strong>Conjugate Gradient:</strong> Exploit problem structure; efficient for large sparse systems
-                    </div>
-                    <div class="step">
-                        <strong>Sub-gradient Method:</strong> Handle non-smooth functions like L1 norm
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🛠️ Regularization Techniques</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>L1 (Lasso):</strong> Penalty = λ||w||₁; creates sparse solutions (some weights exactly 0)
-                    </div>
-                    <div class="step">
-                        <strong>L2 (Ridge):</strong> Penalty = λ||w||²₂; shrinks weights smoothly, no exact zeros
-                    </div>
-                    <div class="step">
-                        <strong>Elastic Net:</strong> Combination of L1 and L2; λ₁||w||₁ + λ₂||w||²₂
-                    </div>
-                    <div class="step">
-                        <strong>Group Lasso:</strong> Apply L1 penalty to groups of weights, not individual weights
-                    </div>
-                    <div class="step">
-                        <strong>Early Stopping:</strong> Stop training when validation error starts increasing
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🔗 Key Relationships</div>
-                <div class="section-content">
-                    <div class="formula">
-                        <strong>Gradient Descent Update:</strong><br>
-                        x ← x - α∇f(x)<br>
-                        <em>Move in negative gradient direction</em>
-                    </div>
-                    <div class="formula">
-                        <strong>Newton's Update:</strong><br>
-                        x ← x - [∇²f(x)]⁻¹∇f(x)<br>
-                        <em>Use curvature information (Hessian)</em>
-                    </div>
-                    <div class="formula">
-                        <strong>Loss with Regularization:</strong><br>
-                        L(w) = DataLoss(w) + RegularizationTerm(w)<br>
-                        <em>Balance accuracy and simplicity</em>
-                    </div>
-                    <div class="formula">
-                        <strong>Barrier Method:</strong><br>
-                        min f(x) + (1/t)×penalty(x)<br>
-                        <em>As t→∞, penalty→0, constraints enforced</em>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Python Libraries</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>NumPy:</strong> Numerical computing; arrays, linear algebra, random numbers
-                    </div>
-                    <div class="step">
-                        <strong>SciPy:</strong> Optimization solvers, advanced linear algebra, integration
-                    </div>
-                    <div class="step">
-                        <strong>Scikit-learn:</strong> Machine learning algorithms including regression models
-                    </div>
-                    <div class="step">
-                        <strong>CVXPY:</strong> Convex optimization; easy problem definition and solving
-                    </div>
-                    <div class="step">
-                        <strong>PuLP:</strong> Linear programming in Python
-                    </div>
-                    <div class="step">
-                        <strong>Matplotlib:</strong> Plotting and visualization
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">⚙️ Hyperparameter Tuning</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Learning Rate (α):</strong><br>
-                        Too small: slow convergence. Too large: divergence/oscillation. Start with 0.01 or 0.001
-                    </div>
-                    <div class="step">
-                        <strong>Batch Size:</strong><br>
-                        Larger: stable updates, slower. Smaller: noisy, faster. Try 32, 64, 128
-                    </div>
-                    <div class="step">
-                        <strong>Regularization Strength (λ):</strong><br>
-                        Too small: overfitting. Too large: underfitting. Use cross-validation to tune
-                    </div>
-                    <div class="step">
-                        <strong>Number of Iterations/Epochs:</strong><br>
-                        Check early stopping condition to avoid over-training
-                    </div>
-                    <div class="step">
-                        <strong>Initialization:</strong><br>
-                        Random initialization usually fine. For Newton/BFGS, start close to optimum helps
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">✅ Convergence Criteria</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Absolute Tolerance:</strong><br>
-                        Stop when ||x_{k+1} - x_k|| < ε (small absolute change)
-                    </div>
-                    <div class="step">
-                        <strong>Relative Tolerance:</strong><br>
-                        Stop when ||x_{k+1} - x_k|| / ||x_k|| < ε (small relative change)
-                    </div>
-                    <div class="step">
-                        <strong>Function Value Tolerance:</strong><br>
-                        Stop when |f(x_{k+1}) - f(x_k)| < ε (objective barely changing)
-                    </div>
-                    <div class="step">
-                        <strong>Gradient Norm:</strong><br>
-                        Stop when ||∇f(x)|| < ε (gradient near zero at optimum)
-                    </div>
-                    <div class="step">
-                        <strong>Maximum Iterations:</strong><br>
-                        Always include fallback max iterations to prevent infinite loops
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🐛 Debugging Tips</div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Loss Not Decreasing:</strong> Learning rate too high; reduce it
-                    </div>
-                    <div class="step">
-                        <strong>Very Slow Convergence:</strong> Learning rate too low; increase it
-                    </div>
-                    <div class="step">
-                        <strong>NaN Values:</strong> Numerical overflow; scale inputs or reduce learning rate
-                    </div>
-                    <div class="step">
-                        <strong>Check Gradients:</strong> Use finite differences to verify gradient computation
-                    </div>
-                    <div class="step">
-                        <strong>Print Intermediate Values:</strong> Debug by printing loss and parameters each iteration
-                    </div>
-                    <div class="step">
-                        <strong>Test Simple Cases:</strong> Start with known solutions before complex problems
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📈 When to Use Each Algorithm</div>
-                <div class="section-content">
-                    <div class="formula">
-                        <strong>Gradient Descent:</strong> Baseline method; works almost everywhere; slow for large-scale
-                    </div>
-                    <div class="formula">
-                        <strong>SGD/Mini-batch:</strong> Large datasets; online learning; parallel processing
-                    </div>
-                    <div class="formula">
-                        <strong>Newton/BFGS:</strong> Small to medium problems; need fast convergence; smooth functions
-                    </div>
-                    <div class="formula">
-                        <strong>Interior Point:</strong> Constrained problems; convex optimization problems
-                    </div>
-                    <div class="formula">
-                        <strong>Conjugate Gradient:</strong> Large sparse linear systems; memory efficient
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <a href="index.html" class="btn">← Back to Home</a>
-                <a href="guide.html" class="btn">Guide →</a>
-            </div>
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="index.html" class="btn">Return to Home Dashboard</a>
         </div>
     </div>
 </body>

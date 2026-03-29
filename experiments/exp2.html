@@ -3,126 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 02 • Newton's Method</title>
+    <title>Experiment 02 • Linear Regression (GD)</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 02: Linear Regression using Gradient Descent</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO1 / Experiment 02
+            <a href="../index.html">Home</a> / Experiment 02
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Newton's Method for Optimization</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Linear Regression using the Gradient Descent optimization technique to find the best-fit line by iteratively updating the slope and intercept.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
-                </div>
-                <div class="section-content">
-                    <p>To implement the second-order Newton-Raphson optimization algorithm to minimize the non-convex objective function \( f(x) = x^4 - 3x^2 + 2 \).</p>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Gradient Descent is an iterative optimization algorithm used to minimize a cost function. In linear regression, it adjusts the slope (m) and intercept (c) by calculating the gradients of the Mean Squared Error with respect to these parameters.</p>
+                <p><strong>Dataset:</strong></p>
+                <ul>
+                    <li>X: [8, 18, 24]</li>
+                    <li>Y: [15, 30, 25]</li>
+                </ul>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Function Analysis</strong>
-                        <p>Objective function: \( f(x) = x^4 - 3x^2 + 2 \)</p>
-                        <p>First derivative (Gradient):</p>
-                        <div class="formula">\( f'(x) = 4x^3 - 6x \)</div>
-                        <p>Second derivative (Hessian):</p>
-                        <div class="formula">\( f''(x) = 12x^2 - 6 \)</div>
-                    </div>
-
-                    <div class="step">
-                        <strong>Part B: Newton Update Rule</strong>
-                        <p>The update step for Newton's method is defined as:</p>
-                        <div class="formula">\( x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} \)</div>
-                    </div>
-
-                    <div class="step">
-                        <strong>Part C: Manual Iteration (Starting point \( x_0 = 1.5 \) )</strong>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize slope \( m \) and intercept \( c \) (e.g., \( m=1.0, c=0.0 \)).</li>
+                    <li>Choose a learning rate \( \eta \) and number of iterations.</li>
+                    <li>For each iteration:
                         <ul>
-                            <li>\( f'(1.5) = 4(1.5)^3 - 6(1.5) = 13.5 - 9 = 4.5 \)</li>
-                            <li>\( f''(1.5) = 12(1.5)^2 - 6 = 27 - 6 = 21 \)</li>
-                            <li><strong>Update:</strong> \( x_1 = 1.5 - (4.5 / 21) \approx 1.2857 \)</li>
+                            <li>Calculate the predictions \( \hat{y} = mx + c \).</li>
+                            <li>Calculate the error \( (y - \hat{y}) \).</li>
+                            <li>Compute gradients: \( \frac{\partial MSE}{\partial m} \) and \( \frac{\partial MSE}{\partial c} \).</li>
+                            <li>Update parameters: \( m = m - \eta \cdot \frac{\partial MSE}{\partial m} \) and \( c = c - \eta \cdot \frac{\partial MSE}{\partial c} \).</li>
                         </ul>
-                    </div>
+                    </li>
+                    <li>Repeat until convergence.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    Prediction: \( \hat{y}_i = mx_i + c \)
                 </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
+                <div class="formula">
+                    Gradient (m): \( D_m = \frac{-2}{n} \sum_{i=1}^n x_i(y_i - \hat{y}_i) \)
                 </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="comment"># Newton's Method Optimization</span>
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
-
-<span class="keyword">def</span> <span class="function">f</span>(x): <span class="keyword">return</span> x**4 - 3*x**2 + 2
-<span class="keyword">def</span> <span class="function">df</span>(x): <span class="keyword">return</span> 4*x**3 - 6*x
-<span class="keyword">def</span> <span class="function">ddf</span>(x): <span class="keyword">return</span> 12*x**2 - 6
-
-<span class="comment"># Starting points</span>
-x_start = [<span class="number">1.5</span>, <span class="number">0.1</span>]
-
-<span class="keyword">for</span> x0 <span class="keyword">in</span> x_start:
-    x = x0
-    <span class="function">print</span>(<span class="string">f"--- Starting from x0 = {x0} ---"</span>)
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
-        x = x - df(x)/ddf(x)
-        <span class="function">print</span>(<span class="string">f"Iter {i+1}: x = {x:.6f}, f(x) = {f(x):.6f}"</span>)
-    <span class="function">print</span>()
-                    </div>
+                <div class="formula">
+                    Gradient (c): \( D_c = \frac{-2}{n} \sum_{i=1}^n (y_i - \hat{y}_i) \)
                 </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
+                <div class="formula">
+                    Updates: \( m = m - \eta D_m, \quad c = c - \eta D_c \)
                 </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
---- Starting from x0 = 1.5 ---<br>
-Iter 1: x = 1.285714, f(x) = -0.223011<br>
-Iter 2: x = 1.229107, f(x) = -0.249449<br>
-Iter 3: x = 1.224768, f(x) = -0.250000<br>
-<br>
---- Starting from x0 = 0.1 ---<br>
-Iter 1: x = -0.001020, f(x) = 1.999997<br>
-Iter 2: x = 0.000000, f(x) = 2.000000
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>✅</span> Result & Verification
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        Newton's method converges extremely fast (quadratically) compared to Gradient Descent. 
-                        Starting at 1.5, it finds the local minimum \( x^* = \sqrt{1.5} \approx 1.224 \). 
-                        Starting at 0.1, it slides toward the local maximum/stationary point at 0.
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Initial state: \( m=1.0, c=0.0, \eta=0.001 \). Data: \( (8,15), (18,30), (24,25) \).</p>
+                <p><strong>Iteration 1:</strong></p>
+                <ul>
+                    <li>Predictions: \( 1(8)+0=8, 1(18)+0=18, 1(24)+0=24 \)</li>
+                    <li>Errors: \( 15-8=7, 30-18=12, 25-24=1 \)</li>
+                    <li>Gradient \( D_m = \frac{-2}{3} (8(7) + 18(12) + 24(1)) = \frac{-2}{3} (56+216+24) = -197.33 \)</li>
+                    <li>Gradient \( D_c = \frac{-2}{3} (7+12+1) = -13.33 \)</li>
+                    <li>New \( m = 1.0 - 0.001(-197.33) \approx 1.197 \)</li>
+                    <li>New \( c = 0.0 - 0.001(-13.33) \approx 0.013 \)</li>
+                </ul>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp1.html" class="btn btn-secondary">⬅️ Experiment 01</a>
-                <a href="exp3.html" class="btn btn-primary">Proceed to Experiment 03 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
 
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+x = np.array([8, 18, 24])
+y = np.array([15, 30, 25])
+
+m, c = 1.0, 0.0
+L = 0.001  # Learning Rate
+iterations = 1000
+
+for i in range(iterations):
+    y_pred = m * x + c
+    Dm = (-2/len(x)) * sum(x * (y - y_pred))
+    Dc = (-2/len(x)) * sum(y - y_pred)
+    m = m - L * Dm
+    c = c - L * Dc
+
+print(f"Final slope: {m:.2f}")
+print(f"Final intercept: {c:.2f}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Initial slope (m): 1.00
+Initial intercept (c): 0.00
+...
+Final slope: 1.29
+Final intercept: 0.32
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp1.html" class="btn btn-secondary">⬅️ Experiment 01</a>
+            <a href="exp3.html" class="btn">Next: Experiment 03 ➔</a>
+        </div>
     </div>
 </body>
 </html>

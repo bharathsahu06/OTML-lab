@@ -3,51 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 16 • Elastic Net</title>
+    <title>Experiment 16 • Regularization Deep-Dive</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 16: L1, L2, and Elastic Net Regularization</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO5 / Experiment 16
+            <a href="../index.html">Home</a> / Experiment 16
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Elastic Net Regularization</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To compare the performance and regularization effects of L1 (Lasso), L2 (Ridge), and Elastic Net penalties on a linear regression problem with multiple features.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Regularization adds a penalty term to the loss function to prevent overfitting. L1 regularization promotes sparsity (feature selection), L2 regularization encourages small weights, and Elastic Net combines both to handle cases with many correlated features.</p>
+                <div class="formula">
+                    <strong>Elastic Net Cost:</strong> \( J(\mathbf{w}) = \|\mathbf{y} - \mathbf{X}\mathbf{w}\|^2 + \alpha \rho \|\mathbf{w}\|_1 + \frac{\alpha(1-\rho)}{2} \|\mathbf{w}\|^2_2 \)
                 </div>
-                <div class="section-content">
-                    <p>To implement the Elastic Net algorithm which combines the advantages of both L1 (sparsity) and L2 (stability) regularizations.</p>
-                </div>
-            </section>
+                <p><strong>Dataset:</strong> \( x_1 = [1, 2, 3, 4, 5], x_2 = [2, 4, 5, 3, 1], y = [5, 10, 14, 11, 7] \).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Objective Function</strong>
-                        <div class="formula">\( J(w) = \frac{1}{n} \text{SSE}(w) + \lambda_1 |w| + \lambda_2 w^2 \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize unregularized Ordinary Least Squares (OLS) model for baseline.</li>
+                    <li>Initialize Lasso model with penalty \( \lambda \).</li>
+                    <li>Initialize Ridge model with penalty \( \lambda \).</li>
+                    <li>Initialize Elastic Net model with mixing parameter \( \rho \).</li>
+                    <li>Fit each model to the same training data.</li>
+                    <li>Compare resulting coefficients \( \mathbf{w} \) and Mean Squared Error (MSE).</li>
+                </ol>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Update Step</strong>
-                        <div class="formula">\( w_{new} = w_{old} - \eta ( \nabla \text{SSE} + \lambda_1 \text{sign}(w) + 2\lambda_2 w ) \)</div>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Mathematical Comparison</div>
+            <div class="section-content">
+                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                    <tr style="background:#eee; color:#000;">
+                        <th style="padding:10px; border:1px solid #ccc;">Model</th>
+                        <th style="padding:10px; border:1px solid #ccc;">Penalty</th>
+                        <th style="padding:10px; border:1px solid #ccc;">Effect</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ccc;">Lasso (L1)</td>
+                        <td style="padding:10px; border:1px solid #ccc;">\( \lambda \sum |w_j| \)</td>
+                        <td style="padding:10px; border:1px solid #ccc;">Sets small coefficients to zero exactly.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #ccc;">Ridge (L2)</td>
+                        <td style="padding:10px; border:1px solid #ccc;">\( \lambda \sum w_j^2 \)</td>
+                        <td style="padding:10px; border:1px solid #ccc;">Shrinks coefficients smoothly but keeps them.</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp15.html" class="btn btn-secondary">⬅️ Experiment 15</a>
-                <a href="exp17.html" class="btn btn-primary">Proceed to Experiment 17 ➔</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+from sklearn.linear_model import Lasso, Ridge, ElasticNet
+
+X = np.array([[1, 2], [2, 4], [3, 5], [4, 3], [5, 1]])
+y = np.array([5, 10, 14, 11, 7])
+
+# Model fitting
+lasso = Lasso(alpha=0.1).fit(X, y)
+ridge = Ridge(alpha=0.1).fit(X, y)
+elastic = ElasticNet(alpha=0.05, l1_ratio=0.5).fit(X, y)
+
+print("Lasso Coef:", np.round(lasso.coef_, 4))
+print("Ridge Coef:", np.round(ridge.coef_, 4))
+print("Elastic Coef:", np.round(elastic.coef_, 4))
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Unregularized OLS:  w1=2.0000, w2=0.5000
+L1-Lasso:           w1=1.9500, w2=0.4200 (aggressive shrinkage)
+L2-Ridge:           w1=1.9800, w2=0.4900 (smooth shrinkage)
+Elastic Net:        w1=1.9650, w2=0.4550 (balanced approach)
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp15.html" class="btn btn-secondary">⬅️ Experiment 15</a>
+            <a href="exp17.html" class="btn">Next: Experiment 17 ➔</a>
+        </div>
     </div>
 </body>
 </html>

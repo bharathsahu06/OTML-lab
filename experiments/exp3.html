@@ -3,108 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 03 • Stochastic Gradient Descent</title>
+    <title>Experiment 03 • Newton's Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 03: Newton's Method for Optimization</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO1 / Experiment 03
+            <a href="../index.html">Home</a> / Experiment 03
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Stochastic Gradient Descent (SGD)</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement the Newton's Method for finding the minimum of a function using second-order derivatives (Hessian matrix).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Newton's Method is a second-order optimization algorithm. Unlike Gradient Descent, which uses only the first derivative, Newton's method uses both the gradient and the curvature (Hessian) to take more direct steps toward the minimum. It typically converges faster but requires calculating high-order derivatives.</p>
+                <p><strong>Test Functions:</strong></p>
+                <ul>
+                    <li>1D: \( f(x) = (1 - x)^2 \)</li>
+                    <li>2D: Rosenbrock Function \( f(x, y) = (1 - x)^2 + 100(y - x^2)^2 \)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Define the objective function \( f(x) \).</li>
+                    <li>Calculate the first derivative \( f'(x) \) (Gradient) and second derivative \( f''(x) \) (Hessian).</li>
+                    <li>Choose an initial starting point \( x_0 \).</li>
+                    <li>Update the point using the Newton step: \( x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} \).</li>
+                    <li>Repeat until the change \( |x_{k+1} - x_k| \) is within a tolerance.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <p><strong>1D Case:</strong></p>
+                <div class="formula">
+                    \( x_{k+1} = x_k - [f''(x_k)]^{-1} f'(x_k) \)
                 </div>
-                <div class="section-content">
-                    <p>To implement the Stochastic Gradient Descent algorithm which updates parameters using only a single data point at a time, providing a scalable alternative to batch methods.</p>
+                <p><strong>Multi-variate Case:</strong></p>
+                <div class="formula">
+                    \( \mathbf{x}_{k+1} = \mathbf{x}_k - \mathbf{H}_f(\mathbf{x}_k)^{-1} \nabla f(\mathbf{x}_k) \)
                 </div>
-            </section>
+                <p>Where \( \mathbf{H}_f \) is the Hessian matrix and \( \nabla f \) is the gradient vector.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Model Specification</strong>
-                        <p>We assume the relationship \( y = w^2 \). For a given point \( (x_i, y_i) \), the squared error loss is:</p>
-                        <div class="formula">\( L(w) = (y_i - w^2)^2 \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>For \( f(x) = (1 - x)^2 \) starting at \( x_0 = 0 \):</p>
+                <ul>
+                    <li>\( f'(x) = -2(1 - x) = 2x - 2 \)</li>
+                    <li>\( f''(x) = 2 \)</li>
+                </ul>
+                <p><strong>Iteration 1:</strong></p>
+                <ul>
+                    <li>\( f'(0) = 2(0) - 2 = -2 \)</li>
+                    <li>\( f''(0) = 2 \)</li>
+                    <li>\( \Delta = -(-2)/2 = 1.0 \)</li>
+                    <li>\( x_1 = 0 + 1.0 = 1.0 \) (Minimum reached)</li>
+                </ul>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Stochastic Gradient</strong>
-                        <p>The derivative of the loss with respect to weight \( w \) is:</p>
-                        <div class="formula">\( \frac{\partial L}{\partial w} = 2(y_i - w^2) \cdot (-2w) = -4w(y_i - w^2) \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import sympy as sp
 
-                    <div class="step">
-                        <strong>Part C: Iterative Update ( \(\eta = 0.05\), \(w_0 = 5.0\) )</strong>
-                        <p>For each sample, perform the update: \( w \leftarrow w - \eta(-4w(y_i-w^2)) \)</p>
-                        <ul>
-                            <li><strong>Sample 1 (\(x=1, y=1\)):</strong> \( g = -4(5)(1-25) = 480 \); \( w_{new} = 5 - 0.05(480) = -19 \)</li>
-                            <li>(Note: High learning rates cause instability in SGD; proper tuning required)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+x = sp.symbols('x')
+f = (1 - x)**2
+f_x = sp.diff(f, x)
+f_xx = sp.diff(f_x, x)
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+# Newton Step
+xk = 0.0
+for k in range(5):
+    grad = float(f_x.subs(x, xk))
+    hess = float(f_xx.subs(x, xk))
+    delta = -grad / hess
+    xk = xk + delta
+    print(f"Iteration {k+1}: x = {xk}")
+    if abs(delta) < 1e-6: break
 
-<span class="comment"># Sample dataset</span>
-x_data = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
-y_data = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>])
+print("Optimal x:", xk)
+</pre>
+            </div>
+        </section>
 
-w = <span class="number">5.0</span>
-alpha = <span class="number">0.05</span>
-epochs = <span class="number">5</span>
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Iteration 1: x = 1.0
+Converged
+Optimal x: 1.0
+Minimum value: 0.0
+</pre>
+            </div>
+        </section>
 
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
-    <span class="keyword">for</span> xi, yi <span class="keyword">in</span> <span class="function">zip</span>(x_data, y_data):
-        y_pred = w**<span class="number">2</span>
-        grad = -<span class="number">4</span> * w * (yi - y_pred)
-        w = w - alpha * grad
-    <span class="function">print</span>(<span class="string">f"Epoch {epoch+1}: w = {w:.6f}"</span>)
-
-<span class="function">print</span>(<span class="string">f"\nFinal weight: {w:.8f}"</span>)
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Epoch 1: w = 4.120301<br>
-Epoch 2: w = 2.859211<br>
-Epoch 3: w = 1.050410<br>
-...<br>
-Final weight: 0.000100 (Approaches 0)
-                </div>
-            </section>
-
-            <nav class="nav-buttons">
-                <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 02</a>
-                <a href="exp4.html" class="btn btn-primary">Proceed to Experiment 04 ➔</a>
-            </nav>
-        </article>
-
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+        <div class="nav-buttons">
+            <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 02</a>
+            <a href="exp4.html" class="btn">Next: Experiment 04 ➔</a>
+        </div>
     </div>
 </body>
 </html>

@@ -3,83 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 07 • PuLP Modeling</title>
+    <title>Experiment 07 • Sub-gradient Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 07: Sub-gradient Method for LASSO</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO2 / Experiment 07
+            <a href="../index.html">Home</a> / Experiment 07
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Linear Programming with PuLP</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement the Sub-gradient method for L1-regularized linear regression (LASSO) to minimize a non-smooth objective function.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>The LASSO adds an L1-penalty to the standard Mean Squared Error (MSE) loss. Since the absolute value function is not differentiable at zero, we use sub-gradients rather than standard gradients to update the parameters.</p>
+                <div class="formula">
+                    Objective: \( J(m,c) = \frac{1}{2n}\sum_{i=1}^n (y_i-(m x_i+c))^2 + \lambda |m| \)
                 </div>
-                <div class="section-content">
-                    <p>To implement a linear programming solver using the PuLP library, which provides a high-level Pythonic interface to industry-standard solvers like CBC and GLPK.</p>
-                </div>
-            </section>
+                <p><strong>Dataset:</strong> \( x = [1, 2, 3], y = [1, 2, 3] \).<br><strong>Regularization:</strong> \( \lambda = 0.1 \).</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">from</span> pulp <span class="keyword">import</span> *
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize slope \( m \) and intercept \( c \).</li>
+                    <li>For each epoch:
+                        <ul>
+                            <li>Compute the gradient of the MSE part.</li>
+                            <li>Compute the sub-gradient of the L1 term \( \lambda |m| \):
+                                <ul>
+                                    <li>If \( m > 0 \), sub-gradient is \( \lambda \).</li>
+                                    <li>If \( m < 0 \), sub-gradient is \( -\lambda \).</li>
+                                    <li>If \( m = 0 \), sub-gradient can be any value in \( [-\lambda, \lambda] \).</li>
+                                </ul>
+                            </li>
+                            <li>Total sub-gradient \( \tilde{g} = \nabla MSE + \text{sub-gradient}(L1) \).</li>
+                            <li>Update parameters: \( \theta_{k+1} = \theta_k - \alpha_k \tilde{g} \).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-<span class="comment"># Initialize the problem</span>
-prob = LpProblem(<span class="string">"Minimization_Problem"</span>, LpMinimize)
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Parameter Updates:</p>
+                <ul>
+                    <li>\( m_{k+1} = m_k - \alpha_k (\frac{1}{n}\sum ((mx_i+c)-y_i)x_i + \lambda \cdot \text{sgn}(m_k)) \)</li>
+                    <li>\( c_{k+1} = c_k - \alpha_k (\frac{1}{n}\sum ((mx_i+c)-y_i)) \)</li>
+                </ul>
+            </div>
+        </section>
 
-<span class="comment"># Define decision variables</span>
-x = LpVariable(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
-y = LpVariable(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
 
-<span class="comment"># Objective function</span>
-prob += <span class="number">3</span>*x + <span class="number">2</span>*y
+x = np.array([1, 2, 3], dtype=float)
+y = np.array([1, 2, 3], dtype=float)
+lam = 0.1
+m, c = 0.0, 0.0
+epochs = 1000
 
-<span class="comment"># Constraints</span>
-prob += x + y >= <span class="number">4</span>
+for epoch in range(1, epochs + 1):
+    n = len(x)
+    ri = (m * x + c) - y
+    dm = np.sum(ri * x) / n
+    dc = np.sum(ri) / n
 
-<span class="comment"># Solve</span>
-status = prob.solve(PULP_CBC_CMD(msg=<span class="number">0</span>))
+    # Sub-gradient for m
+    if m > 0: dm += lam
+    elif m < 0: dm -= lam
+    
+    alpha = 1.0 / (1.0 + epoch)
+    m -= alpha * dm
+    c -= alpha * dc
 
-<span class="function">print</span>(<span class="string">f"Status: {LpStatus[status]}"</span>)
-<span class="function">print</span>(<span class="string">f"x = {value(x):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"y = {value(y):.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Objective = {value(prob.objective):.6f}"</span>)
-                    </div>
-                </div>
-            </section>
+print(f"Final m: {m:.4f}")
+print(f"Final c: {c:.4f}")
+</pre>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Status: Optimal<br>
-x = 0.000000<br>
-y = 4.000000<br>
-Objective = 8.000000
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Final m (slope): 0.8457
+Final c (intercept): 0.3097
 
-            <nav class="nav-buttons">
-                <a href="exp6.html" class="btn btn-secondary">⬅️ Experiment 06</a>
-                <a href="exp8.html" class="btn btn-primary">Proceed to Experiment 08 ➔</a>
-            </nav>
-        </article>
+Results:
+x=1.00 | Pred y=1.1554
+x=2.00 | Pred y=2.0012
+x=3.00 | Pred y=2.8469
+</pre>
+            </div>
+        </section>
 
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+        <div class="nav-buttons">
+            <a href="exp6.html" class="btn btn-secondary">⬅️ Experiment 06</a>
+            <a href="exp8.html" class="btn">Next: Experiment 08 ➔</a>
+        </div>
     </div>
 </body>
 </html>

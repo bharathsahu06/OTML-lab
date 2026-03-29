@@ -3,136 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 01 • Gradient Descent</title>
+    <title>Experiment 01 • OLS Linear Regression</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 01: Linear Regression using OLS</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO1 / Experiment 01
+            <a href="../index.html">Home</a> / Experiment 01
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Gradient Descent Optimization</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Linear Regression using the Ordinary Least Squares (OLS) method to find the best-fit line for a given dataset.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Ordinary Least Squares (OLS) is a type of linear least squares method for estimating the unknown parameters in a linear regression model. Standard OLS regression minimizes the sum of squared vertical distances (residuals) between the observed responses in the dataset and the responses predicted by the linear approximation.</p>
+                <p><strong>Dataset:</strong></p>
+                <ul>
+                    <li>X: [1, 3, 5, 7, 9]</li>
+                    <li>Y: [3, 8, 13, 20, 25]</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize the dataset of x and y values.</li>
+                    <li>Calculate the number of elements \( n \).</li>
+                    <li>Compute \( \sum x \), \( \sum y \), \( \sum xy \), and \( \sum x^2 \).</li>
+                    <li>Calculate the slope \( m \) and intercept \( b \) using the OLS formulas.</li>
+                    <li>Iterate through the data to calculate predicted values and squared errors.</li>
+                    <li>Calculate Total Error and Mean Squared Error (MSE).</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    Slope \( m = \frac{n\sum(xy) - (\sum x)(\sum y)}{n\sum(x^2) - (\sum x)^2} \)
                 </div>
-                <div class="section-content">
-                    <p>To implement and analyze the convergence properties of the Gradient Descent algorithm for minimizing a fundamental convex objective function \( f(x) = x^2 \).</p>
+                <div class="formula">
+                    Intercept \( b = \frac{\sum y - m(\sum x)}{n} \)
                 </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>📝</span> Problem Statement
+                <div class="formula">
+                    Mean Squared Error (MSE) \( = \frac{1}{n}\sum(y - \hat{y})^2 \)
                 </div>
-                <div class="section-content">
-                    <p>Implement a gradient descent routine to find the global minimum of the function \( f(x) = x^2 \). Given a dataset \( x = [1, 2, 3, 4], y = [1, 4, 9, 16] \), verify that the data points lie on the objective curve and observe the iterative reduction in value starting from an initial point \( x_0 = 5.0 \).</p>
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Model Derivation</strong>
-                        <p>Verify data consistency for the relationship \( y = x^2 \):</p>
-                        <ul>
-                            <li>At \( x = 1 \): \( y = 1^2 = 1 \) 🗸</li>
-                            <li>At \( x = 2 \): \( y = 2^2 = 4 \) 🗸</li>
-                            <li>At \( x = 3 \): \( y = 3^2 = 9 \) 🗸</li>
-                            <li>At \( x = 4 \): \( y = 4^2 = 16 \) 🗸</li>
-                        </ul>
-                    </div>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Based on the dataset \( x=[1, 3, 5, 7, 9], y=[3, 8, 13, 20, 25] \):</p>
+                <ul>
+                    <li>\( n = 5 \)</li>
+                    <li>\( \sum x = 1+3+5+7+9 = 25 \)</li>
+                    <li>\( \sum y = 3+8+13+20+25 = 69 \)</li>
+                    <li>\( \sum xy = (1*3)+(3*8)+(5*13)+(7*20)+(9*25) = 3+24+65+140+225 = 457 \)</li>
+                    <li>\( \sum x^2 = 1+9+25+49+81 = 165 \)</li>
+                </ul>
+                <p>Calculation for \( m \):</p>
+                <p>\( m = \frac{5(457) - (25)(69)}{5(165) - (25)^2} = \frac{2285 - 1725}{825 - 625} = \frac{560}{200} = 2.8 \)</p>
+                <p>Calculation for \( b \):</p>
+                <p>\( b = \frac{69 - 2.8(25)}{5} = \frac{69 - 70}{5} = \frac{-1}{5} = -0.2 \)</p>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Iterative Update Rule</strong>
-                        <p>The derivative (gradient) of the objective \( f(x) = x^2 \) is:</p>
-                        <div class="formula">\( f'(x) = 2x \)</div>
-                        <p>The parameter update rule with learning rate \( \eta \) is:</p>
-                        <div class="formula">\( x_{k+1} = x_k - \eta \cdot f'(x_k) = x_k - \eta(2x_k) \)</div>
-                    </div>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+# Linear Regression using OLS
+def linear_regression(x, y):
+    n = len(x)
+    sum_xy, sum_x, sum_y, sum_xs = 0, 0, 0, 0
+    for i in range(n):
+        sum_xy += x[i] * y[i]
+        sum_x += x[i]
+        sum_y += y[i]
+        sum_xs += x[i]**2
+    
+    m = ((n * sum_xy) - (sum_x * sum_y)) / (n * sum_xs - sum_x**2)
+    b = (sum_y / n) - (m * (sum_x) / n)
+    return m, b
 
-                    <div class="step">
-                        <strong>Part C: Manual Calculation ( \(\eta = 0.1\), \(x_0 = 5.0\) )</strong>
-                        <ul>
-                            <li><strong>Iteration 0:</strong> \( x_1 = 5.0 - 0.1(2 \cdot 5.0) = 4.0 \)</li>
-                            <li><strong>Iteration 1:</strong> \( x_2 = 4.0 - 0.1(2 \cdot 4.0) = 3.2 \)</li>
-                            <li><strong>Iteration 2:</strong> \( x_3 = 3.2 - 0.1(2 \cdot 3.2) = 2.56 \)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+def mse(x, y, m, b):
+    n = len(x)
+    total_error = 0
+    for i in range(n):
+        pred = m * x[i] + b
+        total_error += (y[i] - pred)**2
+    return total_error / n, total_error
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="comment"># Gradient Descent for f(x) = x^2</span>
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+x = [1, 3, 5, 7, 9]
+y = [3, 8, 13, 20, 25]
 
-<span class="comment"># Hyperparameters</span>
-x = <span class="number">5.0</span>
-alpha = <span class="number">0.1</span>
-epochs = <span class="number">20</span>
+m, b = linear_regression(x, y)
+mse_val, total_err = mse(x, y, m, b)
 
-<span class="function">print</span>(<span class="string">f"Initial state: x = {x}"</span>)
+print(f"Slope: {m}")
+print(f"Intercept: {b:.2f}")
+print(f"Total Error: {total_err:.2f}")
+print(f"MSE: {mse_val:.2f}")
+</pre>
+            </div>
+        </section>
 
-<span class="keyword">for</span> k <span class="keyword">in</span> <span class="function">range</span>(epochs):
-    <span class="comment"># x = x - alpha * gradient (where gradient = 2 * x)</span>
-    x = x * (<span class="number">1</span> - <span class="number">2</span> * alpha)
-    <span class="keyword">if</span> k % <span class="number">5</span> == <span class="number">0</span>:
-        <span class="function">print</span>(<span class="string">f"Iteration {k+1}: x = {x:.8f}"</span>)
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Slope: 2.8
+Intercept: -0.20
+Total Error: 1.20
+MSE: 0.24
+</pre>
+            </div>
+        </section>
 
-<span class="function">print</span>(<span class="string">f"\nFinal x: {x:.8f}"</span>)
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Initial state: x = 5.0<br>
-Iteration 1: x = 4.00000000<br>
-Iteration 6: x = 1.31072000<br>
-Iteration 11: x = 0.42949673<br>
-Iteration 16: x = 0.14073749<br>
-<br>
-Final x: 0.00000000 (Approaches 0)
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>✅</span> Result & Verification
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        The parameter \( x \) successfully converges to the theoretical minimum at 0. Since the contraction factor \( (1 - 2\eta) = 0.8 \) is less than 1, geometric convergence is guaranteed for this convex function.
-                    </div>
-                </div>
-            </section>
-
-            <nav class="nav-buttons">
-                <a href="../index.html" class="btn btn-secondary">🏠 Laboratory Overview</a>
-                <a href="exp2.html" class="btn btn-primary">Proceed to Experiment 02 ➔</a>
-            </nav>
-        </article>
-
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn btn-secondary">🏠 Back to Home</a>
+            <a href="exp2.html" class="btn">Next: Experiment 02 ➔</a>
+        </div>
     </div>
 </body>
 </html>

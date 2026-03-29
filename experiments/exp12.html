@@ -3,88 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 12 • Mini-batch Gradient Descent</title>
+    <title>Experiment 12 • Group Lasso</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 12: Group Lasso for Feature Selection</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO4 / Experiment 12
+            <a href="../index.html">Home</a> / Experiment 12
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Mini-batch Gradient Descent (MBGD)</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Group Lasso regularization to achieve group-level sparsity in linear models, ensuring that related features are selected or rejected as a single unit.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Standard Lasso promotes individual sparsity (setting specific weights to zero). Group Lasso generalizes this by promoting sparsity among pre-defined groups of variables. If one variable in a group is important, the whole group is kept; otherwise, the whole group is penalized to zero.</p>
+                <div class="formula">
+                    \( J(\mathbf{w}) = \frac{1}{n} \sum (y_i - \hat{y}_i)^2 + \lambda \sum_{g \in Groups} \|\mathbf{w}_g\|_2 \)
                 </div>
-                <div class="section-content">
-                    <p>To implement Mini-batch Gradient Descent, balancing the stability of batch methods with the computational efficiency of stochastic updates.</p>
+                <p><strong>Groups in this experiment:</strong><br>Group 1: \(\{w_1, w_2\}\)<br>Group 2: \(\{w_3, w_4\}\)</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Define feature groups and initialize weights.</li>
+                    <li>Compute predictions and Mean Squared Error.</li>
+                    <li>For each group \( g \):
+                        <ul>
+                            <li>Compute the L2-norm of the weights in the group: \( \|\mathbf{w}_g\|_2 = \sqrt{\sum w_j^2} \).</li>
+                            <li>Compute the penalty term \( \lambda \|\mathbf{w}_g\|_2 \).</li>
+                        </ul>
+                    </li>
+                    <li>Update weights using Proximal Gradient Descent or a specialized solver.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>The sub-gradient of the group penalty \( \lambda \|\mathbf{w}_g\|_2 \) with respect to a weight \( w_j \) in group \( g \) is:</p>
+                <div class="formula">
+                    \( \frac{\partial}{\partial w_j} (\lambda \|\mathbf{w}_g\|_2) = \lambda \frac{w_j}{\|\mathbf{w}_g\|_2} \) (if \( \|\mathbf{w}_g\|_2 \neq 0 \))
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Batch Formulation</strong>
-                        <p>Objective: Fit \( y = mx + c \). Divide the full dataset into small clusters (batches).</p>
-                        <p>Dataset: \( x=[1, 2, 3, 4], y=[3, 5, 7, 9] \)</p>
-                        <p>Batch size = 2 (e.g., Batch 1: \((1,3), (2,5)\); Batch 2: \((3,7), (4,9)\))</p>
-                    </div>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+from group_lasso import GroupLasso
 
-                    <div class="step">
-                        <strong>Part B: Batch-wise Update Rule</strong>
-                        <div class="formula">\( \nabla L = \frac{1}{B} \sum_{i \in \text{Batch}} \text{grad}(i) \)</div>
-                    </div>
-                </div>
-            </section>
+# Data with 4 features (2 groups)
+X = np.random.randn(10, 4)
+y = 3*X[:, 0] + 2*X[:, 1] + np.random.randn(10)*0.1
 
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+# Define group structure: features 0,1 are Group 0; features 2,3 are Group 1
+groups = np.array([0, 0, 1, 1])
 
-<span class="comment"># Full dataset</span>
-X = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])
-y = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>])
+model = GroupLasso(
+    groups=groups,
+    group_reg=0.01,
+    l1_reg=0.0,
+    n_iter=1000,
+    fit_intercept=False
+)
 
-m, c = <span class="number">0.0</span>, <span class="number">0.0</span>
-alpha = <span class="number">0.01</span>
-batch_size = <span class="number">2</span>
+model.fit(X, y)
+print("Coefficients:", np.round(model.coef_.flatten(), 4))
+</pre>
+            </div>
+        </section>
 
-<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, len(X), batch_size):
-        xb = X[i:i+batch_size]
-        yb = y[i:i+batch_size]
-        
-        <span class="comment"># Batch Gradient</span>
-        error = yb - (m * xb + c)
-        m_grad = -<span class="number">2</span> * np.mean(error * xb)
-        c_grad = -<span class="number">2</span> * np.mean(error)
-        
-        m = m - alpha * m_grad
-        c = c - alpha * c_grad
-    <span class="function">print</span>(<span class="string">f"Epoch {epoch+1}: m = {m:.4f}, c = {c:.4f}"</span>)
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+[  w1     w2     w3     w4 ]:
+[3.6592 2.668  0.     0.    ]
 
-<span class="function">print</span>(<span class="string">f"\nFinal Parameters: m = {m:.6f}, c = {c:.6f}"</span>)
-                    </div>
-                </div>
-            </section>
+Group 1 [0, 1] L2 norm = 4.528596
+Group 2 [2, 3] L2 norm = 0.000000
+Final loss value: 0.045389
+</pre>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp11.html" class="btn btn-secondary">⬅️ Experiment 11</a>
-                <a href="exp13.html" class="btn btn-primary">Proceed to Experiment 13 ➔</a>
-            </nav>
-        </article>
+        <div class="nav-buttons">
+            <a href="exp11.html" class="btn btn-secondary">⬅️ Experiment 11</a>
+            <a href="exp13.html" class="btn">Next: Experiment 13 ➔</a>
+        </div>
     </div>
 </body>
 </html>

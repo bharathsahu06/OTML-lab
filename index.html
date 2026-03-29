@@ -3,144 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTML Lab • Optimization & Machine Learning</title>
+    <title>OTML Lab • Home</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>OTML Lab</h1>
-            <p>Advanced Optimization Methods for Machine Learning</p>
-        </header>
+    <header>
+        <h1>Optimization Techniques for Machine Learning</h1>
+        <p>Laboratory Manual and Experiment Repository</p>
+    </header>
 
-        <section class="co-container" id="co1">
-            <h2 class="co-header">CO1: Optimization Fundamentals</h2>
-            <div class="experiments-grid">
+    <nav class="main-nav">
+        <a href="guide.html">Quick Start Guide</a>
+        <a href="reference.html">Glossary & Reference</a>
+        <a href="procedures.html">Full Procedures</a>
+    </nav>
+
+    <div class="container index-container">
+        <!-- CO1 -->
+        <section class="co-section">
+            <div class="co-title">
+                <h2>CO1: Gradient Based Optimization</h2>
+            </div>
+            <div class="experiment-list">
                 <a href="experiments/exp1.html" class="experiment-card">
-                    <div class="number-badge">Experiment 01</div>
-                    <h3>Gradient Descent</h3>
-                    <p>Understanding first-order convergence and learning dynamics of Gradient Descent on a fundamental quadratic surface.</p>
+                    <h3>Experiment 01</h3>
+                    <p>Linear Regression using Ordinary Least Squares (OLS).</p>
                 </a>
                 <a href="experiments/exp2.html" class="experiment-card">
-                    <div class="number-badge">Experiment 02</div>
-                    <h3>Newton's Method</h3>
-                    <p>Leveraging second-order information for accelerated convergence. Optimization of complex non-convex functions.</p>
+                    <h3>Experiment 02</h3>
+                    <p>Linear Regression using Gradient Descent (GD).</p>
                 </a>
                 <a href="experiments/exp3.html" class="experiment-card">
-                    <div class="number-badge">Experiment 03</div>
-                    <h3>Stochastic Gradient Descent</h3>
-                    <p>Minimizing loss functions using noisy gradient estimates. The foundation of modern neural network training.</p>
+                    <h3>Experiment 03</h3>
+                    <p>Newton's Method for 1D and 2D Optimization.</p>
                 </a>
             </div>
         </section>
 
-        <section class="co-container" id="co2">
-            <h2 class="co-header">CO2: Convex Optimization & Constraints</h2>
-            <div class="experiments-grid">
+        <!-- CO2 -->
+        <section class="co-section">
+            <div class="co-title">
+                <h2>CO2: Stochastic and Constrained Optimization</h2>
+            </div>
+            <div class="experiment-list">
                 <a href="experiments/exp4.html" class="experiment-card">
-                    <div class="number-badge">Experiment 04</div>
-                    <h3>Quadratic Optimization</h3>
-                    <p>Solving constrained quadratic programming problems using the CVXPY research framework.</p>
+                    <h3>Experiment 04</h3>
+                    <p>Stochastic Gradient Descent (SGD) for Regression.</p>
                 </a>
                 <a href="experiments/exp5.html" class="experiment-card">
-                    <div class="number-badge">Experiment 05</div>
-                    <h3>Linear Programming</h3>
-                    <p>Minimizing linear objective functions subject to linear constraints using high-level optimization libraries.</p>
+                    <h3>Experiment 05</h3>
+                    <p>Linear (Simplex) and Quadratic (KKT) Programming.</p>
                 </a>
                 <a href="experiments/exp6.html" class="experiment-card">
-                    <div class="number-badge">Experiment 06</div>
-                    <h3>Quadratic-Linear Systems</h3>
-                    <p>Optimizing quadratic objectives under strictly linear constraints in multi-dimensional space.</p>
-                </a>
-                <a href="experiments/exp7.html" class="experiment-card">
-                    <div class="number-badge">Experiment 07</div>
-                    <h3>PuLP Modeling</h3>
-                    <p>Industrial-grade linear programming and modeling using the PuLP library for decision optimization.</p>
+                    <h3>Experiment 06</h3>
+                    <p>Solving LP and QP using CVXPY and PuLP.</p>
                 </a>
             </div>
         </section>
 
-        <section class="co-container" id="co3">
-            <h2 class="co-header">CO3: Advanced Non-Smooth Methods</h2>
-            <div class="experiments-grid">
-                <a href="experiments/exp8.html" class="experiment-card">
-                    <div class="number-badge">Experiment 08</div>
-                    <h3>Sub-gradient L1 Methods</h3>
-                    <p>Optimization of non-smooth objectives like L1-regularized loss functions for sparse recovery.</p>
+        <!-- CO3 -->
+        <section class="co-section">
+            <div class="co-title">
+                <h2>CO3: Non-Smooth and Interior Point Methods</h2>
+            </div>
+            <div class="experiment-list">
+                <a href="experiments/exp7.html" class="experiment-card">
+                    <h3>Experiment 07</h3>
+                    <p>Sub-gradient Method for L1-Regularization (LASSO).</p>
                 </a>
+                <a href="experiments/exp8.html" class="experiment-card">
+                    <h3>Experiment 08</h3>
+                    <p>Interior Point Method (Log-Barrier) Implementation.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- CO4 -->
+        <section class="co-section">
+            <div class="co-title">
+                <h2>CO4: Scalable and Distributed Optimization</h2>
+            </div>
+            <div class="experiment-list">
                 <a href="experiments/exp9.html" class="experiment-card">
-                    <div class="number-badge">Experiment 09</div>
-                    <h3>Regularization Selection</h3>
-                    <p>Effect of L1 penalty on feature selection and model simplicity in regression tasks.</p>
+                    <h3>Experiment 09</h3>
+                    <p>Mini-batch Gradient Descent Implementation.</p>
                 </a>
                 <a href="experiments/exp10.html" class="experiment-card">
-                    <div class="number-badge">Experiment 10</div>
-                    <h3>Interior Point Method</h3>
-                    <p>Solving constrained non-linear problems using logarithmic barrier functions and path-following.</p>
+                    <h3>Experiment 10</h3>
+                    <p>Distributed Gradient Descent Simulation.</p>
                 </a>
                 <a href="experiments/exp11.html" class="experiment-card">
-                    <div class="number-badge">Experiment 11</div>
-                    <h3>Interior Point 2D</h3>
-                    <p>Visualization and implementation of Interior Point methods for multi-variable constrained optimization.</p>
+                    <h3>Experiment 11</h3>
+                    <p>Elastic Net Regularization Optimization.</p>
+                </a>
+                <a href="experiments/exp12.html" class="experiment-card">
+                    <h3>Experiment 12</h3>
+                    <p>Group Lasso Method for Feature Selection.</p>
                 </a>
             </div>
         </section>
 
-        <section class="co-container" id="co4">
-            <h2 class="co-header">CO4: Scalable Optimization</h2>
-            <div class="experiments-grid">
-                <a href="experiments/exp12.html" class="experiment-card">
-                    <div class="number-badge">Experiment 12</div>
-                    <h3>Mini-batch Gradient Descent</h3>
-                    <p>Balancing computational efficiency and gradient stability through batch-based parameter updates.</p>
-                </a>
+        <!-- CO5 -->
+        <section class="co-section">
+            <div class="co-title">
+                <h2>CO5: Advanced Topics in Optimization</h2>
+            </div>
+            <div class="experiment-list">
                 <a href="experiments/exp13.html" class="experiment-card">
-                    <div class="number-badge">Experiment 13</div>
-                    <h3>Distributed Learning</h3>
-                    <p>Architectural simulation of parameter sharing and gradient averaging across multi-worker clusters.</p>
+                    <h3>Experiment 13</h3>
+                    <p>Parameter Averaging in Distributed Learning.</p>
                 </a>
                 <a href="experiments/exp14.html" class="experiment-card">
-                    <div class="number-badge">Experiment 14</div>
-                    <h3>Shifted Linear Models</h3>
-                    <p>Optimizing linear systems with non-zero biases using high-performance Batch-GD variants.</p>
+                    <h3>Experiment 14</h3>
+                    <p>Newton's Method for Shifted Linear Systems.</p>
                 </a>
                 <a href="experiments/exp15.html" class="experiment-card">
-                    <div class="number-badge">Experiment 15</div>
-                    <h3>Scalable Distributed Systems</h3>
-                    <p>Simulating worker-server communication overhead in large-scale machine learning optimization.</p>
+                    <h3>Experiment 15</h3>
+                    <p>Scalable Systems and Staleness Modeling.</p>
                 </a>
-            </div>
-        </section>
-
-        <section class="co-container" id="co5">
-            <h2 class="co-header">CO5: Modern Regularization & Large Scale</h2>
-            <div class="experiments-grid">
                 <a href="experiments/exp16.html" class="experiment-card">
-                    <div class="number-badge">Experiment 16</div>
-                    <h3>Elastic Net Regularization</h3>
-                    <p>Implementation of combined L1 and L2 penalties for robust feature selection and shrinkage.</p>
+                    <h3>Experiment 16</h3>
+                    <p>Elastic Net (Coordinate Descent Formulation).</p>
                 </a>
                 <a href="experiments/exp17.html" class="experiment-card">
-                    <div class="number-badge">Experiment 17</div>
-                    <h3>Group Lasso</h3>
-                    <p>Promoting sparsity at the group level for multi-task learning and categorical feature selection.</p>
+                    <h3>Experiment 17</h3>
+                    <p>Group Lasso for Variable Block Sparsity.</p>
                 </a>
                 <a href="experiments/exp18.html" class="experiment-card">
-                    <div class="number-badge">Experiment 18</div>
-                    <h3>Conjugate Gradient</h3>
-                    <p>Solving very large systems of linear equations using the Conjugate Gradient iterative method.</p>
+                    <h3>Experiment 18</h3>
+                    <p>Linear Conjugate Gradient Method.</p>
                 </a>
                 <a href="experiments/exp19.html" class="experiment-card">
-                    <div class="number-badge">Experiment 19</div>
-                    <h3>Quasi-Newton (BFGS)</h3>
-                    <p>Efficient approximation of the Hessian inverse for super-linear convergence without second derivatives.</p>
+                    <h3>Experiment 19</h3>
+                    <p>Quasi-Newton Method (BFGS Update).</p>
                 </a>
             </div>
         </section>
-
-        <footer>
-            <p>&copy; 2024 OTML Lab • Designed for Academic Excellence</p>
-        </footer>
     </div>
 </body>
 </html>

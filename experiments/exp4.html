@@ -3,116 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 04 • Quadratic Optimization</title>
+    <title>Experiment 04 • Stochastic Gradient Descent</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 04: Stochastic Gradient Descent (SGD)</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO2 / Experiment 04
+            <a href="../index.html">Home</a> / Experiment 04
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Quadratic Optimization (CVXPY)</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement Stochastic Gradient Descent (SGD) for linear regression, demonstrating how the model parameters are updated after processing each individual sample from the dataset.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
-                </div>
-                <div class="section-content">
-                    <p>To solve a constrained quadratic optimization problem using the CVXPY library, finding the minimum of a circular dish function subject to half-plane constraints.</p>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Unlike standard Gradient Descent which uses the entire dataset to compute gradients, Stochastic Gradient Descent (SGD) updates parameters for every single data point. This makes the optimization faster and able to handle huge datasets, though the path to the minimum is more "noisy" or "stochastic".</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Problem Formulation</strong>
-                        <p>Objective function: \( \text{minimize } f(x, y) = x^2 + y^2 \)</p>
-                        <p>Subject to:</p>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize parameters \( m \) and \( c \).</li>
+                    <li>For each epoch:
                         <ul>
-                            <li>\( x + y \ge 1 \)</li>
-                            <li>\( x \ge 0, y \ge 0 \)</li>
+                            <li>Shuffle the dataset (or select points randomly).</li>
+                            <li>For each training example \( (x, y) \):
+                                <ul>
+                                    <li>Calculate prediction \( \hat{y} = mx + c \).</li>
+                                    <li>Calculate Gradient for this single point: \( \frac{\partial L}{\partial m} = -(y - \hat{y})x \).</li>
+                                    <li>Update: \( m = m - \eta \cdot \frac{\partial L}{\partial m} \).</li>
+                                    <li>Update: \( c = c - \eta \cdot \frac{\partial L}{\partial c} \).</li>
+                                </ul>
+                            </li>
                         </ul>
-                    </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Analytical Solution</strong>
-                        <p>The unconstrained minimum is at \((0,0)\). However, this point violates \( x+y \ge 1 \). The closest point to the origin on the line \( x+y = 1 \) is the intersection with the normal line \( y = x \).</p>
-                        <div class="formula">\( x + x = 1 \implies x = 0.5, y = 0.5 \)</div>
-                        <p>Minimum Value: \( f(0.5, 0.5) = 0.5^2 + 0.5^2 = 0.5 \)</p>
-                    </div>
+        <section class="section">
+            <div class="section-title">Formulas</div>
+            <div class="section-content">
+                <div class="formula">
+                    Error per point: \( e = y - (mx + c) \)
                 </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">
-                    <span>💻</span> Python Implementation
+                <div class="formula">
+                    Update Gradient: \( \nabla m = -e \cdot x, \quad \nabla c = -e \)
                 </div>
-                <div class="section-content">
-                    <div class="code-block">
-<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
-
-<span class="comment"># Define variables</span>
-x = cp.Variable()
-y = cp.Variable()
-
-<span class="comment"># Define objective</span>
-objective = cp.Minimize(x**<span class="number">2</span> + y**<span class="number">2</span>)
-
-<span class="comment"># Define constraints</span>
-constraints = [x + y >= <span class="number">1</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
-
-<span class="comment"># Solve problem</span>
-prob = cp.Problem(objective, constraints)
-prob.solve()
-
-<span class="function">print</span>(<span class="string">f"Status: {prob.status}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal x: {x.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Optimal y: {y.value:.6f}"</span>)
-<span class="function">print</span>(<span class="string">f"Minimum value: {prob.value:.6f}"</span>)
-                    </div>
+                <div class="formula">
+                    Parameter Update: \( \theta = \theta - \eta \nabla_\theta L \)
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📊</span> Expected Output
-                </div>
-                <div class="output-block">
-                    <div class="output-label">Terminal Console</div>
-Status: optimal<br>
-Optimal x: 0.500000<br>
-Optimal y: 0.500000<br>
-Minimum value: 0.500000
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-content">
+                <p>Assume point \( (2.5, 6.1) \) and model \( y = 1.0x + 0.5 \), \( \eta=0.01 \).</p>
+                <ul>
+                    <li>Prediction: \( 1.0(2.5) + 0.5 = 3.0 \)</li>
+                    <li>Error: \( 6.1 - 3.0 = 3.1 \)</li>
+                    <li>Update \( m \): \( 1.0 - 0.01(-3.1 \cdot 2.5) = 1.0 + 0.0775 = 1.0775 \)</li>
+                    <li>Update \( c \): \( 0.5 - 0.01(-3.1) = 0.5 + 0.031 = 0.531 \)</li>
+                </ul>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>✅</span> Result & Verification
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        CVXPY successfully identifies the optimal point at (0.5, 0.5). If we set \( x+y \ge 10 \), the optimal value would increase to 50, showing how constraints shift the equilibrium.
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import random
 
-            <nav class="nav-buttons">
-                <a href="exp3.html" class="btn btn-secondary">⬅️ Experiment 03</a>
-                <a href="exp5.html" class="btn btn-primary">Proceed to Experiment 05 ➔</a>
-            </nav>
-        </article>
+# Synthetic data: y = 2x + 1
+data = [(x, 2*x + 1 + random.uniform(-1, 1)) for x in [random.uniform(0, 10) for _ in range(100)]]
 
-        <footer>
-            <p>OTML Lab • Machine Learning Optimization Series</p>
-        </footer>
+m, c = 0.0, 0.0
+eta = 0.01
+
+for epoch in range(100):
+    x, y = random.choice(data)
+    y_pred = m * x + c
+    error = y - y_pred
+    
+    # SGD updates
+    m = m - eta * (-error * x)
+    c = c - eta * (-error)
+
+print(f"Final model: y = {m:.4f}x + {c:.4f}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+epoch 1: m=0.3404, c=0.0881, loss=38.8000
+...
+Final learned model:
+y^ = 2.1467x + 0.4851
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp3.html" class="btn btn-secondary">⬅️ Experiment 03</a>
+            <a href="exp5.html" class="btn">Next: Experiment 05 ➔</a>
+        </div>
     </div>
 </body>
 </html>

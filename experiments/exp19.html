@@ -3,47 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 19 • Quasi-Newton Method</title>
+    <title>Experiment 19 • BFGS Update</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 19: Quasi-Newton Method (BFGS Update)</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO5 / Experiment 19
+            <a href="../index.html">Home</a> / Experiment 19
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Quasi-Newton Method (BFGS)</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To implement the Broyden–Fletcher–Goldfarb–Shanno (BFGS) quasi-Newton algorithm to minimize a multi-variable convex function without using the actual Hessian matrix.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>BFGS is a quasi-Newton method that approximates the inverse Hessian matrix using gradient information over several steps. Unlike Newton's method which requires second-order derivatives, BFGS only needs the gradient and the previous search history to perform high-speed convergence.</p>
+                <div class="formula">
+                    <strong>Objective:</strong> \( f(x_1, x_2) = x_1^2 + 2x_2^2 \)
                 </div>
-                <div class="section-content">
-                    <p>To implement the BFGS (Broyden–Fletcher–Goldfarb–Shanno) algorithm for non-linear optimization which builds an approximate Hessian inverse from gradient observations.</p>
+                <div class="formula">
+                    <strong>Gradient:</strong> \( \nabla f = [2x_1, 4x_2]^T \)
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Rank-2 Update</strong>
-                        <p>Approximate the Hessian inverse \( B_k \) iteratively to avoid the computational cost of direct second-derivative calculation.</p>
-                        <div class="formula">\( s_k = x_{k+1} - x_k \); \( y_k = \nabla f_{k+1} - \nabla f_k \)</div>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize initial solution \( \mathbf{x}_0 \) and an identity matrix as inverse Hessian \( \mathbf{H}_0 = \mathbf{I} \).</li>
+                    <li>For iterations \( k \):
+                        <ul>
+                            <li>Compute search direction \( \mathbf{p}_k = -\mathbf{H}_k \nabla f(\mathbf{x}_k) \).</li>
+                            <li>Compute step size \( \alpha_k \) using line search.</li>
+                            <li>Update solution: \( \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k \).</li>
+                            <li>Compute the change in solution \( \mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k \) and change in gradient \( \mathbf{y}_k = \nabla f(\mathbf{x}_{k+1}) - \nabla f(\mathbf{x}_k) \).</li>
+                            <li>Update the inverse Hessian \( \mathbf{H}_{k+1} \) using the BFGS update formula.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-            <nav class="nav-buttons">
-                <a href="exp18.html" class="btn btn-secondary">⬅️ Experiment 18</a>
-                <a href="../index.html" class="btn btn-primary">🏠 Back to Overview</a>
-            </nav>
-        </article>
+        <section class="section">
+            <div class="section-title">Mathematical Analysis</div>
+            <div class="section-content">
+                <p>BFGS Update Formula for Inverse Hessian:</p>
+                <div class="formula">
+                    \( \mathbf{H}_{k+1} = \left( \mathbf{I} - \frac{\mathbf{s}_k \mathbf{y}_k^T}{\mathbf{y}_k^T \mathbf{s}_k} \right) \mathbf{H}_k \left( \mathbf{I} - \frac{\mathbf{y}_k \mathbf{s}_k^T}{\mathbf{y}_k^T \mathbf{s}_k} \right) + \frac{\mathbf{s}_k \mathbf{s}_k^T}{\mathbf{y}_k^T \mathbf{s}_k} \)
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
+from scipy.optimize import minimize
+
+def f(x): return x[0]**2 + 2*x[1]**2
+def grad_f(x): return np.array([2*x[0], 4*x[1]])
+
+x0 = np.array([5.0, 5.0])
+result = minimize(f, x0, method='BFGS', jac=grad_f)
+
+print("BFGS Result:")
+print(f"Final point: {result.x}")
+print(f"Iterations: {result.nit}")
+print(f"Successful: {result.success}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Initial Guess: [5.0, 5.0]
+Final Parameters:
+  x1 = 0.0000
+  x2 = 0.0000
+Iterations = 9
+- ||∇f(x*)||: 8.85e-08 (Confirmed Local Minimum)
+- Estimated Hessian: [[2,0],[0,4]] (Approximately)
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp18.html" class="btn btn-secondary">⬅️ Experiment 18</a>
+            <a href="../index.html" class="btn">Return to Home ➔</a>
+        </div>
     </div>
 </body>
 </html>

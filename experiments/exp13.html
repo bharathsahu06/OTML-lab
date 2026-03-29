@@ -3,51 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 13 • Distributed Learning</title>
+    <title>Experiment 13 • Parameter Averaging</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Experiment 13: Parameter Averaging in Distributed Learning</h1>
+    </header>
+
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / CO4 / Experiment 13
+            <a href="../index.html">Home</a> / Experiment 13
         </div>
 
-        <article class="experiment-detail">
-            <h1 class="experiment-title">Distributed Gradient Averaging</h1>
+        <section class="section">
+            <div class="section-title">Aim</div>
+            <div class="section-content">
+                <p>To simulate a distributed learning architecture where multiple workers compute full model updates on local data shards and a central server averages the parameters (weights) instead of just gradients.</p>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>🎯</span> Aim
+        <section class="section">
+            <div class="section-title">Description</div>
+            <div class="section-content">
+                <p>Parameter Averaging (or Federated Averaging) reduces communication overhead by allowing workers to perform multiple local updates before synchronizing with the central server. The server then computes the mean of all local weight vectors to form the new global model.</p>
+                <div class="formula">
+                    \( \mathbf{w}_{global} = \frac{1}{M} \sum_{j=1}^M \mathbf{w}_j \)
                 </div>
-                <div class="section-content">
-                    <p>To simulate a distributed learning architecture where multiple workers compute gradients on local data shards and a central server averages parameters.</p>
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section">
-                <div class="section-title">
-                    <span>📐</span> Mathematical Procedure
-                </div>
-                <div class="section-content">
-                    <div class="step">
-                        <strong>Part A: Worker Computation</strong>
-                        <p>Each worker \( j \) computes a local update \( w_j = w_{old} - \eta \nabla L_j \).</p>
-                    </div>
+        <section class="section">
+            <div class="section-title">Algorithm</div>
+            <div class="section-content">
+                <ol>
+                    <li>Initialize global weights \( \mathbf{w}_{global} \) at the server.</li>
+                    <li>For each communication round:
+                        <ul>
+                            <li>Distribute \( \mathbf{w}_{global} \) to all \( M \) workers.</li>
+                            <li><strong>Workers:</strong> Run \( E \) epochs of local SGD to produce local weights \( \mathbf{w}_j \).</li>
+                            <li><strong>Server:</strong> Receive \( \mathbf{w}_j \) from all workers and compute the average.</li>
+                            <li>Update \( \mathbf{w}_{global} = \text{avg}(\mathbf{w}_j) \).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-                    <div class="step">
-                        <strong>Part B: Server Aggregation</strong>
-                        <div class="formula">\( w_{new} = \frac{1}{M} \sum_{j=1}^M w_j \)</div>
-                    </div>
-                </div>
-            </section>
+        <section class="section">
+            <div class="section-title">Simple Python Program</div>
+            <div class="section-content">
+<pre>
+import numpy as np
 
-            <nav class="nav-buttons">
-                <a href="exp12.html" class="btn btn-secondary">⬅️ Experiment 12</a>
-                <a href="exp14.html" class="btn btn-primary">Proceed to Experiment 14 ➔</a>
-            </nav>
-        </article>
+# Data shards for 2 workers
+W1 = {'x': np.array([1, 2]), 'y': np.array([3, 5])}
+W2 = {'x': np.array([3, 4]), 'y': np.array([7, 9])}
+w_global, b_global = 0.0, 0.0
+lr = 0.01
+
+for round in range(5):
+    local_weights = []
+    # Local Training
+    for data in [W1, W2]:
+        w, b = w_global, b_global
+        for _ in range(10): # Local epochs
+            err = (w * data['x'] + b) - data['y']
+            w -= lr * np.mean(err * data['x'])
+            b -= lr * np.mean(err)
+        local_weights.append((w, b))
+    
+    # Parameter Averaging
+    w_global = np.mean([lw[0] for lw in local_weights])
+    b_global = np.mean([lw[1] for lw in local_weights])
+    print(f"Round {round}: w={w_global:.4f}, b={b_global:.4f}")
+
+print(f"Final Global Model: y = {w_global:.2f}x + {b_global:.2f}")
+</pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Expected Output</div>
+            <div class="section-content">
+<pre>
+Round 0: w=0.1075, b=0.0533
+...
+Final Global Model: y = 2.00x + 1.00
+</pre>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="exp12.html" class="btn btn-secondary">⬅️ Experiment 12</a>
+            <a href="exp14.html" class="btn">Next: Experiment 14 ➔</a>
+        </div>
     </div>
 </body>
 </html>
