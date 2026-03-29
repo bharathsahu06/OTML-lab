@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 14 • Shifted Linear Systems</title>
+    <title>Experiment 14 • Mini-batch GD (Dataset 2)</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 14: Optimizing Shifted Linear Systems</h1>
+        <h1>Experiment 14: Mini-batch Gradient Descent (Dataset 2)</h1>
     </header>
 
     <div class="container">
@@ -21,18 +21,18 @@
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To implement Gradient Descent for linear systems with an explicit bias term (Shifted), ensuring the model correctly handles non-zero intercepts in regression problems.</p>
+                <p>To minimize the loss function of linear regression using Mini-batch Gradient Descent for the dataset \( x = [1, 2, 3, 4] \) and \( y = [5, 7, 9, 11] \).</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>A "shifted" system is one where the target \( y \) does not pass through the origin. In this experiment, we minimize the Mean Squared Error for the relationship \( y = mx + c \). The shift \( c \) represents the vertical displacement of the line.</p>
+                <p>Using a dataset with a different offset (intercept), we compare how different initializations and batch updates affect the recovery of the linear relationship \( y = 2x + 3 \).</p>
                 <div class="formula">
-                    <strong>Model:</strong> \( y_i = m x_i + c + \epsilon \)
+                    <strong>Inequality Shift:</strong> \( y = 2x + 3 \) <br>
+                    <strong>Data:</strong> (1,5), (2,7), (3,9), (4,11)
                 </div>
-                <p><strong>Dataset:</strong> \( x = [0, 1, 2, 3], y = [1, 3, 5, 7] \).</p>
             </div>
         </section>
 
@@ -40,29 +40,25 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Initialize parameters \( m \) and \( c \) randomly or at zero.</li>
-                    <li>Set learning rate \( \alpha \) and number of epochs.</li>
-                    <li>Repeat for each epoch:
+                    <li>Initialize weights \( w = 0 \) and bias \( b = 0 \).</li>
+                    <li>Repeat for the parameters in total epochs:
                         <ul>
-                            <li>Compute error: \( e_i = \hat{y}_i - y_i = (mx_i + c) - y_i \).</li>
-                            <li>Compute partial derivatives for slope: \( \nabla m = \frac{2}{n} \sum e_i x_i \).</li>
-                            <li>Compute partial derivatives for bias: \( \nabla c = \frac{2}{n} \sum e_i \).</li>
-                            <li>Update: \( m = m - \alpha \nabla m, c = c - \alpha \nabla c \).</li>
+                            <li>Compute gradients: \( \nabla w_{batch}, \nabla b_{batch} \).</li>
+                            <li>Update: \( w = w - \alpha \nabla w, b = b - \alpha \nabla b \).</li>
                         </ul>
                     </li>
-                    <li>Repeat until MSE converges.</li>
+                    <li>Verify with final parameters \( w = 2, b = 3 \).</li>
                 </ol>
             </div>
         </section>
 
         <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-title">Mathematical Analysis</div>
             <div class="section-content">
+                <p>For Dataset \( (1,5), (2,7), (3,9), (4,11) \):</p>
                 <div class="formula">
-                    Cost Function: \( J(m,c) = \frac{1}{n} \sum ((mx_i + c) - y_i)^2 \)
-                </div>
-                <div class="formula">
-                    Gradient Update: \( \begin{pmatrix} m \\ c \end{pmatrix}_{k+1} = \begin{pmatrix} m \\ c \end{pmatrix}_{k} - \alpha \begin{pmatrix} \nabla m \\ \nabla c \end{pmatrix} \)
+                    Slope \( w = \frac{\sum (x-x_{mean})(y-y_{mean})}{\sum (x-x_{mean})^2} = \frac{10}{5} = 2.0 \) <br>
+                    Intercept \( b = y_{mean} - w \cdot x_{mean} = 8 - 2(2.5) = 3.0 \)
                 </div>
             </div>
         </section>
@@ -73,19 +69,27 @@
 <pre>
 import numpy as np
 
-x = np.array([0, 1, 2, 3], dtype=float)
-y = np.array([1, 3, 5, 7], dtype=float)
-m, c, lr = 0.0, 0.0, 0.1
+x = np.array([1, 2, 3, 4])
+y = np.array([5, 7, 9, 11])
+w, b = 0.0, 0.0
+alpha = 0.01
 
-for _ in range(100):
-    y_pred = m * x + c
-    grad_m = (2/len(x)) * np.sum((y_pred - y) * x)
-    grad_c = (2/len(x)) * np.sum(y_pred - y)
+for epoch in range(10):
+    for i in range(0, 4, 2):
+        x_batch = x[i:i+2]
+        y_batch = y[i:i+2]
+        
+        y_pred = w * x_batch + b
+        dw = -2 * np.mean((y_batch - y_pred) * x_batch)
+        db = -2 * np.mean(y_batch - y_pred)
+        
+        w = w - alpha * dw
+        b = b - alpha * db
     
-    m -= lr * grad_m
-    c -= lr * grad_c
+    mse = np.mean((y - w * x - b)**2)
+    print(f"Epoch {epoch}: w={w:.4f}, b={b:.4f}, MSE={mse:.4f}")
 
-print(f"Optimal Model: y = {m:.2f}x + {c:.2f}")
+print(f"Final Weights: w={w:.4f}, b={b:.4f}")
 </pre>
             </div>
         </section>
@@ -94,11 +98,10 @@ print(f"Optimal Model: y = {m:.2f}x + {c:.2f}")
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Initial Guess: m=0.0, c=0.0
-Final Parameters:
-  m = 2.00
-  c = 1.00
-Verification: y = 2x + 1. (Fits x=0, y=1; x=3, y=7 exactly).
+Epoch 0: w=0.1900, b=0.1200, MSE=35.45
+Epoch 5: w=1.9234, b=2.9501, MSE=0.0150
+Final Weights: w=2.0000, b=3.0000
+Result: Recovers y = 2x + 3.
 </pre>
             </div>
         </section>

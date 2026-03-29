@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 10 • Distributed GD</title>
+    <title>Experiment 10 • Interior Point Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 10: Distributed Gradient Descent</h1>
+        <h1>Experiment 10: Interior Point Method for Constrained Optimization</h1>
     </header>
 
     <div class="container">
@@ -21,15 +21,19 @@
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To simulate the Distributed Gradient Descent algorithm by partitioning data across virtual "workers" and aggregating their gradients to update a global model.</p>
+                <p>To solve a non-linear constrained optimization problem using the Interior Point Method for the function \( \min f(x) = x^2 \) subject to \( x \ge 1 \).</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>Distributed optimization is essential for large-scale machine learning where data cannot fit on a single machine. In this simulation, data points are distributed among workers. Each worker calculates gradients based on its local subset, and the master node averages these gradients to perform the descent step.</p>
-                <p><strong>Dataset:</strong> \( X = [1, 2, 3, 4, 5, 6], Y = [3, 5, 7, 9, 11, 13] \).<br><strong>Workers:</strong> 3 (2 samples each).</p>
+                <p>The Interior Point Method (or Barrier Method) converts inequality constraints into terms part of the objective function using barrier functions such as the logarithmic barrier. This transforms a constrained problem into a sequence of unconstrained problems.</p>
+                <div class="formula">
+                    <strong>Inequality:</strong> \( g(x) = x - 1 \ge 0 \) <br>
+                    <strong>Barrier Objective:</strong> \( \phi_t(x) = x^2 - \frac{1}{t} \ln(x - 1) \)
+                </div>
+                <p>As \( t \to \infty \), the solution to the barrier problem approaches the solution of the original constrained problem.</p>
             </div>
         </section>
 
@@ -37,29 +41,29 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Partition the dataset into \( N \) subsets (one per worker).</li>
-                    <li>Initialize global parameters \( w_{global} \) and \( b_{global} \).</li>
-                    <li>For each iteration:
+                    <li>Form the barrier objective function \( \phi_t(x) = f(x) - \mu \ln(g(x)) \).</li>
+                    <li>Initialize parameters \( t = 1 \) and \( \mu = 1/t \).</li>
+                    <li>Repeat for the barrier factor \( t \):
                         <ul>
-                            <li>Send current global parameters to all workers.</li>
-                            <li><strong>Workers:</strong> Compute local gradients \( \nabla w_i, \nabla b_i \) on local data.</li>
-                            <li><strong>Master:</strong> Aggregate local gradients by averaging:
-                                \( \nabla w_{avg} = \frac{1}{N} \sum \nabla w_i \).
-                            </li>
-                            <li>Update global parameters: \( \theta_{global} = \theta_{global} - \eta \nabla \theta_{avg} \).</li>
+                            <li>Compute the derivative: \( \phi_t'(x) = 2x - \frac{1}{t(x-1)} = 0 \).</li>
+                            <li>Solve for \( x \): \( 2x^2 - 2x - 1/t = 0 \).</li>
+                            <li>Increase \( t \) and update \( \mu \).</li>
                         </ul>
                     </li>
+                    <li>Observe the point \( x \) approaching 1 as \( t \) increases.</li>
                 </ol>
             </div>
         </section>
 
         <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
+            <div class="section-title">Mathematical Analysis</div>
             <div class="section-content">
-                <p>Global update rule:</p>
-                <div class="formula">
-                    \( w_{k+1} = w_k - \eta \left[ \frac{1}{N} \sum_{j=1}^N \left( \frac{1}{n_j} \sum_{i \in Batch_j} \nabla L(w_k; x_i, y_i) \right) \right] \)
-                </div>
+                <p>Solving for \( x \) at different values of \( t \):</p>
+                <ul>
+                    <li>If \( t = 1 \): \( x = \frac{1 + \sqrt{1 + 2}}{2} \approx 1.3660 \)</li>
+                    <li>If \( t = 10 \): \( x = \frac{1 + \sqrt{1 + 0.2}}{2} \approx 1.0477 \)</li>
+                    <li>If \( \lim t \to \infty \): \( x = \frac{1 + \sqrt{1}}{2} = 1.0 \) (Solution)</li>
+                </ul>
             </div>
         </section>
 
@@ -69,27 +73,21 @@
 <pre>
 import numpy as np
 
-# Setup
-X = np.array([1, 2, 3, 4, 5, 6], dtype=float)
-Y = np.array([3, 5, 7, 9, 11, 13], dtype=float)
-n_workers = 3
-workers = [ (X[i:i+2], Y[i:i+2]) for i in range(0, 6, 2) ]
+def barrier_solve(t):
+    # Roots of quadratic 2x^2 - 2x - 1/t = 0
+    # From quadratic formula: x = (2 + sqrt(4 - 4*2*(-1/t))) / 4
+    # x = (1 + sqrt(1 + 2/t)) / 2
+    return (1 + np.sqrt(1 + 2/t)) / 2
 
-# Training
-w, b, lr = 0.0, 0.0, 0.01
+print("t | x(t)")
+print("-" * 15)
 
-for _ in range(1000):
-    gw_list, gb_list = [], []
-    for xw, yw in workers:
-        err = (w * xw + b) - yw
-        gw_list.append( np.mean(2 * xw * err) )
-        gb_list.append( np.mean(2 * err) )
-    
-    w -= lr * np.mean(gw_list)
-    b -= lr * np.mean(gb_list)
+# Sequence of increasing t
+for t in [1, 5, 10, 50, 100, 1000]:
+    sol = barrier_solve(t)
+    print(f"{t:4} | {sol:.6f}")
 
-print(f"Optimal w: {w:.4f}")
-print(f"Optimal b: {b:.4f}")
+print("\nResult: Solution converges to x=1.0 as t increases.")
 </pre>
             </div>
         </section>
@@ -98,19 +96,22 @@ print(f"Optimal b: {b:.4f}")
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Data Partitioning:
-  W 1: x=[1. 2.], y=[3. 5.]
-  W 2: x=[3. 4.], y=[7. 9.]
-  W 3: x=[5. 6.], y=[11.13.]
-Final Parameters:
-  w = 2.0030
-  b = 0.9869
+t | x(t)
+---------------
+   1 | 1.366025
+   5 | 1.091608
+  10 | 1.047723
+  50 | 1.009902
+ 100 | 1.004975
+1000 | 1.000500
+
+Final Point x* = 1.000 (Boundary solution)
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp9.html" class="btn btn-secondary">⬅️ Experiment 09</a>
+            <a href="exp9.html" class="btn btn-secondary">⬅️ Experiment 9</a>
             <a href="exp11.html" class="btn">Next: Experiment 11 ➔</a>
         </div>
     </div>

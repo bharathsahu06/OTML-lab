@@ -22,20 +22,20 @@
         <!-- CO1 -->
         <section class="co-section">
             <div class="co-title">
-                <h2>CO1: Gradient Based Optimization</h2>
+                <h2>CO1: Basic Optimization Methods</h2>
             </div>
             <div class="experiment-list">
                 <a href="experiments/exp1.html" class="experiment-card">
                     <h3>Experiment 01</h3>
-                    <p>Linear Regression using Ordinary Least Squares (OLS).</p>
+                    <p>Gradient Descent for function \( f(x) = x^2 \).</p>
                 </a>
                 <a href="experiments/exp2.html" class="experiment-card">
                     <h3>Experiment 02</h3>
-                    <p>Linear Regression using Gradient Descent (GD).</p>
+                    <p>Newton's Method for \( f(x) = x^4 - 3x^2 + 2 \).</p>
                 </a>
                 <a href="experiments/exp3.html" class="experiment-card">
                     <h3>Experiment 03</h3>
-                    <p>Newton's Method for 1D and 2D Optimization.</p>
+                    <p>Stochastic Gradient Descent for \( f(x) = x^2 \).</p>
                 </a>
             </div>
         </section>
@@ -43,20 +43,24 @@
         <!-- CO2 -->
         <section class="co-section">
             <div class="co-title">
-                <h2>CO2: Stochastic and Constrained Optimization</h2>
+                <h2>CO2: Constrained Optimization</h2>
             </div>
             <div class="experiment-list">
                 <a href="experiments/exp4.html" class="experiment-card">
                     <h3>Experiment 04</h3>
-                    <p>Stochastic Gradient Descent (SGD) for Regression.</p>
+                    <p>Minimize \( f(x,y)=x^2+y^2 \) with constraints (CVXPY).</p>
                 </a>
                 <a href="experiments/exp5.html" class="experiment-card">
                     <h3>Experiment 05</h3>
-                    <p>Linear (Simplex) and Quadratic (KKT) Programming.</p>
+                    <p>Linear Objective Optimization (3x+2y) (CVXPY).</p>
                 </a>
                 <a href="experiments/exp6.html" class="experiment-card">
                     <h3>Experiment 06</h3>
-                    <p>Solving LP and QP using CVXPY and PuLP.</p>
+                    <p>Quadratic objective \( x_1^2+x_2^2 \) (CVXPY).</p>
+                </a>
+                <a href="experiments/exp7.html" class="experiment-card">
+                    <h3>Experiment 07</h3>
+                    <p>Linear Programming with and without PuLP.</p>
                 </a>
             </div>
         </section>
@@ -67,13 +71,21 @@
                 <h2>CO3: Non-Smooth and Interior Point Methods</h2>
             </div>
             <div class="experiment-list">
-                <a href="experiments/exp7.html" class="experiment-card">
-                    <h3>Experiment 07</h3>
-                    <p>Sub-gradient Method for L1-Regularization (LASSO).</p>
-                </a>
                 <a href="experiments/exp8.html" class="experiment-card">
                     <h3>Experiment 08</h3>
-                    <p>Interior Point Method (Log-Barrier) Implementation.</p>
+                    <p>Sub-gradient Method with L1-regularized loss (Dataset 1).</p>
+                </a>
+                <a href="experiments/exp9.html" class="experiment-card">
+                    <h3>Experiment 09</h3>
+                    <p>Sub-gradient Method with L1-regularized loss (Dataset 2).</p>
+                </a>
+                <a href="experiments/exp10.html" class="experiment-card">
+                    <h3>Experiment 10</h3>
+                    <p>Interior point method for \( \min f(x)=x^2 \) s.t. \( x \ge 1 \).</p>
+                </a>
+                <a href="experiments/exp11.html" class="experiment-card">
+                    <h3>Experiment 11</h3>
+                    <p>Interior point method for \( \min f(x,y)=x+y \) s.t. \( x,y \ge 1 \).</p>
                 </a>
             </div>
         </section>
@@ -81,24 +93,24 @@
         <!-- CO4 -->
         <section class="co-section">
             <div class="co-title">
-                <h2>CO4: Scalable and Distributed Optimization</h2>
+                <h2>CO4: Distributed and Stochastic Systems</h2>
             </div>
             <div class="experiment-list">
-                <a href="experiments/exp9.html" class="experiment-card">
-                    <h3>Experiment 09</h3>
-                    <p>Mini-batch Gradient Descent Implementation.</p>
-                </a>
-                <a href="experiments/exp10.html" class="experiment-card">
-                    <h3>Experiment 10</h3>
-                    <p>Distributed Gradient Descent Simulation.</p>
-                </a>
-                <a href="experiments/exp11.html" class="experiment-card">
-                    <h3>Experiment 11</h3>
-                    <p>Elastic Net Regularization Optimization.</p>
-                </a>
                 <a href="experiments/exp12.html" class="experiment-card">
                     <h3>Experiment 12</h3>
-                    <p>Group Lasso Method for Feature Selection.</p>
+                    <p>Mini-batch Gradient Descent for \( y=2x+1 \).</p>
+                </a>
+                <a href="experiments/exp13.html" class="experiment-card">
+                    <h3>Experiment 13</h3>
+                    <p>Distributed Gradient Descent Simulation (6 points).</p>
+                </a>
+                <a href="experiments/exp14.html" class="experiment-card">
+                    <h3>Experiment 14</h3>
+                    <p>Mini-batch Gradient Descent for \( y=2x+3 \).</p>
+                </a>
+                <a href="experiments/exp15.html" class="experiment-card">
+                    <h3>Experiment 15</h3>
+                    <p>Distributed Gradient Descent Simulation (4 points).</p>
                 </a>
             </div>
         </section>
@@ -106,36 +118,24 @@
         <!-- CO5 -->
         <section class="co-section">
             <div class="co-title">
-                <h2>CO5: Advanced Topics in Optimization</h2>
+                <h2>CO5: Regularization & Advanced Methods</h2>
             </div>
             <div class="experiment-list">
-                <a href="experiments/exp13.html" class="experiment-card">
-                    <h3>Experiment 13</h3>
-                    <p>Parameter Averaging in Distributed Learning.</p>
-                </a>
-                <a href="experiments/exp14.html" class="experiment-card">
-                    <h3>Experiment 14</h3>
-                    <p>Newton's Method for Shifted Linear Systems.</p>
-                </a>
-                <a href="experiments/exp15.html" class="experiment-card">
-                    <h3>Experiment 15</h3>
-                    <p>Scalable Systems and Staleness Modeling.</p>
-                </a>
                 <a href="experiments/exp16.html" class="experiment-card">
                     <h3>Experiment 16</h3>
-                    <p>Elastic Net (Coordinate Descent Formulation).</p>
+                    <p>L1, L2 Regularization and Elastic Net Regression.</p>
                 </a>
                 <a href="experiments/exp17.html" class="experiment-card">
                     <h3>Experiment 17</h3>
-                    <p>Group Lasso for Variable Block Sparsity.</p>
+                    <p>Grouped Sparsity demonstration using Group Lasso.</p>
                 </a>
                 <a href="experiments/exp18.html" class="experiment-card">
                     <h3>Experiment 18</h3>
-                    <p>Linear Conjugate Gradient Method.</p>
+                    <p>Conjugate Gradient Method for Linear Systems \( Ax=b \).</p>
                 </a>
                 <a href="experiments/exp19.html" class="experiment-card">
                     <h3>Experiment 19</h3>
-                    <p>Quasi-Newton Method (BFGS Update).</p>
+                    <p>Quasi-Newton Method for \( f(x_1,x_2)=x_1^2+2x_2^2 \).</p>
                 </a>
             </div>
         </section>

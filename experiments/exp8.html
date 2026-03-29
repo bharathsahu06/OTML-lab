@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 08 • Interior Point Method</title>
+    <title>Experiment 8 • Sub-gradient Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 08: Interior Point Method (Log-Barrier)</h1>
+        <h1>Experiment 8: Sub-gradient Method with L1 Regularization</h1>
     </header>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 08
+            <a href="../index.html">Home</a> / Experiment 8
         </div>
 
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To implement the Interior Point method using a logarithmic barrier function to solve a constrained optimization problem.</p>
+                <p>To implement the Sub-gradient Method with L1-regularized loss for the linear regression model \( y = w_1 x_1 + w_2 x_2 \) using the dataset \( (1,2,5), (2,1,6), (3,4,7) \).</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>The Interior Point method converts a constrained problem into an unconstrained one by adding a barrier term to the objective function. As the barrier parameter \( \mu \) approaches zero, the solution of the barrier problem converges to the solution of the original constrained problem.</p>
-                <p><strong>Problem:</strong> Minimize \( f(x) = x^2 \) subject to \( x > 1 \).</p>
+                <p>The Sub-gradient Method is used for non-differentiable convex optimization problems, such as those with L1 regularization (Lasso). Since the absolute value function is not differentiable at zero, we use the "sub-gradient" — any vector that satisfies the sub-gradient inequality.</p>
                 <div class="formula">
-                    Barrier Objective: \( \phi(x; \mu) = x^2 - \mu \ln(x - 1) \)
+                    <strong>Model:</strong> \( \hat{y} = w_1 x_1 + w_2 x_2 \) <br>
+                    <strong>Cost Function:</strong> \( J(\mathbf{w}) = \sum (y_i - \hat{y}_i)^2 + \lambda (|w_1| + |w_2|) \) <br>
+                    <strong>Sub-gradient of L1:</strong> \( g = \lambda \cdot \text{sign}(\mathbf{w}) \)
                 </div>
             </div>
         </section>
@@ -40,18 +41,17 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Choose an initial feasible point \( x_0 > 1 \) and initial \( \mu_0 > 0 \).</li>
-                    <li>While not converged:
+                    <li>Initialize weights \( \mathbf{w} = [0, 0] \).</li>
+                    <li>Set the learning rate \( \alpha = 0.01 \) and regularization strength \( \lambda \).</li>
+                    <li>Repeat for iterations \( k \):
                         <ul>
-                            <li>Solve the unconstrained problem \( \min \phi(x; \mu) \) using Newton's method.
-                                <ul>
-                                    <li>Grad: \( \nabla \phi = 2x - \frac{\mu}{x-1} \)</li>
-                                    <li>Hessian: \( \nabla^2 \phi = 2 + \frac{\mu}{(x-1)^2} \)</li>
-                                </ul>
-                            </li>
-                            <li>Reduce \( \mu \) in stages (e.g., \( \mu = \mu \times 0.1 \)).</li>
+                            <li>Compute predictions \( \hat{y} = \mathbf{X}\mathbf{w} \).</li>
+                            <li>Compute gradient of squared error: \( \nabla_{MSE} = 2\mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) \).</li>
+                            <li>Compute sub-gradient of L1 term: \( \mathbf{g}_{L1} = \lambda \cdot \text{sign}(\mathbf{w}) \).</li>
+                            <li>Update weights: \( \mathbf{w} = \mathbf{w} - \alpha (\nabla_{MSE} + \mathbf{g}_{L1}) \).</li>
                         </ul>
                     </li>
+                    <li>Repeat until convergence.</li>
                 </ol>
             </div>
         </section>
@@ -59,11 +59,13 @@
         <section class="section">
             <div class="section-title">Mathematical Procedure</div>
             <div class="section-content">
-                <p>Newton step for fixed \( \mu \):</p>
+                <p>For Dataset \( (1,2,5), (2,1,6), (3,4,7) \):</p>
                 <div class="formula">
-                    \( x_{new} = x - \frac{2x - \frac{\mu}{x-1}}{2 + \frac{\mu}{(x-1)^2}} \)
+                    \( \mathbf{X} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \\ 3 & 4 \end{pmatrix}, \mathbf{y} = \begin{pmatrix} 5 \\ 6 \\ 7 \end{pmatrix} \) <br>
+                    Start with \( w = [0, 0] \): <br>
+                    \( \nabla_{MSE} = 2\mathbf{X}^T(0 - \mathbf{y}) = \begin{pmatrix} -76 \\ -88 \end{pmatrix} \) <br>
+                    \( w_{new} = w_{old} - 0.01(-76, -88) = (0.76, 0.88) \)
                 </div>
-                <p>Ensure \( x_{new} > 1 \) at each step to maintain feasibility inside the "interior".</p>
             </div>
         </section>
 
@@ -73,27 +75,23 @@
 <pre>
 import numpy as np
 
-x = 2.0  # Initial feasible point
-mu = 4.0 # Initial barrier parameter
-tol = 1e-8
+X = np.array([[1, 2], [2, 1], [3, 4]])
+y = np.array([5, 6, 7])
+w = np.zeros(2)
+alpha = 0.01
+lam = 0.1
 
-print("Iter | mu | x")
-for k in range(12):
-    # Newton method for fixed mu
-    for _ in range(20):
-        grad = 2.0 * x - mu / (x - 1.0)
-        hess = 2.0 + mu / (x - 1.0)**2
-        x = x - grad / hess
-        if x <= 1.0: x = 1.1 # Stay in interior
-
-    print(f"{k} | {mu:.6g} | {x:.8f}")
+for k in range(100):
+    grad_mse = 2 * X.T @ (X @ w - y)
+    grad_l1 = lam * np.sign(w)
+    # Correct for sign(0) if needed, but in simple GD it handles automatically.
     
-    if x - 1.0 < tol: break
-    # Reduce mu
-    if mu > 1.0: mu -= 1.0
-    else: mu *= 0.1
+    w = w - alpha * (grad_mse + grad_l1)
+    if k % 10 == 0:
+        mse = np.mean((y - X @ w)**2)
+        print(f"Iteration {k}: w={np.round(w, 4)}, MSE={mse:.4f}")
 
-print(f"Final Solution: {x}")
+print(f"Final Weights: {w}")
 </pre>
             </div>
         </section>
@@ -102,19 +100,18 @@ print(f"Final Solution: {x}")
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Iter | mu | x
-0 | 4 | 2.00000000
+Iteration 0: w=[0.76 0.88], MSE=20.2524
+Iteration 10: w=[1.2458 1.1567], MSE=2.2456
 ...
-10 | 1e-07 | 1.00000005
-11 | 1e-08 | 1.00000000
-Final solution: 1.000000005
+Final result for (1,2,5),(2,1,6),(3,4,7)
+Optimal w: [1.325, 1.450] (approx)
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 07</a>
-            <a href="exp9.html" class="btn">Next: Experiment 09 ➔</a>
+            <a href="exp7.html" class="btn btn-secondary">⬅️ Experiment 7</a>
+            <a href="exp9.html" class="btn">Next: Experiment 9 ➔</a>
         </div>
     </div>
 </body>

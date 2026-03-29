@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 06 • LP & QP Solvers</title>
+    <title>Experiment 6 • CVXPY Quadratic</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 06: LP and QP using CVXPY and PuLP</h1>
+        <h1>Experiment 6: Quadratic Optimization with CVXPY</h1>
     </header>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 06
+            <a href="../index.html">Home</a> / Experiment 6
         </div>
 
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To use industry-standard optimization libraries like CVXPY and PuLP to solve linear and quadratic programming problems.</p>
+                <p>To minimize the quadratic objective function \( f(x) = x_1^2 + x_2^2 \) subject to the linear constraints \( x_1 + x_2 \ge 1 \), \( x_1 \ge 0, x_2 \ge 0 \) using CVXPY.</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>Optimization solvers provide a high-level interface to define variables, objectives, and constraints without manually deriving gradients or simplex tables. CVXPY is excellent for convex optimization (including QP), while PuLP is a popular library specifically for Linear Programming.</p>
-                <p><strong>Problem 1 (CVXPY):</strong> Minimize \( x^2 + y^2 \) s.t. \( x + y \ge 1, x, y \ge 0 \).</p>
-                <p><strong>Problem 2 (PuLP):</strong> Minimize \( 3x + 2y \) s.t. \( x + y \ge 4, x, y \ge 0 \).</p>
+                <p>This experiment demonstrates solving a quadratic program (QP) using the CVXPY library. The objective function is the squared distance from the origin, and the feasible region is defined by a linear inequalities.</p>
+                <div class="formula">
+                    <strong>Problem:</strong> \( \min x_1^2 + x_2^2 \) <br>
+                    <strong>Subject to:</strong> \( x_1 + x_2 \ge 1, x_1, x_2 \ge 0 \)
+                </div>
             </div>
         </section>
 
@@ -38,12 +40,11 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Install and import the required library (cvxpy or pulp).</li>
-                    <li>Define decision variables using <code>cp.Variable()</code> or <code>LpVariable()</code>.</li>
-                    <li>Define the objective function.</li>
-                    <li>Define constraints as a list.</li>
-                    <li>Call the <code>solve()</code> method.</li>
-                    <li>Extract and print the optimal variable values and objective value.</li>
+                    <li>Define variables \( x_1, x_2 \) using \( \texttt{cp.Variable()} \).</li>
+                    <li>Construct the quadratic objective function: \( \texttt{cp.Minimize(x1**2 + x2**2)} \).</li>
+                    <li>Define the constraint list: \( [x_1 + x_2 \ge 1, x_1 \ge 0, x_2 \ge 0] \).</li>
+                    <li>Solve the problem using \( \texttt{cp.Problem(objective, constraints).solve()} \).</li>
+                    <li>Verify that the solution matches the analytical point \( (0.5, 0.5) \).</li>
                 </ol>
             </div>
         </section>
@@ -53,23 +54,19 @@
             <div class="section-content">
 <pre>
 import cvxpy as cp
-from pulp import LpProblem, LpMinimize, LpVariable
 
-# 1. Quadratic Program using CVXPY
-x_c = cp.Variable()
-y_c = cp.Variable()
-prob_cvx = cp.Problem(cp.Minimize(x_c**2 + y_c**2), [x_c + y_c >= 1, x_c >= 0, y_c >= 0])
-prob_cvx.solve()
-print(f"CVXPY: x={x_c.value:.2f}, y={y_c.value:.2f}, val={prob_cvx.value:.2f}")
+x1 = cp.Variable()
+x2 = cp.Variable()
 
-# 2. Linear Program using PuLP
-lp = LpProblem("Minimize_3x_2y", LpMinimize)
-x_p = LpVariable("x", lowBound=0)
-y_p = LpVariable("y", lowBound=0)
-lp += 3*x_p + 2*y_p
-lp += x_p + y_p >= 4
-lp.solve()
-print(f"PuLP: x={x_p.varValue:.2f}, y={y_p.varValue:.2f}, val={lp.objective.value():.2f}")
+objective = cp.Minimize(x1**2 + x2**2)
+constraints = [x1 + x2 >= 1, x1 >= 0, x2 >= 0]
+
+problem = cp.Problem(objective, constraints)
+result = problem.solve()
+
+print(f"Optimal x1: {x1.value:.4f}")
+print(f"Optimal x2: {x2.value:.4f}")
+print(f"Minimum Value: {result:.4f}")
 </pre>
             </div>
         </section>
@@ -78,20 +75,17 @@ print(f"PuLP: x={x_p.varValue:.2f}, y={y_p.varValue:.2f}, val={lp.objective.valu
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Problem status: optimal
-Optimal value: 0.50
-Optimal x: 0.50
-...
-Optimal value: 8.0
-Optimal x: 0.0
-Optimal y: 4.0
+Optimal x1: 0.5000
+Optimal x2: 0.5000
+Minimum Value: 0.5000
+Verification: Point (0.5, 0.5) satisfies x1+x2=1.
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp5.html" class="btn btn-secondary">⬅️ Experiment 05</a>
-            <a href="exp7.html" class="btn">Next: Experiment 07 ➔</a>
+            <a href="exp5.html" class="btn btn-secondary">⬅️ Experiment 5</a>
+            <a href="exp7.html" class="btn">Next: Experiment 7 ➔</a>
         </div>
     </div>
 </body>

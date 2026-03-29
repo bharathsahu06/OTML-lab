@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 02 • Linear Regression (GD)</title>
+    <title>Experiment 2 • Newton's Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 02: Linear Regression using Gradient Descent</h1>
+        <h1>Experiment 2: Newton's Method for Optimization</h1>
     </header>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 02
+            <a href="../index.html">Home</a> / Experiment 2
         </div>
 
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To implement Linear Regression using the Gradient Descent optimization technique to find the best-fit line by iteratively updating the slope and intercept.</p>
+                <p>To implement the Newton's Method for optimizing the function \( f(x) = x^4 - 3x^2 + 2 \), identifying critical points where the derivative approaches zero.</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>Gradient Descent is an iterative optimization algorithm used to minimize a cost function. In linear regression, it adjusts the slope (m) and intercept (c) by calculating the gradients of the Mean Squared Error with respect to these parameters.</p>
-                <p><strong>Dataset:</strong></p>
-                <ul>
-                    <li>X: [8, 18, 24]</li>
-                    <li>Y: [15, 30, 25]</li>
-                </ul>
+                <p>Newton's Method is a root-finding algorithm that can also be used for optimization by finding where the first derivative of a function is zero. It uses the second derivative (Hessian) information, making it converge much faster than Gradient Descent for smooth functions.</p>
+                <div class="formula">
+                    \( f(x) = x^4 - 3x^2 + 2 \) <br>
+                    First Derivative: \( f'(x) = 4x^3 - 6x \) <br>
+                    Second Derivative: \( f''(x) = 12x^2 - 6 \)
+                </div>
             </div>
         </section>
 
@@ -41,52 +41,27 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Initialize slope \( m \) and intercept \( c \) (e.g., \( m=1.0, c=0.0 \)).</li>
-                    <li>Choose a learning rate \( \eta \) and number of iterations.</li>
-                    <li>For each iteration:
+                    <li>Initialize the point \( x_0 \).</li>
+                    <li>Repeat for iterations \( k \):
                         <ul>
-                            <li>Calculate the predictions \( \hat{y} = mx + c \).</li>
-                            <li>Calculate the error \( (y - \hat{y}) \).</li>
-                            <li>Compute gradients: \( \frac{\partial MSE}{\partial m} \) and \( \frac{\partial MSE}{\partial c} \).</li>
-                            <li>Update parameters: \( m = m - \eta \cdot \frac{\partial MSE}{\partial m} \) and \( c = c - \eta \cdot \frac{\partial MSE}{\partial c} \).</li>
+                            <li>Compute first derivative \( f'(x_k) \).</li>
+                            <li>Compute second derivative \( f''(x_k) \).</li>
+                            <li>Update: \( x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} \).</li>
                         </ul>
                     </li>
-                    <li>Repeat until convergence.</li>
+                    <li>Continue until the residual \( |f'(x)| \) is sufficiently small.</li>
                 </ol>
             </div>
         </section>
 
         <section class="section">
-            <div class="section-title">Formulas</div>
+            <div class="section-title">Mathematical Analysis</div>
             <div class="section-content">
+                <p>To find the critical points, we set \( f'(x) = 0 \):</p>
                 <div class="formula">
-                    Prediction: \( \hat{y}_i = mx_i + c \)
+                    \( 4x^3 - 6x = 0 \implies 2x(2x^2 - 3) = 0 \) <br>
+                    Critical points at: \( x = 0, x = \sqrt{1.5} \approx 1.22, x = -\sqrt{1.5} \approx -1.22 \).
                 </div>
-                <div class="formula">
-                    Gradient (m): \( D_m = \frac{-2}{n} \sum_{i=1}^n x_i(y_i - \hat{y}_i) \)
-                </div>
-                <div class="formula">
-                    Gradient (c): \( D_c = \frac{-2}{n} \sum_{i=1}^n (y_i - \hat{y}_i) \)
-                </div>
-                <div class="formula">
-                    Updates: \( m = m - \eta D_m, \quad c = c - \eta D_c \)
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
-            <div class="section-content">
-                <p>Initial state: \( m=1.0, c=0.0, \eta=0.001 \). Data: \( (8,15), (18,30), (24,25) \).</p>
-                <p><strong>Iteration 1:</strong></p>
-                <ul>
-                    <li>Predictions: \( 1(8)+0=8, 1(18)+0=18, 1(24)+0=24 \)</li>
-                    <li>Errors: \( 15-8=7, 30-18=12, 25-24=1 \)</li>
-                    <li>Gradient \( D_m = \frac{-2}{3} (8(7) + 18(12) + 24(1)) = \frac{-2}{3} (56+216+24) = -197.33 \)</li>
-                    <li>Gradient \( D_c = \frac{-2}{3} (7+12+1) = -13.33 \)</li>
-                    <li>New \( m = 1.0 - 0.001(-197.33) \approx 1.197 \)</li>
-                    <li>New \( c = 0.0 - 0.001(-13.33) \approx 0.013 \)</li>
-                </ul>
             </div>
         </section>
 
@@ -96,22 +71,25 @@
 <pre>
 import numpy as np
 
-x = np.array([8, 18, 24])
-y = np.array([15, 30, 25])
+def f_prime(x): return 4*x**3 - 6*x
+def f_double_prime(x): return 12*x**2 - 6
 
-m, c = 1.0, 0.0
-L = 0.001  # Learning Rate
-iterations = 1000
+# Initial point
+x = 2.0
+print("k | x_k | f'(x_k)")
+print("-" * 15)
 
-for i in range(iterations):
-    y_pred = m * x + c
-    Dm = (-2/len(x)) * sum(x * (y - y_pred))
-    Dc = (-2/len(x)) * sum(y - y_pred)
-    m = m - L * Dm
-    c = c - L * Dc
+for k in range(10):
+    grad = f_prime(x)
+    hess = f_double_prime(x)
+    
+    x = x - grad / hess
+    print(f"{k} | {x:.6f} | {f_prime(x):.2e}")
+    
+    if abs(grad) < 1e-10:
+        break
 
-print(f"Final slope: {m:.2f}")
-print(f"Final intercept: {c:.2f}")
+print(f"Final Critical Point: x = {x:.4f}")
 </pre>
             </div>
         </section>
@@ -120,18 +98,23 @@ print(f"Final intercept: {c:.2f}")
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Initial slope (m): 1.00
-Initial intercept (c): 0.00
-...
-Final slope: 1.29
-Final intercept: 0.32
+k | x_k | f'(x_k)
+---------------
+0 | 1.5714 | 5.92e+00
+1 | 1.3218 | 1.34e+00
+2 | 1.2335 | 9.04e-02
+3 | 1.2248 | 4.88e-04
+4 | 1.2247 | 1.45e-08
+5 | 1.2247 | 0.00e+00
+Final Critical Point: x = 1.2247
+(Numerical convergence to sqrt(1.5))
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp1.html" class="btn btn-secondary">⬅️ Experiment 01</a>
-            <a href="exp3.html" class="btn">Next: Experiment 03 ➔</a>
+            <a href="exp1.html" class="btn btn-secondary">⬅️ Experiment 1</a>
+            <a href="exp3.html" class="btn">Next: Experiment 3 ➔</a>
         </div>
     </div>
 </body>

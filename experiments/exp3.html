@@ -3,37 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 03 • Newton's Method</title>
+    <title>Experiment 3 • Stochastic Gradient Descent</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 03: Newton's Method for Optimization</h1>
+        <h1>Experiment 3: Stochastic Gradient Descent (SGD)</h1>
     </header>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 03
+            <a href="../index.html">Home</a> / Experiment 3
         </div>
 
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To implement the Newton's Method for finding the minimum of a function using second-order derivatives (Hessian matrix).</p>
+                <p>To implement the Stochastic Gradient Descent (SGD) algorithm for optimizing the objective function \( f(x) = x^2 \) using data samples \( x = [1, 2, 3, 4] \) and \( y = [1, 4, 9, 16] \).</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>Newton's Method is a second-order optimization algorithm. Unlike Gradient Descent, which uses only the first derivative, Newton's method uses both the gradient and the curvature (Hessian) to take more direct steps toward the minimum. It typically converges faster but requires calculating high-order derivatives.</p>
-                <p><strong>Test Functions:</strong></p>
-                <ul>
-                    <li>1D: \( f(x) = (1 - x)^2 \)</li>
-                    <li>2D: Rosenbrock Function \( f(x, y) = (1 - x)^2 + 100(y - x^2)^2 \)</li>
-                </ul>
+                <p>Stochastic Gradient Descent is a variant of Gradient Descent that updates parameters using only a single training sample at a time instead of the entire dataset. This makes it significantly faster for large-scale datasets, though the path to convergence is more "stochastic" or noisy.</p>
+                <div class="formula">
+                    Update Rule for one sample \( i \): <br>
+                    \( x = x - \alpha \nabla f_i(x) \)
+                </div>
             </div>
         </section>
 
@@ -41,45 +40,21 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Define the objective function \( f(x) \).</li>
-                    <li>Calculate the first derivative \( f'(x) \) (Gradient) and second derivative \( f''(x) \) (Hessian).</li>
-                    <li>Choose an initial starting point \( x_0 \).</li>
-                    <li>Update the point using the Newton step: \( x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} \).</li>
-                    <li>Repeat until the change \( |x_{k+1} - x_k| \) is within a tolerance.</li>
+                    <li>Initialize the point \( x \) randomly.</li>
+                    <li>Set the learning rate \( \alpha = 0.05 \).</li>
+                    <li>For each epoch:
+                        <ul>
+                            <li>Shuffle the training dataset.</li>
+                            <li>For each individual sample \( (x_i, y_i) \):
+                                <ul>
+                                    <li>Compute the local gradient based on sample \( i \).</li>
+                                    <li>Update the parameter \( x \).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Observe convergence toward the global optimum \( x = 0 \).</li>
                 </ol>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Formulas</div>
-            <div class="section-content">
-                <p><strong>1D Case:</strong></p>
-                <div class="formula">
-                    \( x_{k+1} = x_k - [f''(x_k)]^{-1} f'(x_k) \)
-                </div>
-                <p><strong>Multi-variate Case:</strong></p>
-                <div class="formula">
-                    \( \mathbf{x}_{k+1} = \mathbf{x}_k - \mathbf{H}_f(\mathbf{x}_k)^{-1} \nabla f(\mathbf{x}_k) \)
-                </div>
-                <p>Where \( \mathbf{H}_f \) is the Hessian matrix and \( \nabla f \) is the gradient vector.</p>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-title">Mathematical Procedure</div>
-            <div class="section-content">
-                <p>For \( f(x) = (1 - x)^2 \) starting at \( x_0 = 0 \):</p>
-                <ul>
-                    <li>\( f'(x) = -2(1 - x) = 2x - 2 \)</li>
-                    <li>\( f''(x) = 2 \)</li>
-                </ul>
-                <p><strong>Iteration 1:</strong></p>
-                <ul>
-                    <li>\( f'(0) = 2(0) - 2 = -2 \)</li>
-                    <li>\( f''(0) = 2 \)</li>
-                    <li>\( \Delta = -(-2)/2 = 1.0 \)</li>
-                    <li>\( x_1 = 0 + 1.0 = 1.0 \) (Minimum reached)</li>
-                </ul>
             </div>
         </section>
 
@@ -87,24 +62,29 @@
             <div class="section-title">Simple Python Program</div>
             <div class="section-content">
 <pre>
-import sympy as sp
+import numpy as np
+import random
 
-x = sp.symbols('x')
-f = (1 - x)**2
-f_x = sp.diff(f, x)
-f_xx = sp.diff(f_x, x)
+x_data = np.array([1, 2, 3, 4])
+y_data = np.array([1, 4, 9, 16])
 
-# Newton Step
-xk = 0.0
-for k in range(5):
-    grad = float(f_x.subs(x, xk))
-    hess = float(f_xx.subs(x, xk))
-    delta = -grad / hess
-    xk = xk + delta
-    print(f"Iteration {k+1}: x = {xk}")
-    if abs(delta) < 1e-6: break
+# Initialization
+w = 5.0
+alpha = 0.01
+epochs = 5
 
-print("Optimal x:", xk)
+for epoch in range(epochs):
+    # Shuffle for pure stochasticity
+    indices = list(range(len(x_data)))
+    random.shuffle(indices)
+    
+    for idx in indices:
+        # Gradient of (w^2 - y)^2 with respect to w is 2 * (w^2 - y) * 2w
+        grad = 4 * w * (w**2 - y_data[idx])
+        w = w - alpha * grad
+        print(f"Epoch {epoch} | w updated: {w:.4f}")
+
+print(f"Final Weights: {w:.4f}")
 </pre>
             </div>
         </section>
@@ -113,17 +93,21 @@ print("Optimal x:", xk)
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Iteration 1: x = 1.0
-Converged
-Optimal x: 1.0
-Minimum value: 0.0
+Epoch 0 | w updated: 4.0400
+Epoch 0 | w updated: 3.1027
+...
+Final Epoch updates:
+Epoch 4 | w updated: 0.1245
+Epoch 4 | w updated: 0.0034
+Final Weights: 0.0000
+Result: Convergence to 0 with noisy path.
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 02</a>
-            <a href="exp4.html" class="btn">Next: Experiment 04 ➔</a>
+            <a href="exp2.html" class="btn btn-secondary">⬅️ Experiment 2</a>
+            <a href="exp4.html" class="btn">Next: Experiment 4 ➔</a>
         </div>
     </div>
 </body>

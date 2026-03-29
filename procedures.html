@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTML Lab • Procedures</title>
+    <title>OTML Lab • Official Procedures</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Laboratory Procedures & Mathematical Manual</h1>
-        <p>Comprehensive repository of optimization techniques and implementations.</p>
+        <h1>Laboratory Procedures Manual</h1>
+        <p>Official list of experiments and mathematical formulations for the OTML course.</p>
     </header>
 
     <div class="container">
@@ -20,90 +20,84 @@
         </div>
 
         <section class="section">
-            <div class="section-title">Overview</div>
+            <div class="section-title">CO1: Basic Optimization Methods</div>
             <div class="section-content">
-                <p>This page summarizes the mathematical formulations and algorithms for all 19 experiments conducted in the OTML Lab. Each section reflects the verified procedures from the official laboratory manual.</p>
+                <h3>Exp 01: Gradient Descent</h3>
+                <p>Implementation of descent for \( f(x) = x^2 \) using samples \( x=[1,2,3,4] \) and \( y=[1,4,9,16] \).</p>
+                
+                <h3>Exp 02: Newton's Method</h3>
+                <p>Optimization of \( f(x) = x^4 - 3x^2 + 2 \) using second-order curvature information.</p>
+                
+                <h3>Exp 03: Stochastic Gradient Descent (SGD)</h3>
+                <p>Single-sample updates for \( f(x) = x^2 \) using dataset \( x=[1,2,3,4], y=[1,4,9,16] \).</p>
             </div>
         </section>
 
-        <!-- CO1 -->
         <section class="section">
-            <div class="section-title">CO1: Gradient Based Optimization</div>
+            <div class="section-title">CO2: Constrained Optimization</div>
             <div class="section-content">
-                <h3>Exp 01: OLS Linear Regression</h3>
-                <p>Computes \( w = (X^T X)^{-1} X^T y \). Optimal for datasets where the model perfectly matches observations.</p>
+                <h3>Exp 04: Minimize \( f(x,y)=x^2+y^2 \)</h3>
+                <p>Subject to \( x+y \ge 1; x,y \ge 0 \) using CVXPY.</p>
                 
-                <h3>Exp 02: Gradient Descent</h3>
-                <p>Iteratively updates parameters: \( \theta = \theta - \eta \nabla J(\theta) \). Uses full-batch gradients.</p>
+                <h3>Exp 05: Linear Objective Optimization</h3>
+                <p>Subject to \( x+y \ge 4, x,y \ge 0 \) for \( f(x,y)=3x+2y \) using CVXPY.</p>
                 
-                <h3>Exp 03: Newton's Method</h3>
-                <p>Second-order optimization using Hessian information: \( x_{k+1} = x_k - [Hf(x_k)]^{-1} \nabla f(x_k) \).</p>
+                <h3>Exp 06: Quadratic Objective Optimization</h3>
+                <p>Subject to \( x_1+x_2 \ge 1, x_1,x_2 \ge 0 \) for \( f(x)=x_1^2+x_2^2 \) using CVXPY.</p>
+                
+                <h3>Exp 07: LP with and without PuLP</h3>
+                <p>Implementation of linear programming for \( z = 3x + 2y \) with manual and automated verification.</p>
             </div>
         </section>
 
-        <!-- CO2 -->
         <section class="section">
-            <div class="section-title">CO2: Stochastic and Constrained Optimization</div>
+            <div class="section-title">CO3: Advanced Methods</div>
             <div class="section-content">
-                <h3>Exp 04: Stochastic Gradient Descent (SGD)</h3>
-                <p>Updates weights using a single random sample per iteration, enabling faster data processing.</p>
+                <h3>Exp 08: Sub-gradient Method (Dataset 1)</h3>
+                <p>L1-regularized linear regression for dataset \( (1,2,5), (2,1,6), (3,4,7) \).</p>
                 
-                <h3>Exp 05: Linear & Quadratic Programming</h3>
-                <p>Solves optimization problems with linear constraints using the Simplex method (LP) and KKT conditions (QP).</p>
+                <h3>Exp 09: Sub-gradient Method (Dataset 2)</h3>
+                <p>L1-regularized linear regression for dataset \( (2,3,8), (1,4,7), (3,2,9) \).</p>
                 
-                <h3>Exp 06: CVXPY and PuLP Solvers</h3>
-                <p>Demonstrates higher-level modeling libraries for convex optimization and linear programming.</p>
+                <h3>Exp 10: Interior Point Method (1D)</h3>
+                <p>Minimizing \( x^2 \) subject to \( x \ge 1 \) using barrier functions.</p>
+                
+                <h3>Exp 11: Interior Point Method (2D)</h3>
+                <p>Minimizing \( x+y \) subject to \( x,y \ge 1 \).</p>
             </div>
         </section>
 
-        <!-- CO3 -->
         <section class="section">
-            <div class="section-title">CO3: Non-Smooth and Interior Point Methods</div>
+            <div class="section-title">CO4: Distributed and Batch Methods</div>
             <div class="section-content">
-                <h3>Exp 07: Sub-gradient Method</h3>
-                <p>Addresses non-differentiable objectives (like L1-norm) by using any vector in the sub-differential set.</p>
+                <h3>Exp 12: Mini-batch GD for \( y = 2x + 1 \)</h3>
+                <p>Processing batches of size 2 for linear regression samples.</p>
                 
-                <h3>Exp 08: Interior Point Method</h3>
-                <p>Handles constraints by converting them into log-barrier functions: \( \phi(x; \mu) = f(x) - \mu \sum \ln(-g_i(x)) \).</p>
+                <h3>Exp 13: Distributed GD Simulation (6 points)</h3>
+                <p>Simulating 3 workers processing data for the model \( y = 2x + 1 \).</p>
+                
+                <h3>Exp 14: Mini-batch GD for \( y = 2x + 3 \)</h3>
+                <p>Linear regression for \( x=[1,2,3,4], y=[5,7,9,11] \).</p>
+                
+                <h3>Exp 15: Distributed GD Simulation (4 points)</h3>
+                <p>Simulating 2 workers processing data for the model \( y = 2x + 1 \).</p>
             </div>
         </section>
 
-        <!-- CO4 -->
         <section class="section">
-            <div class="section-title">CO4: Scalable and Distributed Optimization</div>
+            <div class="section-title">CO5: Advanced Regularization</div>
             <div class="section-content">
-                <h3>Exp 09: Mini-batch Gradient Descent</h3>
-                <p>The standard training method for deep learning, using subsets of data for update stability.</p>
+                <h3>Exp 16: Regularization Techniques</h3>
+                <p>Implementation of L1 (Lasso), L2 (Ridge), and Elastic Net for feature shrinkage.</p>
                 
-                <h3>Exp 10: Distributed Gradient Descent</h3>
-                <p>Parallelizes computation across workers. Gradients are computed locally and averaged globally.</p>
-                
-                <h3>Exp 11: Elastic Net Regularization</h3>
-                <p>Combines L1 and L2 penalties: \( J(w) = MSE + \lambda_1 \|w\|_1 + \lambda_2 \|w\|_2^2 \).</p>
-                
-                <h3>Exp 12: Group Lasso</h3>
-                <p>Promotes block-sparsity, allowing features to be toggled on/off in pre-defined groups.</p>
-            </div>
-        </section>
-
-        <!-- CO5 -->
-        <section class="section">
-            <div class="section-title">CO5: Advanced Topics</div>
-            <div class="section-content">
-                <h3>Exp 13: Parameter Averaging</h3>
-                <p>Distributed technique where workers perform multiple local updates before models are averaged.</p>
-                
-                <h3>Exp 14: Shifted Linear Systems</h3>
-                <p>Optimization of models with non-zero intercepts (\( y = mx + c \)) using bias terms.</p>
-                
-                <h3>Exp 15: System Staleness</h3>
-                <p>Analyzes the impact of asynchronous communication and stragglers in distributed environments.</p>
+                <h3>Exp 17: Grouped Sparsity</h3>
+                <p>Demonstrating block sparsity on pre-defined feature groups using Group Lasso.</p>
                 
                 <h3>Exp 18: Conjugate Gradient Method</h3>
-                <p>Iteratively solves \( Ax=b \) in \( n \) steps by searching in A-conjugate directions.</p>
+                <p>Solving \( Ax = b \) for symmetric, positive definite matrices.</p>
                 
-                <h3>Exp 19: BFGS Quasi-Newton</h3>
-                <p>Learns a local approximation of the inverse Hessian without computing second-order derivatives.</p>
+                <h3>Exp 19: BFGS Quasi-Newton Update</h3>
+                <p>Minimizing \( f(x_1,x_2) = x_1^2 + 2x_2^2 \) using gradient-based Hessian approximation.</p>
             </div>
         </section>
 

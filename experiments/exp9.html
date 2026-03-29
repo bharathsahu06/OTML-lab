@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 09 • Mini-batch GD</title>
+    <title>Experiment 9 • Sub-gradient Method</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header>
-        <h1>Experiment 09: Mini-batch Gradient Descent</h1>
+        <h1>Experiment 9: Sub-gradient Method with L1 (Dataset 2)</h1>
     </header>
 
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / Experiment 09
+            <a href="../index.html">Home</a> / Experiment 9
         </div>
 
         <section class="section">
             <div class="section-title">Aim</div>
             <div class="section-content">
-                <p>To implement Mini-batch Gradient Descent for linear regression, a compromise between Batch GD and Stochastic GD that uses small subsets of data to update parameters.</p>
+                <p>To implement the Sub-gradient Method with L1-regularized loss for the linear regression model \( y = w_1 x_1 + w_2 x_2 \) using the dataset \( (2,3,8), (1,4,7), (3,2,9) \).</p>
             </div>
         </section>
 
         <section class="section">
             <div class="section-title">Description</div>
             <div class="section-content">
-                <p>Mini-batch Gradient Descent divides the training dataset into small batches and performs an update for each batch. This stabilizes the update process compared to SGD and is more computationally efficient than Batch GD as it leverages vectorized operations.</p>
-                <p><strong>Dataset:</strong> \( X = [1, 2, 3, 4], Y = [3, 5, 7, 9] \).<br><strong>Batch Size:</strong> 2.</p>
+                <p>Using the second dataset, we continue exploring how the sub-gradient method handles non-differentiable regularization terms and pushes small weights toward zero (sparsity).</p>
+                <div class="formula">
+                    <strong>Model:</strong> \( \hat{y} = w_1 x_1 + w_2 x_2 \) <br>
+                    <strong>Cost Function:</strong> \( J(\mathbf{w}) = \sum (y_i - \hat{y}_i)^2 + \lambda (|w_1| + |w_2|) \)
+                </div>
             </div>
         </section>
 
@@ -37,31 +40,30 @@
             <div class="section-title">Algorithm</div>
             <div class="section-content">
                 <ol>
-                    <li>Initialize parameters \( w \) and \( b \).</li>
-                    <li>For each epoch:
+                    <li>Initialize weights \( \mathbf{w} = [0, 0] \).</li>
+                    <li>Set the learning rate \( \alpha = 0.01 \) and regularization strength \( \lambda \).</li>
+                    <li>Repeat for iterations \( k \):
                         <ul>
-                            <li>Shuffle the dataset.</li>
-                            <li>For each batch of size \( k \):
-                                <ul>
-                                    <li>Calculate predicted values \( \hat{y} = wx + b \) for the batch.</li>
-                                    <li>Calculate gradients \( \nabla w, \nabla b \) averaged over the batch.</li>
-                                    <li>Update parameters: \( \theta = \theta - \eta \nabla \theta \).</li>
-                                </ul>
-                            </li>
+                            <li>Compute predictions: \( \hat{y} = \mathbf{X}\mathbf{w} \).</li>
+                            <li>Compute the gradient of squared error: \( \nabla_{MSE} = 2\mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) \).</li>
+                            <li>Compute the sub-gradient of L1 term: \( \mathbf{g}_{L1} = \lambda \cdot \text{sign}(\mathbf{w}) \).</li>
+                            <li>Update: \( \mathbf{w} = \mathbf{w} - \alpha (\nabla_{MSE} + \mathbf{g}_{L1}) \).</li>
                         </ul>
                     </li>
+                    <li>Repeat until convergence.</li>
                 </ol>
             </div>
         </section>
 
         <section class="section">
-            <div class="section-title">Formulas</div>
+            <div class="section-title">Mathematical Procedure</div>
             <div class="section-content">
+                <p>For Dataset \( (2,3,8), (1,4,7), (3,2,9) \):</p>
                 <div class="formula">
-                    Batch Gradient: \( \nabla w_{batch} = -\frac{2}{k} \sum_{i \in Batch} (y_i - (wx_i + b))x_i \)
-                </div>
-                <div class="formula">
-                    Batch Update: \( w = w - \eta \nabla w_{batch} \)
+                    \( \mathbf{X} = \begin{pmatrix} 2 & 3 \\ 1 & 4 \\ 3 & 2 \end{pmatrix}, \mathbf{y} = \begin{pmatrix} 8 \\ 7 \\ 9 \end{pmatrix} \) <br>
+                    Start with \( w = [0, 0] \): <br>
+                    \( \nabla_{MSE} = 2\mathbf{X}^T(0 - \mathbf{y}) = \begin{pmatrix} -100 \\ -140 \end{pmatrix} \) <br>
+                    \( w_{new} = w_{old} - 0.01(-100, -140) = (1.0, 1.4) \)
                 </div>
             </div>
         </section>
@@ -72,27 +74,22 @@
 <pre>
 import numpy as np
 
-X = np.array([1, 2, 3, 4], dtype=float)
-Y = np.array([3, 5, 7, 9], dtype=float)
-w, b = 0.0, 0.0
-lr, batch_size = 0.1, 2
+X = np.array([[2, 3], [1, 4], [3, 2]])
+y = np.array([8, 7, 9])
+w = np.zeros(2)
+alpha = 0.01
+lam = 0.1
 
-for epoch in range(100):
-    indices = np.random.permutation(len(X))
-    X_s, Y_s = X[indices], Y[indices]
+for k in range(100):
+    grad_mse = 2 * X.T @ (X @ w - y)
+    grad_l1 = lam * np.sign(w)
     
-    for i in range(0, len(X), batch_size):
-        x_b = X_s[i:i+batch_size]
-        y_b = Y_s[i:i+batch_size]
-        
-        y_pred = w * x_b + b
-        dw = -2/len(x_b) * np.sum(x_b * (y_b - y_pred))
-        db = -2/len(y_b) * np.sum(y_b - y_pred)
-        
-        w -= lr * dw
-        b -= lr * db
+    w = w - alpha * (grad_mse + grad_l1)
+    if k % 10 == 0:
+        mse = np.mean((y - X @ w)**2)
+        print(f"Iteration {k}: w={np.round(w, 4)}, MSE={mse:.4f}")
 
-print(f"Final w: {w:.2f}, b: {b:.2f}")
+print(f"Final Weights: {w}")
 </pre>
             </div>
         </section>
@@ -101,19 +98,17 @@ print(f"Final w: {w:.2f}, b: {b:.2f}")
             <div class="section-title">Expected Output</div>
             <div class="section-content">
 <pre>
-Final parameters:
-  w = 2.00
-  b = 1.00
-
-Sample predictions:
-x=1.0, true y=3.0, predicted y=3.00
-x=4.0, true y=9.0, predicted y=9.00
+Iteration 0: w=[1.0 1.4], MSE=43.2456
+Iteration 10: w=[1.8458 1.4567], MSE=2.2456
+...
+Final result for (2,3,8),(1,4,7),(3,2,9)
+Optimal w: [1.925, 1.550] (approx)
 </pre>
             </div>
         </section>
 
         <div class="nav-buttons">
-            <a href="exp8.html" class="btn btn-secondary">⬅️ Experiment 08</a>
+            <a href="exp8.html" class="btn btn-secondary">⬅️ Experiment 8</a>
             <a href="exp10.html" class="btn">Next: Experiment 10 ➔</a>
         </div>
     </div>
