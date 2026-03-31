@@ -27,8 +27,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment solves an unconstrained optimization problem using a Quasi-Newton approach. Unlike standard gradient descent, Quasi-Newton methods use gradient information to build an approximation of second-order curvature (inverse Hessian), which usually gives faster convergence. Here we use the BFGS update, one of the most common Quasi-Newton methods.</p>
-                    <p>The method followed is: start from an initial point and identity inverse-Hessian approximation, compute gradient, and take a search direction using the approximate inverse Hessian. Then perform a line search to choose step size and update the position. After each step, update the inverse-Hessian approximation using BFGS formula and continue until gradient norm becomes very small. Finally, report optimum point, function value, and convergence status.</p>
+                    <p><strong>Quasi-Newton Methods (BFGS)</strong> bridge the gap between gradient descent's simplicity and Newton's Method's speed. By building an approximation of the Hessian (or its inverse) from gradient information alone, Quasi-Newton methods achieve superlinear convergence without computing second derivatives explicitly. BFGS (Broyden–Fletcher–Goldfarb–Shanno) is the most popular variant because it maintains positive-definiteness and numerical stability.</p>
+                    <p>The core innovation is the BFGS update that improves the Hessian approximation after each iteration using observed curvature changes (the difference between consecutive gradients). This is far cheaper than computing actual Hessians, yet provides enough second-order information to achieve fast convergence. Line search (like backtracking with Armijo condition) ensures global convergence even from poor starting points.</p>
+                    <p>BFGS is practical and widely used: it requires only gradients (not Hessians), converges faster than gradient descent, and has better numerical properties than Newton's Method. Understanding BFGS reveals how to balance computational cost and convergence speed—a perennial trade-off in optimization.</p>
                 </div>
             </div>
 

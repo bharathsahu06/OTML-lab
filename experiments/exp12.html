@@ -29,8 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>In this experiment, we train a linear regression model using minibatch gradient descent. The model is taken as $\hat{y}=wx+b$, and the objective is to reduce the Mean Squared Error (MSE) between predicted and actual values. Minibatch gradient descent updates the parameters using a small group of samples at a time, which is more stable than pure stochastic updates and faster than full-batch computation on large datasets.</p>
-                    <p>The method followed is: split data into minibatches, compute predictions and errors for each minibatch, and calculate gradients of loss with respect to $w$ and $b$. Then update parameters after each minibatch and repeat across multiple epochs until loss becomes small and stable. Finally, report learned parameters, final MSE, and predicted outputs for all input points.</p>
+                    <p><strong>Minibatch Gradient Descent</strong> provides a practical middle ground between pure stochastic and full-batch gradient descent. By processing small groups of samples together, minibatch methods reduce gradient variance compared to SGD while remaining faster than full-batch methods on large datasets. This is the standard approach in modern deep learning, where hardware (GPUs) is designed to process batches efficiently.</p>
+                    <p>The key advantage is computational efficiency combined with improved generalization. Processing minibatches amortizes overhead (data loading, parallelization) across multiple samples. The batch size creates a hyperparameter controlling the variance-efficiency trade-off: larger batches give more accurate gradients but require more compute; smaller batches provide more frequent updates with noisier gradient estimates. A moderate batch size (typically 32-256) balances these concerns.</p>
+                    <p>Minibatch gradient descent naturally incorporates shuffling, which provides computational benefits and acts as a regularizer. The iteration count per epoch (number of batches) creates implicit learning rate scheduling: completing many small updates per epoch leads to different learning dynamics than fewer larger updates per epoch.</p>
                 </div>
             </div>
 

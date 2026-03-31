@@ -27,8 +27,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment demonstrates two methods to solve the same linear programming (LP) problem. In part (a), PuLP is used to model the objective and constraints directly, then a solver finds the optimum automatically. In part (b), the LP is solved without PuLP by using the geometric/vertex idea for two-variable LP.</p>
-                    <p>The method followed is: first formulate the LP in standard mathematical form, then solve it with PuLP to get an optimal solution and objective value. Next, solve the same LP without PuLP by finding intersection points of boundary lines, testing feasibility, and evaluating objective values at feasible corner points. Finally, compare both results to confirm that both methods return the same optimal solution.</p>
+                    <p><strong>LP Solution Methods</strong> encompass different computational approaches to finding optimal solutions. The Simplex Method (used by PuLP) navigates the polytope vertices efficiently, taking larger steps toward the optimum. The Vertex/Corner Point Method directly examines intersection points, making it suitable for low-dimensional problems. Understanding multiple approaches reveals that LP has rich algorithmic variety, each with different strengths in speed, numerical stability, and scalability.</p>
+                    <p>The key insight is that all methods exploit the geometric structure of LP: the optimum always resides at a vertex. Simplex implicitly checks this by visiting promising vertices in sequence. Direct vertex enumeration becomes impractical in high dimensions but perfectly illustrates the principle in 2D. Modern solvers (interior point, barrier methods) take different paths through the feasible region but all converge to the same vertex optimum.</p>
+                    <p>Comparing methods on the same problem demonstrates that despite different computational routes, they find identical optimal solutions. This consistency validates the underlying theory and builds confidence in using high-level solvers like PuLP.</p>
                 </div>
             </div>
 

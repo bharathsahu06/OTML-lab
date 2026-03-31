@@ -29,8 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment solves a convex quadratic optimization problem with linear inequality constraints. The objective $x_1^2+x_2^2$ is strictly convex, and the feasible region defined by the constraints is also convex, so the solution is unique and globally optimal. CVXPY is used to represent the optimization model in a natural mathematical form and solve it using an appropriate convex solver.</p>
-                    <p>The method followed is: define decision variables $x_1$ and $x_2$, construct the quadratic objective, and enforce all linear constraints exactly as given. Then we solve the model and verify that the returned solution satisfies every constraint numerically. Because this is a convex optimization setup, the computed optimum is the true global minimum over the feasible set.</p>
+                    <p><strong>Quadratic Programming (QP)</strong> combines quadratic objective functions with linear constraints, forming a special but important class of convex optimization problems. The quadratic term provides curvature that captures non-linear relationships while remaining computationally tractable. QP arises naturally in portfolio optimization (minimize risk given constraints on allocation), robotics, signal processing, and machine learning applications like support vector machines.</p>
+                    <p>The structure of QP ensures uniqueness and global optimality: the quadratic objective is strictly convex (curved upward), and constraints form a convex polytope. The optimal solution lies at a point where the gradient of the objective aligns with the constraint normals. Efficient specialized algorithms exploit this structure to solve QP problems faster than general nonlinear methods.</p>
+                    <p>QP generalizes linear programming (when the quadratic term disappears) and provides a bridge toward more complex optimization. Understanding QP principles helps build intuition for broader convex optimization and machine learning algorithms that minimize quadratic loss functions.</p>
                 </div>
             </div>
 

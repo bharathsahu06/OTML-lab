@@ -29,8 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment solves a convex optimization problem with a quadratic objective and linear inequality constraints. The objective $x^2+y^2$ is convex, and all constraints are also convex, so a global minimum exists and can be obtained reliably using CVXPY. CVXPY lets us define decision variables, objective function, and constraints in mathematical form, then solves the problem using an appropriate convex solver.</p>
-                    <p>The method followed is: formulate the optimization model in standard form, apply all constraints exactly as given, and call the solver to compute the optimal feasible point. After solving, we verify that the returned values satisfy $x+y\ge 1$, $x\ge 0$, and $y\ge 0$, and then report the minimum objective value. Because the problem is convex, the obtained result is the true global optimum, not a local approximation.</p>
+                    <p><strong>Convex Optimization with Constraints</strong> addresses the problem of minimizing a convex objective function subject to constraint sets. The crucial property of convex problems is that any local minimum is also a global minimum—there are no hidden better solutions. This guarantee eliminates the risk of solvers getting stuck in suboptimal local minima, a major challenge in non-convex optimization.</p>
+                    <p>Quadratic objectives with linear constraints form a special class called Quadratic Programming (QP), which combines the efficiency of convex methods with the expressiveness needed for many practical problems. The feasible region (set of points satisfying all constraints) is a convex polytope, and the solution always lies at a vertex or along an edge of this region. CVXPY provides a way to specify these problems in mathematical notation and automatically selects appropriate solvers.</p>
+                    <p>The power of convex optimization lies in its theoretical guarantees: a discovered optimum is truly optimal, not just locally good. This reliability makes convex methods foundational in control systems, finance, signal processing, and machine learning—wherever provably good solutions are required.</p>
                 </div>
             </div>
 

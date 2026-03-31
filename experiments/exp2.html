@@ -27,10 +27,9 @@
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
                     <p>Newton's Method is an iterative optimization technique that uses first and second derivatives of a function to quickly approach a stationary point.</p>
-                    <p>For optimization, we solve $f'(x)=0$ using the update rule:</p>
-                    $$x_{k+1}=x_k-\frac{f'(x_k)}{f''(x_k)}$$
-                    <p>In this experiment, we apply Newton's Method to find a minimum of $f(x)=x^4-3x^2+2$.</p>
-                    <p>The method followed is: start with an initial guess $x_0$, calculate $f'(x_k)$ and $f''(x_k)$ at each step, and then update $x_k$ using the Newton formula. After every update, we check the difference $|x_{k+1}-x_k|$ to decide whether convergence has been achieved. This gives faster convergence than basic gradient methods because second-derivative (curvature) information is used in each iteration.</p>
+                    <p><strong>Newton's Method</strong> is a second-order optimization algorithm that uses both first and second derivatives to find function minima. Unlike Gradient Descent which only uses gradient direction, Newton's Method leverages curvature information (the Hessian matrix) to make better-informed steps. This leads to superlinear convergence—typically reaching the optimum in far fewer iterations than first-order methods.</p>
+                    <p>The update rule incorporates the inverse Hessian, which scales the gradient by the local curvature. In regions of high curvature, steps are smaller; where curvature is low, steps are larger. This adaptive scaling allows Newton's Method to navigate non-uniform loss landscapes efficiently. However, computing and inverting the Hessian is expensive, especially in high dimensions, limiting its use to problems where this cost is justified by faster convergence.</p>
+                    <p>Newton's Method requires computing both $f'(x)$ and $f''(x)$, making it more complex but also more powerful than gradient-based methods for well-conditioned problems. It is particularly effective for quadratic functions, where it converges in a single iteration.</p>
                 </div>
             </div>
 

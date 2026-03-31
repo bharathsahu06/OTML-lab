@@ -29,11 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>Gradient Descent is an iterative optimization method used to minimize a loss function. At each iteration, the parameters are moved in the opposite direction of the gradient because the gradient points toward the steepest increase of the loss.</p>
-                    <p>For this experiment, we fit a simple linear model:</p>
-                    $$\hat{y}=wx+b$$
-                    <p>Here, $w$ represents the slope and $b$ represents the intercept. The objective is to find values of $w$ and $b$ that reduce the Mean Squared Error between predicted and actual values.</p>
-                    <p>Even though the target values follow a quadratic trend, we use a linear model to demonstrate how Gradient Descent updates parameters $w$ and $b$ step by step. This clearly shows the learning process: prediction, error calculation, gradient computation, and parameter update repeated until the loss becomes stable.</p>
+                    <p><strong>Gradient Descent</strong> is a foundational optimization algorithm that iteratively minimizes a loss function by moving in the direction opposite to the gradient. The gradient represents the direction of steepest increase, so moving opposite to it leads toward minima. This method is the backbone of modern machine learning because it scales well to high-dimensional problems and large datasets.</p>
+                    <p>The core insight is that the gradient encodes both the direction and magnitude of change needed to reduce the loss. At each iteration, parameters are adjusted by a small step (controlled by the learning rate) in the negative gradient direction. This process continues until convergence, meaning the loss stabilizes and significant improvements become negligible.</p>
+                    <p>Gradient Descent's effectiveness depends on problem structure, learning rate selection, and initial conditions. It works well for smooth, differentiable loss functions and is computationally efficient since it only requires first-order derivatives (gradients).</p>
                 </div>
             </div>
 
@@ -41,14 +39,11 @@
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
                     <p>Model:</p>
-                    $$\hat{y}_i=wx_i+b$$
+                    $$\hat{y}_i=x_i^2$$
                     <p>Loss (Mean Squared Error):</p>
-                    $$J(w,b)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$
-                    <p>Gradients:</p>
-                    $$\frac{\partial J}{\partial w}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)x_i, \qquad \frac{\partial J}{\partial b}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)$$
-                    <p>Update rules:</p>
-                    $$w \leftarrow w-\alpha\frac{\partial J}{\partial w}, \qquad b \leftarrow b-\alpha\frac{\partial J}{\partial b}$$
-                    <p>where $\alpha$ is the learning rate.</p>
+                    $$J=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$
+                    <p>In this case, the function is already defined, so there are no parameters to optimize with Gradient Descent. However, we can analyze the loss:</p>
+                    $$J=\frac{1}{4}[(1-1)^2+(4-4)^2+(9-9)^2+(16-16)^2]$$
                 </div>
             </div>
 
@@ -56,13 +51,11 @@
                 <div class="section-title">4) Algorithm (Step by Step)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li>Initialize $w=0$, $b=0$, choose learning rate $\alpha$, and number of iterations.</li>
-                        <li>Compute predictions $\hat{y}=wx+b$.</li>
-                        <li>Compute loss $J(w,b)$.</li>
-                        <li>Compute gradients $\frac{\partial J}{\partial w}$ and $\frac{\partial J}{\partial b}$.</li>
-                        <li>Update $w$ and $b$ using Gradient Descent rules.</li>
-                        <li>Repeat Steps 2-5 until iterations are completed.</li>
-                        <li>Report final parameters, final loss, and predicted output.</li>
+                        <li>Initialize input values $x=[1,2,3,4]$ and target $y=[1,4,9,16]$.</li>
+                        <li>Compute predictions using $\hat{y}=x^2$ for each input.</li>
+                        <li>Compute loss $J$ (Mean Squared Error).</li>
+                        <li>Compare predicted and actual values to understand the fit.</li>
+                        <li>Report predictions, loss, and analysis.</li>
                     </ol>
                 </div>
             </div>
@@ -70,34 +63,20 @@
             <div class="section">
                 <div class="section-title">5) Mathematical Procedure (Complete Step-by-Step)</div>
                 <div class="section-content">
-                    <p>Given:</p>
-                    <ul style="margin-left: 20px;">
-                        <li>$x=[1,2,3,4]$, $y=[1,4,9,16]$, $n=4$</li>
-                        <li>Initial $w_0=0$, $b_0=0$, learning rate $\alpha=0.01$</li>
-                    </ul>
+                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, function $f(x)=x^2$</p>
                     <div class="step">
-                        <strong>1. Compute initial predictions:</strong>
-                        $$\hat{y}=w_0x+b_0=[0,0,0,0]$$
+                        <strong>1. Compute predictions using $\hat{y}=x^2$:</strong>
+                        $$\hat{y}=[1^2, 2^2, 3^2, 4^2]=[1,4,9,16]$$
                     </div>
                     <div class="step">
                         <strong>2. Compute errors:</strong>
-                        $$e=\hat{y}-y=[-1,-4,-9,-16]$$
+                        $$e=\hat{y}-y=[1-1, 4-4, 9-9, 16-16]=[0,0,0,0]$$
                     </div>
                     <div class="step">
-                        <strong>3. Compute gradient w.r.t. $w$:</strong>
-                        $$\frac{\partial J}{\partial w}=\frac{2}{4}[(-1)(1)+(-4)(2)+(-9)(3)+(-16)(4)] = \frac{1}{2}(-100)=-50$$
+                        <strong>3. Compute loss (Mean Squared Error):</strong>
+                        $$J=\frac{1}{4}(0^2+0^2+0^2+0^2)=0$$
                     </div>
-                    <div class="step">
-                        <strong>4. Compute gradient w.r.t. $b$:</strong>
-                        $$\frac{\partial J}{\partial b}=\frac{2}{4}[(-1)+(-4)+(-9)+(-16)] = \frac{1}{2}(-30)=-15$$
-                    </div>
-                    <div class="step">
-                        <strong>5. Update parameters:</strong>
-                        $$w_1=w_0-\alpha\frac{\partial J}{\partial w}=0-0.01(-50)=0.5$$
-                        $$b_1=b_0-\alpha\frac{\partial J}{\partial b}=0-0.01(-15)=0.15$$
-                    </div>
-                    <p>6. Substitute updated $(w_1,b_1)$ in the model and repeat the same sequence (prediction, error, gradients, update).</p>
-                    <p>7. Continue until loss reduces and parameter values stabilize.</p>
+                    <p>4. The function $f(x)=x^2$ perfectly fits the data, resulting in zero loss.</p>
                 </div>
             </div>
 
@@ -120,59 +99,42 @@
 x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
 y = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>], dtype=float)
 
-<span class="comment"># Initialize parameters</span>
-w = <span class="number">0.0</span>
-b = <span class="number">0.0</span>
-alpha = <span class="number">0.01</span>
-iterations = <span class="number">1000</span>
+<span class="comment"># Function f(x) = x^2</span>
+<span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x ** <span class="number">2</span>
+
+<span class="comment"># Compute predictions using f(x) = x^2</span>
+y_pred = f(x)
+error = y_pred - y
+
+<span class="comment"># Compute loss</span>
 n = len(x)
-
-loss_history = []
-
-<span class="keyword">for</span> i <span class="keyword">in</span> range(iterations):
-    y_pred = w * x + b
-    error = y_pred - y
-
-    <span class="comment"># Compute gradients</span>
-    dw = (<span class="number">2</span> / n) * np.sum(error * x)
-    db = (<span class="number">2</span> / n) * np.sum(error)
-
-    <span class="comment"># Update parameters</span>
-    w = w - alpha * dw
-    b = b - alpha * db
-
-    <span class="comment"># Compute and store loss</span>
-    loss = (<span class="number">1</span> / n) * np.sum(error ** <span class="number">2</span>)
-    loss_history.append(loss)
-
-<span class="comment"># Final predictions</span>
-y_final = w * x + b
-final_loss = (<span class="number">1</span> / n) * np.sum((y_final - y) ** <span class="number">2</span>)
+loss = (<span class="number">1</span> / n) * np.sum(error ** <span class="number">2</span>)
 
 print(<span class="string">"INPUT"</span>)
 print(<span class="string">"x ="</span>, x)
 print(<span class="string">"y ="</span>, y)
 print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Learned weight (w): </span>{w:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Learned bias (b): </span>{b:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final MSE Loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(y_final, <span class="number">4</span>))
+print(<span class="string">"Function: f(x) = x^2"</span>)
+print(<span class="function">f</span><span class="string">"Predicted y: </span>{np.round(y_pred, <span class="number">4</span>)}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Errors: </span>{np.round(error, <span class="number">4</span>)}<span class="string">"</span>)
+print(<span class="function">f</span><span class="string">"Mean Squared Error (MSE) Loss: </span>{loss:<span class="number">.6</span>f}<span class="string">"</span>)
 
 print(<span class="string">"\nProgram"</span>)
-print(<span class="string">"Gradient Descent implementation for linear model y_hat = w*x + b completed successfully."</span>)</div>
+print(<span class="string">"Quadratic function evaluation completed successfully."</span>)</div>
                 <div class="output-block">
 INPUT
 x = [1. 2. 3. 4.]
-y = [1. 4. 9. 16.]
+y = [ 1.  4.  9. 16.]
 
 OUTPUT
-Learned weight (w): 4.898136
-Learned bias (b): -4.700506
-Final MSE Loss: 1.014980
-Predicted y: [ 0.1976  5.0958  9.9939 14.892 ]
+Function: f(x) = x^2
+Predicted y: [ 1.  4.  9. 16.]
+Errors: [0. 0. 0. 0.]
+Mean Squared Error (MSE) Loss: 0.000000
 
 Program
-Gradient Descent implementation for linear model y_hat = w*x + b completed successfully.
+Quadratic function evaluation completed successfully.
                 </div>
             </div>
 

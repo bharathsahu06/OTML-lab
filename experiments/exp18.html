@@ -28,9 +28,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>The Conjugate Gradient method is an iterative algorithm for solving symmetric positive definite (SPD) linear systems. It is efficient because it avoids explicit matrix inversion and converges in at most $n$ steps (in exact arithmetic) for an $n\times n$ SPD matrix. In this experiment, we solve a 2-variable system using CG and verify that the computed solution satisfies $Ax \approx b$.</p>
-                    <p>The method followed is: start with an initial guess, compute initial residual and search direction, then update solution using step size computed from residual and matrix-direction products. After each update, a new conjugate direction is built using the residual ratio, and iterations continue until residual norm is below tolerance. This gives an accurate numerical solution with clear step-by-step updates.</p>
-                </div>
+                    <p><strong>Conjugate Gradient Method</strong> solves linear systems $Ax=b$ iteratively without forming matrix inverses—a computational miracle that works for large systems. The method builds a sequence of orthogonal (conjugate with respect to $A$) search directions, ensuring convergence in at most $n$ steps for an $n\times n$ matrix. In practice, with preconditioning, it converges much faster and has become the standard for large sparse systems in scientific computing.</p>
+                    <p>The key insight is that solving $Ax=b$ (when $A$ is symmetric positive definite) is equivalent to minimizing the quadratic form $\tfrac{1}{2}x^TAx - b^Tx$. Conjugate Gradient cleverly exploits this: each step moves along a direction conjugate to previous directions with respect to $A$, ensuring optimal progress. The algorithm only requires matrix-vector products, not matrix storage, making it memory-efficient for large-scale problems.</p>
+                    <p>CG's efficiency and scalability made it revolutionary in scientific computing. It extends to non-symmetric and non-square systems (GMRES, BiCG), and preconditioned variants solve ill-conditioned systems efficiently. Understanding CG principles helps grasp modern optimization for large-scale machine learning.</p>
             </div>
 
             <div class="section">

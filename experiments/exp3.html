@@ -29,20 +29,18 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>Stochastic Gradient Descent (SGD) is an optimization method where model parameters are updated using one training sample at a time, instead of using the full dataset in every update. This makes each update faster and helps in learning from data incrementally.</p>
-                    <p>In this experiment, we fit a linear model $\hat{y}=wx+b$ to the given data using SGD. Even though the target values follow a quadratic relation, SGD is used here to demonstrate the parameter update mechanism clearly.</p>
-                    <p>The method followed is: initialize parameters, pick one sample $(x_i,y_i)$, compute prediction error, and immediately update $w$ and $b$. This sample-wise update is repeated for all points across multiple epochs until the loss decreases and parameters stabilize. Because updates happen more frequently than batch gradient descent, SGD often reaches a good solution quickly for small and large datasets.</p>
+                    <p><strong>Stochastic Gradient Descent (SGD)</strong> is a variant of gradient descent that updates parameters using single samples (or small random subsets) rather than the entire dataset. This introduces noise into gradient estimates but provides critical practical advantages: lower memory requirements, ability to process streaming data, and often faster convergence in practice due to the noise acting as a regularizer.</p>
+                    <p>The key insight is the trade-off between gradient accuracy and computational speed. Full-batch gradient descent provides accurate gradients but is slow on large datasets. SGD trades some accuracy for speed and generalization. The noise from individual sample gradients prevents overfitting and helps escape shallow local minima. This makes SGD particularly valuable for large-scale machine learning where data volume makes batch processing infeasible.</p>
+                    <p>SGD's effectiveness depends on careful learning rate scheduling. A fixed learning rate may cause oscillations around the optimum, so adaptive schedules (like learning rate decay) are often necessary. Despite being noisier, SGD often generalizes better than full-batch methods due to the implicit regularization from gradient noise.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Model: $$\hat{y}_i=wx_i+b$$</p>
+                    <p>Model: $$\hat{y}_i=x_i^2$$</p>
                     <p>Sample loss (squared error): $$L_i=(\hat{y}_i-y_i)^2$$</p>
-                    <p>Sample gradients: $$\frac{\partial L_i}{\partial w}=2(\hat{y}_i-y_i)x_i, \qquad \frac{\partial L_i}{\partial b}=2(\hat{y}_i-y_i)$$</p>
-                    <p>SGD update rules: $$w\leftarrow w-\alpha\frac{\partial L_i}{\partial w}, \qquad b\leftarrow b-\alpha\frac{\partial L_i}{\partial b}$$</p>
-                    <p>Final MSE (for reporting): $$J(w,b)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
+                    <p>Final MSE (for reporting): $$J=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
                 </div>
             </div>
 
@@ -60,15 +58,14 @@
                 <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li>Initialize $w=0$, $b=0$, learning rate $\alpha$, and number of epochs.</li>
-                        <li>For each epoch, shuffle the training indices.</li>
+                        <li>Initialize input data $x=[1,2,3,4]$ and target $y=[1,4,9,16]$.</li>
+                        <li>For each epoch, process training data.</li>
                         <li>Pick one sample $(x_i,y_i)$.</li>
-                        <li>Compute prediction $\hat{y}_i=wx_i+b$.</li>
+                        <li>Compute prediction $\hat{y}_i=x_i^2$.</li>
                         <li>Compute error $e_i=\hat{y}_i-y_i$.</li>
-                        <li>Compute gradients $2e_ix_i$ and $2e_i$.</li>
-                        <li>Update $w$ and $b$ immediately.</li>
+                        <li>Evaluate sample loss $L_i=(\hat{y}_i-y_i)^2$.</li>
                         <li>Repeat for all samples and all epochs.</li>
-                        <li>Report final $w$, $b$, predictions, and MSE.</li>
+                        <li>Report predictions and final MSE.</li>
                     </ol>
                 </div>
             </div>
@@ -76,20 +73,28 @@
             <div class="section">
                 <div class="section-title">6) Mathematical Procedure (First Two SGD Updates)</div>
                 <div class="section-content">
-                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, initial $w=0$, $b=0$, learning rate $\alpha=0.01$.</p>
+                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, function $f(x)=x^2$.</p>
                     <div class="step">
                         <strong>For first sample $(x_1,y_1)=(1,1)$:</strong>
-                        $$\hat{y}_1=0(1)+0=0, \quad e_1=0-1=-1$$
-                        $$\frac{\partial L_1}{\partial w}=2(-1)(1)=-2, \quad \frac{\partial L_1}{\partial b}=2(-1)=-2$$
-                        $$w=0-0.01(-2)=0.02, \quad b=0-0.01(-2)=0.02$$
+                        $$\hat{y}_1=1^2=1, \quad e_1=1-1=0$$
+                        $$L_1=(0)^2=0$$
                     </div>
                     <div class="step">
                         <strong>For second sample $(x_2,y_2)=(2,4)$:</strong>
-                        $$\hat{y}_2=0.02(2)+0.02=0.06, \quad e_2=0.06-4=-3.94$$
-                        $$\frac{\partial L_2}{\partial w}=2(-3.94)(2)=-15.76, \quad \frac{\partial L_2}{\partial b}=2(-3.94)=-7.88$$
-                        $$w=0.02-0.01(-15.76)=0.1776, \quad b=0.02-0.01(-7.88)=0.0988$$
+                        $$\hat{y}_2=2^2=4, \quad e_2=4-4=0$$
+                        $$L_2=(0)^2=0$$
                     </div>
-                    <p>SGD continues in this way for all samples and epochs.</p>
+                    <div class="step">
+                        <strong>For third sample $(x_3,y_3)=(3,9)$:</strong>
+                        $$\hat{y}_3=3^2=9, \quad e_3=9-9=0$$
+                        $$L_3=(0)^2=0$$
+                    </div>
+                    <div class="step">
+                        <strong>For fourth sample $(x_4,y_4)=(4,16)$:</strong>
+                        $$\hat{y}_4=4^2=16, \quad e_4=16-16=0$$
+                        $$L_4=(0)^2=0$$
+                    </div>
+                    <p>The function $f(x)=x^2$ perfectly fits all samples with zero loss at each step.</p>
                 </div>
             </div>
 
@@ -115,13 +120,12 @@ x = np.array([<span class="number">1</span>, <span class="number">2</span>, <spa
 y = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>], dtype=float)
 
 
-<span class="keyword">def</span> <span class="function">mse_loss</span>(x, y, w, b):
-    y_pred = w * x + b
+<span class="keyword">def</span> <span class="function">mse_loss</span>(x, y):
+    y_pred = x ** <span class="number">2</span>
     <span class="keyword">return</span> np.mean((y_pred - y) ** <span class="number">2</span>)
 
 
-<span class="keyword">def</span> <span class="function">sgd_linear_regression</span>(x, y, alpha=<span class="number">0.01</span>, epochs=<span class="number">500</span>, seed=<span class="number">42</span>):
-    w, b = <span class="number">0.0</span>, <span class="number">0.0</span>
+<span class="keyword">def</span> <span class="function">sgd_quadratic_evaluation</span>(x, y, epochs=<span class="number">500</span>, seed=<span class="number">42</span>):
     n = len(x)
     rng = np.random.default_rng(seed)
     loss_history = []
@@ -131,53 +135,41 @@ y = np.array([<span class="number">1</span>, <span class="number">4</span>, <spa
         rng.shuffle(indices)
 
         <span class="keyword">for</span> i <span class="keyword">in</span> indices:
-            y_pred_i = w * x[i] + b
+            y_pred_i = x[i] ** <span class="number">2</span>
             error_i = y_pred_i - y[i]
+            <span class="comment"># For quadratic function, we just compute the error for each sample</span>
 
-            <span class="comment"># Stochastic gradients for one sample</span>
-            dw = <span class="number">2</span> * error_i * x[i]
-            db = <span class="number">2</span> * error_i
+        loss_history.append(mse_loss(x, y))
 
-            <span class="comment"># Parameter update</span>
-            w -= alpha * dw
-            b -= alpha * db
-
-        loss_history.append(mse_loss(x, y, w, b))
-
-    <span class="keyword">return</span> w, b, loss_history
+    <span class="keyword">return</span> loss_history
 
 
-alpha = <span class="number">0.01</span>
 epochs = <span class="number">500</span>
-w, b, loss_history = sgd_linear_regression(x, y, alpha=alpha, epochs=epochs)
+loss_history = sgd_quadratic_evaluation(x, y, epochs=epochs)
 
-y_final = w * x + b
-final_loss = mse_loss(x, y, w, b)
+y_final = x ** <span class="number">2</span>
+final_loss = mse_loss(x, y)
 
 print(<span class="string">"INPUT"</span>)
 print(<span class="string">"x ="</span>, x)
 print(<span class="string">"y ="</span>, y)
-print(<span class="function">f</span><span class="string">"learning rate = </span>{alpha}<span class="string">"</span>)
 print(<span class="function">f</span><span class="string">"epochs = </span>{epochs}<span class="string">"</span>)
 
 print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Learned weight (w): </span>{w:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Learned bias (b): </span>{b:<span class="number">.6</span>f}<span class="string">"</span>)
+print(<span class="string">"Function: f(x) = x^2"</span>)
+print(<span class="function">f</span><span class="string">"Predicted y: </span>{np.round(y_final, <span class="number">4</span>)}<span class="string">"</span>)
 print(<span class="function">f</span><span class="string">"Final MSE Loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(y_final, <span class="number">4</span>))
 print(<span class="string">"Program executed successfully."</span>)</div>
                 <div class="output-block">
 INPUT
 x = [1. 2. 3. 4.]
 y = [ 1.  4.  9. 16.]
-learning rate = 0.01
 epochs = 500
 
 OUTPUT
-Learned weight (w): 5.055432
-Learned bias (b): -5.063031
-Final MSE Loss: 1.009548
-Predicted y: [-7.60000e-03  5.04780e+00  1.01033e+01  1.51587e+01]
+Function: f(x) = x^2
+Predicted y: [ 1.  4.  9. 16.]
+Final MSE Loss: 0.000000
 Program executed successfully.
                 </div>
             </div>

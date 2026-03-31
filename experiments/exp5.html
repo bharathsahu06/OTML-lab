@@ -29,8 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment solves a linear programming problem where both objective and constraints are linear. The goal is to find feasible values of $x$ and $y$ that satisfy all inequalities while giving the smallest possible value of $3x+2y$. CVXPY is used to model the optimization problem in a direct mathematical way and then solve it using a suitable LP solver.</p>
-                    <p>The method followed is: define decision variables, construct the linear objective, add all given constraints, and solve the optimization model. After obtaining the result, we check whether the solution satisfies each constraint and then report the minimum objective value. Since this is a convex linear program, the solver returns a global optimum over the feasible region.</p>
+                    <p><strong>Linear Programming (LP)</strong> is the foundational class of optimization problems where both the objective function and all constraints are linear. LP problems are ubiquitous in operations research, supply chain management, resource allocation, and business planning. Their power comes from a combination of practical importance and computational tractability—LP can be solved efficiently even with millions of variables.</p>
+                    <p>The geometry of LP is elegant: the feasible region is a convex polytope, and the optimal solution always occurs at a vertex (corner point) of this region. This insight enables the Simplex Method, which navigates vertices efficiently. Since the objective is linear, moving in any direction strictly decreases it, so boundary points (especially vertices) are always optimal—the interior never contains the optimum.</p>
+                    <p>LP has rich theory about sensitivity analysis, duality, and shadow prices, making it not just a tool for finding answers but for understanding trade-offs in constrained decisions. Extensions like Integer Programming and Mixed-Integer Programming handle discrete decisions, though at increased computational cost.</p>
                 </div>
             </div>
 

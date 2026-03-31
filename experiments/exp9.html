@@ -28,8 +28,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>In this experiment, we train a linear regression model with L1 regularization. L1 regularization adds the penalty term $\lambda(|w_1|+|w_2|)$ to the loss, which promotes sparse parameter values and improves generalization. Since the absolute value is not differentiable at zero, standard gradient descent is replaced by the sub-gradient method, which uses valid sub-gradients for the L1 term.</p>
-                    <p>The method followed is: initialize $w_1,w_2$, compute predictions and errors for all samples, and calculate the MSE gradient component. Then include L1 sub-gradient terms using the sign function and update parameters iteratively with a chosen learning rate. After repeated updates, we report final weights, regularized loss, and predicted outputs for the dataset.</p>
+                    <p><strong>L1 Regularization and Sub-gradient Methods</strong> address the challenge of producing sparse solutions where many model parameters are exactly zero. L1 regularization (also called LASSO) adds penalty $\lambda||w||_1$ to the loss, pushing weights toward zero through a sharp "corner" at the origin. This corner creates non-differentiability—standard gradient descent fails because the gradient is undefined at zero.</p>
+                    <p>Sub-gradient methods generalize gradient descent to handle non-smooth (non-differentiable) functions. Instead of a unique gradient, non-smooth functions have a set of valid gradient-like vectors called sub-gradients. The L1 norm has a simple sub-gradient: the sign function. Sub-gradient updates still descend the objective, maintaining the convergence guarantees of gradient descent while handling non-smoothness.</p>
+                    <p>L1 regularization is crucial in high-dimensional machine learning where feature selection is desired. By encouraging sparsity, L1 helps identify important features and reduces overfitting. The sub-gradient method makes it computationally tractable to optimize L1-regularized objectives, enabling practical sparse learning in applications from text classification to signal processing.</p>
                 </div>
             </div>
 

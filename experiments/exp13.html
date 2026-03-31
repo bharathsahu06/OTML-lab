@@ -29,9 +29,9 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>This experiment demonstrates distributed training of a linear regression model using gradient descent. The model is $\hat{y}=wx+b$, and the objective is to minimize MSE loss. In distributed gradient descent, the dataset is split across multiple workers; each worker computes local gradients and a central server aggregates them to update global parameters. This approach is useful when data is large or stored across different machines.</p>
-                    <p>The method followed is: divide data into worker partitions, broadcast current global parameters to all workers, and compute local gradients in parallel (simulated). Then average local gradients at the server and perform one global parameter update per epoch. Repeating this synchronization process gives the same learning logic as gradient descent but in distributed form.</p>
-                </div>
+                    <p><strong>Distributed Gradient Descent</strong> enables large-scale machine learning by partitioning data across multiple computers or nodes. Each node independently computes gradients on its local data, then a central aggregator (parameter server) combines them to update global model parameters. This approach is essential for modern machine learning: datasets too large for single machines, computational benefits from parallelization, and resilience through data distribution.</p>
+                    <p>The elegance of distributed gradient descent lies in its simplicity and theoretical guarantees. Averaging local gradients from $K$ workers produces a gradient estimate with variance scaling like $1/K$—faster parallel learning. Communication happens only when aggregating gradients, making the method bandwidth-efficient. The method naturally handles data heterogeneity: as long as each worker computes correct local gradients, the globally aggregated gradient approximates the full-batch gradient.</p>
+                    <p>This approach is the foundation of federated learning, parameter server architectures, and distributed deep learning frameworks like PyTorch Distributed and TensorFlow. Understanding this principle unlocks scalability: the same optimization algorithm works when computation is parallelized, enabling training on datasets and models impossible on single machines.</p>
             </div>
 
             <div class="section">
