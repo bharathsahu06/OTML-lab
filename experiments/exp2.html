@@ -119,83 +119,73 @@
                 <div class="section-title">8) Python Implementation & Output</div>
                 <div class="code-block">
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> sympy <span class="keyword">import</span> symbols, diff, lambdify, sympify
 
-<span class="comment"># Function and derivatives</span>
+<span class="comment"># Symbol</span>
+x = symbols(<span class="string">'x'</span>)
 
-<span class="keyword">def</span> <span class="function">f</span>(x):
-    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">3</span>*x**<span class="number">2</span> + <span class="number">2</span>
+<span class="comment"># ===== INPUT =====</span>
+expr_input = input(<span class="string">"Enter function f(x): "</span>)
+x0 = float(input(<span class="string">"Enter initial value: "</span>))
 
-<span class="keyword">def</span> <span class="function">df</span>(x):
-    <span class="keyword">return</span> <span class="number">4</span>*x**<span class="number">3</span> - <span class="number">6</span>*x
-
-<span class="keyword">def</span> <span class="function">d2f</span>(x):
-    <span class="keyword">return</span> <span class="number">12</span>*x**<span class="number">2</span> - <span class="number">6</span>
-
-
-<span class="keyword">def</span> <span class="function">newton_optimize</span>(x0, tol=<span class="number">1e-6</span>, max_iter=<span class="number">20</span>):
-    x = float(x0)
-    history = []
-
-    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, max_iter + <span class="number">1</span>):
-        grad = df(x)
-        hess = d2f(x)
-
-        <span class="keyword">if</span> abs(hess) < <span class="number">1e-12</span>:
-            <span class="keyword">raise</span> ValueError(<span class="string">"Second derivative is too close to zero; Newton step is unstable."</span>)
-
-        x_next = x - grad / hess
-        history.append((k, x, grad, hess, x_next, abs(x_next - x)))
-
-        <span class="keyword">if</span> abs(x_next - x) < tol:
-            <span class="keyword">return</span> x_next, f(x_next), history
-
-        x = x_next
-
-    <span class="keyword">return</span> x, f(x), history
-
-
-<span class="comment"># Given input</span>
-x0 = <span class="number">2.0</span>
+<span class="comment"># Defaults</span>
 tol = <span class="number">1e-6</span>
 max_iter = <span class="number">20</span>
 
-x_star, f_star, steps = newton_optimize(x0, tol, max_iter)
+<span class="comment"># ===== SYMBOLIC =====</span>
+f_expr = sympify(expr_input)
+df_expr = diff(f_expr, x)
+d2f_expr = diff(df_expr, x)
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="function">f</span><span class="string">"Function: f(x) = x^4 - 3x^2 + 2"</span>)
-print(<span class="function">f</span><span class="string">"Initial guess (x0): </span>{x0}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Tolerance: </span>{tol}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Max iterations: </span>{max_iter}<span class="string">"</span>)
+<span class="comment"># ===== NUMERICAL =====</span>
+f = lambdify(x, f_expr, <span class="string">'numpy'</span>)
+df = lambdify(x, df_expr, <span class="string">'numpy'</span>)
+d2f = lambdify(x, d2f_expr, <span class="string">'numpy'</span>)
 
-print(<span class="string">"\nITERATION TABLE"</span>)
-print(<span class="string">"k\t x_k\t\t f'(x_k)\t f''(x_k)\t x_(k+1)\t |x_(k+1)-x_k|"</span>)
-<span class="keyword">for</span> k, xk, grad, hess, xn, diff <span class="keyword">in</span> steps:
-    print(<span class="function">f</span><span class="string">"</span>{k}<span class="string">\t </span>{xk:<span class="number">.6</span>f}<span class="string">\t </span>{grad:<span class="number">.6</span>f}<span class="string">\t </span>{hess:<span class="number">.6</span>f}<span class="string">\t </span>{xn:<span class="number">.6</span>f}<span class="string">\t </span>{diff:<span class="number">.6</span>e}<span class="string">"</span>)
+<span class="comment"># ===== NEWTON METHOD =====</span>
+x_val = x0
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Optimal x*: </span>{x_star:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum function value f(x*): </span>{f_star:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+print(<span class="string">"\nIter\t x\t\t f(x)"</span>)
+
+<span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, max_iter + <span class="number">1</span>):
+    grad = df(x_val)
+    hess = d2f(x_val)
+
+    <span class="keyword">if</span> abs(hess) < <span class="number">1e-12</span>:
+        print(<span class="string">"Stopped: second derivative too small"</span>)
+        <span class="keyword">break</span>
+
+    x_new = x_val - grad / hess
+
+    print(<span class="function">f</span><span class="string">"{k}\t {x_new:.6f}\t {f(x_new):.6f}"</span>)
+
+    <span class="keyword">if</span> abs(x_new - x_val) < tol:
+        x_val = x_new
+        <span class="keyword">break</span>
+
+    x_val = x_new
+
+<span class="comment"># ===== RESULT =====</span>
+print(<span class="string">"function:"</span>, f_expr)
+print(<span class="string">"initial x:"</span>, x0)
+print(<span class="string">"\nOptimal x ="</span>, round(x_val, <span class="number">6</span>))
+print(<span class="string">"Minimum value ="</span>, round(f(x_val), <span class="number">6</span>))</div>
                 <div class="output-block">
-INPUT
-Function: f(x) = x^4 - 3x^2 + 2
-Initial guess (x0): 2.0
-Tolerance: 1e-06
-Max iterations: 20
+Enter function f(x): x**4 - 3*x**2 + 2
+Enter initial value: 2.0
 
-ITERATION TABLE
-k	 x_k		 f'(x_k)	 f''(x_k)	 x_(k+1)	 |x_(k+1)-x_k|
-1	 2.000000	 20.000000	 42.000000	 1.523810	 4.761905e-01
-2	 1.523810	 5.010258	 21.863946	 1.294653	 2.291562e-01
-3	 1.294653	 0.912095	 14.113528	 1.230028	 6.462560e-02
-4	 1.230028	 0.063805	 12.155619	 1.224779	 5.249039e-03
-5	 1.224779	 0.000406	 12.000995	 1.224745	 3.383921e-05
-6	 1.224745	 0.000000	 12.000000	 1.224745	 1.402472e-09
+Iter	 x		 f(x)
+1	 1.523810	 0.638748
+2	 1.294653	 -0.206268
+3	 1.230028	 -0.247652
+4	 1.224779	 -0.249999
+5	 1.224745	 -0.250000
+6	 1.224745	 -0.250000
+function: x**4 - 3*x**2 + 2
+initial x: 2.0
 
-OUTPUT
-Optimal x*: 1.224745
-Minimum function value f(x*): -0.250000
-Program executed successfully.
+Optimal x = 1.224745
+Minimum value = -0.25
                 </div>
             </div>
 
