@@ -124,6 +124,16 @@ model.<span class="function">solve</span>(pulp.<span class="function">PULP_CBC_C
 <span class="function">print</span>(<span class="string">&quot;y =&quot;</span>, pulp.<span class="function">value</span>(y))
 <span class="function">print</span>(<span class="string">&quot;Minimum Z =&quot;</span>, pulp.<span class="function">value</span>(model.objective))</div>
                 <div class="output-block">
+model: LP_Problem:
+MINIMIZE
+3*x + 2*y + 0
+SUBJECT TO
+_C1: x + y >= 4
+
+VARIABLES
+x Continuous
+y Continuous
+
 Status: Optimal
 x = 0.0
 y = 4.0
