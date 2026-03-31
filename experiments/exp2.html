@@ -125,8 +125,8 @@
 x = symbols(<span class="string">'x'</span>)
 
 <span class="comment"># ===== INPUT =====</span>
-expr_input = input(<span class="string">"Enter function f(x): "</span>)
-x0 = float(input(<span class="string">"Enter initial value: "</span>))
+expr_input = <span class="function">input</span>(<span class="string">"Enter function f(x): "</span>)
+x0 = <span class="function">float</span>(<span class="function">input</span>(<span class="string">"Enter initial value: "</span>))
 
 <span class="comment"># Defaults</span>
 tol = <span class="number">1e-6</span>
@@ -145,44 +145,40 @@ d2f = lambdify(x, d2f_expr, <span class="string">'numpy'</span>)
 <span class="comment"># ===== NEWTON METHOD =====</span>
 x_val = x0
 
-print(<span class="string">"\nIter\t x\t\t f(x)"</span>)
+<span class="function">print</span>(<span class="string">"\nIter\t x\t\t f(x)"</span>)
 
-<span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, max_iter + <span class="number">1</span>):
+<span class="keyword">for</span> k <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, max_iter + <span class="number">1</span>):
     grad = df(x_val)
     hess = d2f(x_val)
 
-    <span class="keyword">if</span> abs(hess) < <span class="number">1e-12</span>:
-        print(<span class="string">"Stopped: second derivative too small"</span>)
+    <span class="keyword">if</span> <span class="function">abs</span>(hess) < <span class="number">1e-12</span>:
+        <span class="function">print</span>(<span class="string">"Stopped: second derivative too small"</span>)
         <span class="keyword">break</span>
 
     x_new = x_val - grad / hess
 
-    print(<span class="function">f</span><span class="string">"{k}\t {x_new:.6f}\t {f(x_new):.6f}"</span>)
+    <span class="function">print</span>(<span class="function">f</span><span class="string">"{k}\t {x_new:.6f}\t {f(x_new):.6f}"</span>)
 
-    <span class="keyword">if</span> abs(x_new - x_val) < tol:
+    <span class="keyword">if</span> <span class="function">abs</span>(x_new - x_val) < tol:
         x_val = x_new
         <span class="keyword">break</span>
 
     x_val = x_new
 
 <span class="comment"># ===== RESULT =====</span>
-print(<span class="string">"function:"</span>, f_expr)
-print(<span class="string">"initial x:"</span>, x0)
-print(<span class="string">"\nOptimal x ="</span>, round(x_val, <span class="number">6</span>))
-print(<span class="string">"Minimum value ="</span>, round(f(x_val), <span class="number">6</span>))</div>
+<span class="function">print</span>(<span class="string">"\nOptimal x ="</span>, <span class="function">round</span>(x_val, <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">"Minimum value ="</span>, <span class="function">round</span>(f(x_val), <span class="number">6</span>))</div>
                 <div class="output-block">
 Enter function f(x): x**4 - 3*x**2 + 2
-Enter initial value: 2.0
+Enter initial value: 2
 
 Iter	 x		 f(x)
-1	 1.523810	 0.638748
-2	 1.294653	 -0.206268
-3	 1.230028	 -0.247652
-4	 1.224779	 -0.249999
-5	 1.224745	 -0.250000
+1	 1.523810	 0.859726
+2	 1.294653	 0.116275
+3	 1.230028	 0.010019
+4	 1.224779	 0.000073
+5	 1.224745	 0.000000
 6	 1.224745	 -0.250000
-function: x**4 - 3*x**2 + 2
-initial x: 2.0
 
 Optimal x = 1.224745
 Minimum value = -0.25
