@@ -109,89 +109,43 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="keyword">def</span> <span class="function">f</span>(x):
-    <span class="keyword">return</span> x**<span class="number">2</span>
-
-
-<span class="keyword">def</span> <span class="function">barrier_phi</span>(x, t):
-    <span class="keyword">return</span> t * (x**<span class="number">2</span>) - np.log(x - <span class="number">1.0</span>)
-
-
-<span class="keyword">def</span> <span class="function">barrier_grad</span>(x, t):
-    <span class="keyword">return</span> <span class="number">2.0</span> * t * x - <span class="number">1.0</span> / (x - <span class="number">1.0</span>)
-
-
-<span class="keyword">def</span> <span class="function">barrier_hess</span>(x, t):
-    <span class="keyword">return</span> <span class="number">2.0</span> * t + <span class="number">1.0</span> / ((x - <span class="number">1.0</span>) ** <span class="number">2</span>)
-
-
-<span class="keyword">def</span> <span class="function">interior_point_1d</span>(x0=<span class="number">2.0</span>, t0=<span class="number">1.0</span>, mu=<span class="number">10.0</span>, eps=<span class="number">1e-6</span>, newton_tol=<span class="number">1e-10</span>, max_outer=<span class="number">20</span>, max_inner=<span class="number">50</span>):
-    x = float(x0)
-    t = float(t0)
-    m = <span class="number">1</span>  <span class="comment"># number of inequality constraints</span>
-    history = []
-
-    <span class="keyword">if</span> x <= <span class="number">1.0</span>:
-        <span class="keyword">raise</span> ValueError(<span class="string">"Initial point must satisfy x > 1."</span>)
-
-    <span class="keyword">for</span> outer <span class="keyword">in</span> range(<span class="number">1</span>, max_outer + <span class="number">1</span>):
-        <span class="keyword">for</span> inner <span class="keyword">in</span> range(<span class="number">1</span>, max_inner + <span class="number">1</span>):
-            g = barrier_grad(x, t)
-            h = barrier_hess(x, t)
-
-            <span class="keyword">if</span> abs(g) < newton_tol:
-                <span class="keyword">break</span>
-
-            <span class="comment"># Newton step</span>
-            delta = -g / h
-            step = <span class="number">1.0</span>
-
-            <span class="comment"># Backtracking to maintain feasibility x > 1</span>
-            <span class="keyword">while</span> x + step * delta <= <span class="number">1.0</span>:
-                step *= <span class="number">0.5</span>
-
-            <span class="comment"># Armijo-style sufficient decrease (simple form)</span>
-            <span class="keyword">while</span> barrier_phi(x + step * delta, t) > barrier_phi(x, t) + <span class="number">1e-4</span> * step * g * delta:
-                step *= <span class="number">0.5</span>
-                <span class="keyword">if</span> step < <span class="number">1e-12</span>:
-                    <span class="keyword">break</span>
-
-            x = x + step * delta
-            history.append((outer, inner, t, x, f(x), abs(g)))
-
-        <span class="keyword">if</span> m / t < eps:
-            <span class="keyword">break</span>
-
-        t *= mu
-
-    <span class="keyword">return</span> x, f(x), history
-
-
-<span class="comment"># Given input parameters</span>
-x0 = <span class="number">2.0</span>
-t0 = <span class="number">1.0</span>
+<span class="comment"># Initial values</span>
+x = <span class="number">2.0</span>
+t = <span class="number">1.0</span>
 mu = <span class="number">10.0</span>
 eps = <span class="number">1e-6</span>
 
-x_star, f_star, steps = interior_point_1d(x0=x0, t0=t0, mu=mu, eps=eps)
+<span class="comment"># Loop</span>
+<span class="keyword">while</span> <span class="number">1</span>/t &gt; eps:
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: minimize f(x) = x^2"</span>)
-print(<span class="string">"Constraint: x >= 1"</span>)
-print(<span class="function">f</span><span class="string">"Initial x0: </span>{x0}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Initial barrier parameter t0: </span>{t0}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Barrier update factor mu: </span>{mu}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Stopping epsilon: </span>{eps}<span class="string">"</span>)
+    <span class="comment"># Newton method (few iterations enough for 1D)</span>
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">20</span>):
+        grad = <span class="number">2</span>*t*x - <span class="number">1</span>/(x - <span class="number">1</span>)
+        hess = <span class="number">2</span>*t + <span class="number">1</span>/((x - <span class="number">1</span>)**<span class="number">2</span>)
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Optimal x*: </span>{x_star:<span class="number">.8</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum objective value f(x*): </span>{f_star:<span class="number">.8</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Constraint check (x* >= 1): </span>{x_star >= <span class="number">1.0</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Distance from boundary (x* - 1): </span>{x_star - <span class="number">1.0</span>:<span class="number">.8</span>e}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+        <span class="keyword">if</span> <span class="function">abs</span>(grad) &lt; <span class="number">1e-10</span>:
+            break
+
+        <span class="comment"># Newton step</span>
+        x_new = x - grad/hess
+
+        <span class="comment"># Keep x &gt; 1 (feasible)</span>
+        <span class="keyword">while</span> x_new &lt;= <span class="number">1</span>:
+            x_new = (x + x_new) / <span class="number">2</span>
+
+        x = x_new
+
+    <span class="comment"># Increase barrier parameter</span>
+    t = t * mu
+
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;objective function: f(x) = x^2&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;constraint: x &gt;= 1&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Optimal x:&quot;</span>, <span class="function">round</span>(x, <span class="number">8</span>))
+<span class="function">print</span>(<span class="string">&quot;Minimum f(x):&quot;</span>, <span class="function">round</span>(x**<span class="number">2</span>, <span class="number">8</span>))
+<span class="function">print</span>(<span class="string">&quot;Constraint satisfied:&quot;</span>, x &gt;= <span class="number">1</span>)</div>
                 <div class="output-block">
 INPUT
 Objective: minimize f(x) = x^2

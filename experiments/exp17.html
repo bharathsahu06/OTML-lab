@@ -118,99 +118,59 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Given input</span>
-x1 = np.array([<span class="number">1</span>, <span class="number">2</span>], dtype=float)
-x2 = np.array([<span class="number">2</span>, <span class="number">1</span>], dtype=float)
-x3 = np.array([<span class="number">1</span>, <span class="number">1</span>], dtype=float)
-x4 = np.array([<span class="number">1</span>, <span class="number">1</span>], dtype=float)
-y = np.array([<span class="number">9</span>, <span class="number">10</span>], dtype=float)
+<span class="comment"># Data</span>
+X = np.<span class="function">array</span>([
+    [<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>],
+    [<span class="number">2.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>]
+])
+y = np.<span class="function">array</span>([<span class="number">9.0</span>, <span class="number">10.0</span>])
 
-X = np.column_stack([x1, x2, x3, x4])
+<span class="comment"># Groups: [w1,w2] and [w3,w4]</span>
+g1 = [<span class="number">0</span>,<span class="number">1</span>]
+g2 = [<span class="number">2</span>,<span class="number">3</span>]
 
-<span class="comment"># Group definitions: [w1, w2] and [w3, w4]</span>
-groups = [np.array([<span class="number">0</span>, <span class="number">1</span>]), np.array([<span class="number">2</span>, <span class="number">3</span>])]
-
-
-<span class="keyword">def</span> <span class="function">group_lasso_objective</span>(X, y, w, groups, lam):
-    n = <span class="keyword">len</span>(y)
-    mse_part = <span class="number">0.5</span> / n * np.sum((X @ w - y) ** <span class="number">2</span>)
-    group_penalty = lam * <span class="keyword">sum</span>(np.linalg.norm(w[g], ord=<span class="number">2</span>) <span class="keyword">for</span> g <span class="keyword">in</span> groups)
-    <span class="keyword">return</span> mse_part + group_penalty
-
-
-<span class="keyword">def</span> <span class="function">group_soft_threshold</span>(v_group, thresh):
-    norm_v = np.linalg.norm(v_group, ord=<span class="number">2</span>)
-    <span class="keyword">if</span> norm_v == <span class="number">0</span> <span class="keyword">or</span> norm_v <= thresh:
-        <span class="keyword">return</span> np.zeros_like(v_group)
-    scale = <span class="number">1.0</span> - thresh / norm_v
-    <span class="keyword">return</span> scale * v_group
-
-
-<span class="keyword">def</span> <span class="function">group_lasso_train</span>(X, y, groups, lam=<span class="number">2.0</span>, iterations=<span class="number">2000</span>):
-    n, d = X.shape
-    w = np.zeros(d)
-
-    <span class="comment"># Step size from Lipschitz constant of gradient of 0.5/n ||Xw-y||^2</span>
-    L = np.linalg.eigvalsh((X.T @ X) / n).max()
-    alpha = <span class="number">0.9</span> / (L + <span class="number">1e-12</span>)
-
-    history = []
-
-    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="keyword">range</span>(iterations):
-        grad = (X.T @ (X @ w - y)) / n
-
-        <span class="comment"># Gradient step</span>
-        v = w - alpha * grad
-
-        <span class="comment"># Proximal group-wise shrinkage</span>
-        w_new = np.zeros_like(w)
-        <span class="keyword">for</span> g <span class="keyword">in</span> groups:
-            w_new[g] = group_soft_threshold(v[g], alpha * lam)
-
-        w = w_new
-        history.append(group_lasso_objective(X, y, w, groups, lam))
-
-    <span class="keyword">return</span> w, alpha, history
-
-
+<span class="comment"># Parameters</span>
+w = np.<span class="function">zeros</span>(<span class="number">4</span>)
 lam = <span class="number">2.0</span>
 iterations = <span class="number">2000</span>
 
-w_opt, alpha, history = group_lasso_train(X, y, groups, lam=lam, iterations=iterations)
-y_pred = X @ w_opt
-obj_val = group_lasso_objective(X, y, w_opt, groups, lam)
+n = <span class="function">len</span>(y)
 
-group1_norm = np.linalg.norm(w_opt[groups[<span class="number">0</span>]], ord=<span class="number">2</span>)
-group2_norm = np.linalg.norm(w_opt[groups[<span class="number">1</span>]], ord=<span class="number">2</span>)
+<span class="comment"># Step size (simple fixed)</span>
+alpha = <span class="number">0.01</span>
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"x1 ="</span>, x1)
-print(<span class="string">"x2 ="</span>, x2)
-print(<span class="string">"x3 ="</span>, x3)
-print(<span class="string">"x4 ="</span>, x4)
-print(<span class="string">"y  ="</span>, y)
-print(<span class="string">"Groups: G1=(w1,w2), G2=(w3,w4)"</span>)
-print(<span class="function">f</span><span class="string">"lambda = </span>{lam}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"iterations = </span>{iterations}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"step size (alpha) = </span>{alpha:<span class="number">.6</span>f}<span class="string">"</span>)
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(iterations):
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"w1 = </span>{w_opt[<span class="number">0</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"w2 = </span>{w_opt[<span class="number">1</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"w3 = </span>{w_opt[<span class="number">2</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"w4 = </span>{w_opt[<span class="number">3</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final objective value = </span>{obj_val:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(y_pred, <span class="number">6</span>))
+    <span class="comment"># Gradient step (MSE part)</span>
+    grad = (X.T @ (X @ w - y)) / n
+    v = w - alpha * grad
 
-print(<span class="string">"\nGROUP SPARSITY CHECK"</span>)
-print(<span class="function">f</span><span class="string">"||[w1, w2]||_2 = </span>{group1_norm:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"||[w3, w4]||_2 = </span>{group2_norm:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Group 1 near zero:"</span>, group1_norm < <span class="number">1e-3</span>)
-print(<span class="string">"Group 2 near zero:"</span>, group2_norm < <span class="number">1e-3</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+    <span class="comment"># Group shrinkage</span>
+    w_new = np.<span class="function">zeros_like</span>(w)
+
+    <span class="comment"># Group 1</span>
+    norm1 = np.linalg.<span class="function">norm</span>(v[g1])
+    <span class="keyword">if</span> norm1 &gt; alpha*lam:
+        w_new[g1] = (<span class="number">1</span> - alpha*lam/norm1) * v[g1]
+
+    <span class="comment"># Group 2</span>
+    norm2 = np.linalg.<span class="function">norm</span>(v[g2])
+    <span class="keyword">if</span> norm2 &gt; alpha*lam:
+        w_new[g2] = (<span class="number">1</span> - alpha*lam/norm2) * v[g2]
+
+    w = w_new
+
+<span class="comment"># Output</span>
+y_pred = X @ w
+
+<span class="function">print</span>(<span class="string">&quot;function: f(x) = w1*x1 + w2*x2 + w3*x3 + w4*x4&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;data points: (1,2,5,1), (2,1,1,1)&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;w =&quot;</span>, np.<span class="function">round</span>(w,<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Predictions =&quot;</span>, np.<span class="function">round</span>(y_pred,<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Group1 norm =&quot;</span>, <span class="function">round</span>(np.linalg.<span class="function">norm</span>(w[g1]),<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Group2 norm =&quot;</span>, <span class="function">round</span>(np.linalg.<span class="function">norm</span>(w[g2]),<span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
 x1 = [1. 2.]

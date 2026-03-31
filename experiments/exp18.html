@@ -110,70 +110,45 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Interpreted input from the aim text</span>
-A = np.array([[<span class="number">4.0</span>, <span class="number">1.0</span>],
+<span class="comment"># Given</span>
+A = np.<span class="function">array</span>([[<span class="number">4.0</span>, <span class="number">1.0</span>],
               [<span class="number">1.0</span>, <span class="number">3.0</span>]])
-b = np.array([<span class="number">1.0</span>, <span class="number">2.0</span>])
+b = np.<span class="function">array</span>([<span class="number">1.0</span>, <span class="number">2.0</span>])
 
+<span class="comment"># Initial guess</span>
+x = np.<span class="function">array</span>([<span class="number">0.0</span>, <span class="number">0.0</span>])
 
-<span class="keyword">def</span> <span class="function">conjugate_gradient</span>(A, b, x0=<span class="keyword">None</span>, tol=<span class="number">1e-10</span>, max_iter=<span class="number">100</span>):
-    n = <span class="keyword">len</span>(b)
-    x = np.zeros(n) <span class="keyword">if</span> x0 <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">else</span> np.array(x0, dtype=float)
+<span class="comment"># Initial residual and direction</span>
+r = b - A @ x
+p = r.<span class="function">copy</span>()
 
-    r = b - A @ x
-    p = r.copy()
-    rs_old = np.dot(r, r)
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):  <span class="comment"># enough for 2x2 (max 2 steps theoretically)</span>
 
-    history = []
+    Ap = A @ p
+    alpha = (r @ r) / (p @ Ap)
 
-    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">1</span>, max_iter + <span class="number">1</span>):
-        Ap = A @ p
-        alpha = rs_old / np.dot(p, Ap)
+    x = x + alpha * p
+    r_new = r - alpha * Ap
 
-        x = x + alpha * p
-        r = r - alpha * Ap
+    <span class="comment"># Stop if converged</span>
+    <span class="keyword">if</span> np.linalg.<span class="function">norm</span>(r_new) &lt; <span class="number">1e-10</span>:
+        break
 
-        rs_new = np.dot(r, r)
-        res_norm = np.sqrt(rs_new)
-        history.append((k, x.copy(), res_norm))
+    beta = (r_new @ r_new) / (r @ r)
+    p = r_new + beta * p
 
-        <span class="keyword">if</span> res_norm < tol:
-            <span class="keyword">break</span>
+    r = r_new
 
-        beta = rs_new / rs_old
-        p = r + beta * p
-        rs_old = rs_new
-
-    <span class="keyword">return</span> x, history
-
-
-x0 = np.array([<span class="number">0.0</span>, <span class="number">0.0</span>])
-tol = <span class="number">1e-10</span>
-max_iter = <span class="number">100</span>
-
-x_star, steps = conjugate_gradient(A, b, x0=x0, tol=tol, max_iter=max_iter)
-b_est = A @ x_star
-residual = b - b_est
-
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"A ="</span>)
-print(A)
-print(<span class="string">"b ="</span>, b)
-print(<span class="string">"Initial guess x0 ="</span>, x0)
-print(<span class="function">f</span><span class="string">"Tolerance = </span>{tol}<span class="string">"</span>)
-
-print(<span class="string">"\nITERATION SUMMARY"</span>)
-<span class="keyword">for</span> k, xk, rn <span class="keyword">in</span> steps:
-    print(<span class="function">f</span><span class="string">"Iter </span>{k}<span class="string">: x = </span>{np.round(xk, <span class="number">10</span>)}<span class="string">, residual_norm = </span>{rn:<span class="number">.3</span>e}<span class="string">"</span>)
-
-print(<span class="string">\nOUTPUT"</span>)
-print(<span class="string">"Solution x* ="</span>, np.round(x_star, <span class="number">10</span>))
-print(<span class="string">"A @ x* ="</span>, np.round(b_est, <span class="number">10</span>))
-print(<span class="string">"Residual (b - A@x*) ="</span>, np.round(residual, <span class="number">12</span>))
-print(<span class="string">"Program executed successfully."</span>)</div>
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;function: Ax = b&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;A =
+&quot;</span>, A)
+<span class="function">print</span>(<span class="string">&quot;b =&quot;</span>, b)
+<span class="function">print</span>(<span class="string">&quot;Solution x =&quot;</span>, np.<span class="function">round</span>(x, <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Check A@x =&quot;</span>, np.<span class="function">round</span>(A @ x, <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Residual =&quot;</span>, np.<span class="function">round</span>(b - A @ x, <span class="number">10</span>))</div>
                 <div class="output-block">
 INPUT
 A =

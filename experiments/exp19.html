@@ -110,85 +110,44 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Objective and gradient</span>
+<span class="comment"># Initial point</span>
+x = np.<span class="function">array</span>([<span class="number">2.0</span>, <span class="number">2.0</span>])
 
-<span class="keyword">def</span> <span class="function">f</span>(x):
-    <span class="keyword">return</span> x[<span class="number">0</span>] ** <span class="number">2</span> + <span class="number">2.0</span> * x[<span class="number">1</span>] ** <span class="number">2</span>
+<span class="comment"># Initial inverse Hessian approximation</span>
+H = np.<span class="function">eye</span>(<span class="number">2</span>)
 
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">20</span>):
 
-<span class="keyword">def</span> <span class="function">grad_f</span>(x):
-    <span class="keyword">return</span> np.array([<span class="number">2.0</span> * x[<span class="number">0</span>], <span class="number">4.0</span> * x[<span class="number">1</span>]])
+    <span class="comment"># Gradient</span>
+    g = np.<span class="function">array</span>([<span class="number">2</span>*x[<span class="number">0</span>], <span class="number">4</span>*x[<span class="number">1</span>]])
 
+    <span class="keyword">if</span> np.linalg.<span class="function">norm</span>(g) &lt; <span class="number">1e-8</span>:
+        break
 
-<span class="keyword">def</span> <span class="function">backtracking_line_search</span>(x, p, g, alpha0=<span class="number">1.0</span>, c=<span class="number">1e-4</span>, tau=<span class="number">0.5</span>):
-    alpha = alpha0
-    fx = f(x)
-    <span class="comment"># Armijo condition</span>
-    <span class="keyword">while</span> f(x + alpha * p) > fx + c * alpha * np.dot(g, p):
-        alpha *= tau
-        <span class="keyword">if</span> alpha < <span class="number">1e-12</span>:
-            <span class="keyword">break</span>
-    <span class="keyword">return</span> alpha
+    <span class="comment"># Search direction</span>
+    p = -H @ g
 
+    <span class="comment"># Simple step (since quadratic, alpha = 1 works fine)</span>
+    x_new = x + p
 
-<span class="keyword">def</span> <span class="function">bfgs_quasi_newton</span>(x0, tol=<span class="number">1e-8</span>, max_iter=<span class="number">200</span>):
-    x = np.array(x0, dtype=float)
-    n = <span class="keyword">len</span>(x)
-    H = np.eye(n)
-    history = []
+    <span class="comment"># BFGS update</span>
+    s = x_new - x
+    y = np.<span class="function">array</span>([<span class="number">2</span>*x_new[<span class="number">0</span>], <span class="number">4</span>*x_new[<span class="number">1</span>]]) - g
 
-    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">1</span>, max_iter + <span class="number">1</span>):
-        g = grad_f(x)
-        gnorm = np.linalg.norm(g)
-        history.append((k, x.copy(), f(x), gnorm))
+    ys = y @ s
+    <span class="keyword">if</span> ys &gt; <span class="number">1e-10</span>:
+        rho = <span class="number">1</span> / ys
+        I = np.<span class="function">eye</span>(<span class="number">2</span>)
+        H = (I - rho*np.<span class="function">outer</span>(s,y)) @ H @ (I - rho*np.<span class="function">outer</span>(y,s)) + rho*np.<span class="function">outer</span>(s,s)
 
-        <span class="keyword">if</span> gnorm < tol:
-            <span class="keyword">break</span>
+    x = x_new
 
-        p = -H @ g
-        alpha = backtracking_line_search(x, p, g)
-        x_new = x + alpha * p
-
-        s = x_new - x
-        y = grad_f(x_new) - g
-
-        ys = np.dot(y, s)
-        <span class="keyword">if</span> ys > <span class="number">1e-12</span>:
-            rho = <span class="number">1.0</span> / ys
-            I = np.eye(n)
-            H = (I - rho * np.outer(s, y)) @ H @ (I - rho * np.outer(y, s)) + rho * np.outer(s, s)
-
-        x = x_new
-
-    <span class="keyword">return</span> x, f(x), history
-
-
-<span class="comment"># Given input</span>
-x0 = np.array([<span class="number">2.0</span>, <span class="number">2.0</span>])
-tol = <span class="number">1e-8</span>
-max_iter = <span class="number">200</span>
-
-x_star, f_star, steps = bfgs_quasi_newton(x0, tol=tol, max_iter=max_iter)
-
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Function: f(x1, x2) = x1^2 + 2*x2^2"</span>)
-print(<span class="function">f</span><span class="string">"Initial point x0: </span>{x0}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Tolerance: </span>{tol}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Max iterations: </span>{max_iter}<span class="string">"</span>)
-
-print(<span class="string">"\nITERATION SUMMARY"</span>)
-<span class="keyword">for</span> k, xk, fk, gk <span class="keyword">in</span> steps[:<span class="number">10</span>]:
-    print(<span class="function">f</span><span class="string">"Iter </span>{k}<span class="string">: x = </span>{np.round(xk, <span class="number">8</span>)}<span class="string">, f(x) = </span>{fk:<span class="number">.10</span>f}<span class="string">, ||grad|| = </span>{gk:<span class="number">.3</span>e}<span class="string">"</span>)
-<span class="keyword">if</span> <span class="keyword">len</span>(steps) > <span class="number">10</span>:
-    print(<span class="string">"..."</span>)
-
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Optimal point x* ="</span>, np.round(x_star, <span class="number">10</span>))
-print(<span class="function">f</span><span class="string">"Minimum function value f(x*) = </span>{f_star:<span class="number">.12</span>f}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;function: f(x) = x1^2 + 2*x2^2&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Optimal x =&quot;</span>, np.<span class="function">round</span>(x, <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;f(x) =&quot;</span>, <span class="function">round</span>(x[<span class="number">0</span>]**<span class="number">2</span> + <span class="number">2</span>*x[<span class="number">1</span>]**<span class="number">2</span>, <span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
 Function: f(x1, x2) = x1^2 + 2*x2^2

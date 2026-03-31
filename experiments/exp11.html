@@ -117,102 +117,52 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="keyword">def</span> <span class="function">f</span>(xy):
-    <span class="keyword">return</span> xy[<span class="number">0</span>] + xy[<span class="number">1</span>]
-
-
-<span class="keyword">def</span> <span class="function">barrier_phi</span>(xy, t):
-    x, y = xy
-    <span class="keyword">return</span> t * (x + y) - np.log(x - <span class="number">1.0</span>) - np.log(y - <span class="number">1.0</span>)
-
-
-<span class="keyword">def</span> <span class="function">barrier_grad</span>(xy, t):
-    x, y = xy
-    <span class="keyword">return</span> np.array([
-        t - <span class="number">1.0</span> / (x - <span class="number">1.0</span>),
-        t - <span class="number">1.0</span> / (y - <span class="number">1.0</span>),
-    ])
-
-
-<span class="keyword">def</span> <span class="function">barrier_hess</span>(xy, t):
-    x, y = xy
-    <span class="keyword">return</span> np.array([
-        [<span class="number">1.0</span> / ((x - <span class="number">1.0</span>) ** <span class="number">2</span>), <span class="number">0.0</span>],
-        [<span class="number">0.0</span>, <span class="number">1.0</span> / ((y - <span class="number">1.0</span>) ** <span class="number">2</span>)],
-    ])
-
-
-<span class="keyword">def</span> <span class="function">interior_point_2d</span>(xy0=np.array([<span class="number">2.0</span>, <span class="number">2.0</span>]), t0=<span class="number">1.0</span>, mu=<span class="number">10.0</span>, eps=<span class="number">1e-6</span>,
-                      newton_tol=<span class="number">1e-10</span>, max_outer=<span class="number">20</span>, max_inner=<span class="number">60</span>):
-    xy = np.array(xy0, dtype=float)
-    t = float(t0)
-    m = <span class="number">2</span>  <span class="comment"># number of inequality constraints</span>
-    history = []
-
-    <span class="keyword">if</span> <span class="keyword">not</span> (xy[<span class="number">0</span>] > <span class="number">1.0</span> <span class="keyword">and</span> xy[<span class="number">1</span>] > <span class="number">1.0</span>):
-        <span class="keyword">raise</span> ValueError(<span class="string">"Initial point must satisfy x > 1 and y > 1."</span>)
-
-    <span class="keyword">for</span> outer <span class="keyword">in</span> range(<span class="number">1</span>, max_outer + <span class="number">1</span>):
-        <span class="keyword">for</span> inner <span class="keyword">in</span> range(<span class="number">1</span>, max_inner + <span class="number">1</span>):
-            g = barrier_grad(xy, t)
-            H = barrier_hess(xy, t)
-
-            <span class="keyword">if</span> np.linalg.norm(g, ord=<span class="number">2</span>) < newton_tol:
-                <span class="keyword">break</span>
-
-            <span class="comment"># Newton direction</span>
-            delta = -np.linalg.solve(H, g)
-            step = <span class="number">1.0</span>
-
-            <span class="comment"># Backtracking to keep strict feasibility x > 1, y > 1</span>
-            <span class="keyword">while</span> (xy[<span class="number">0</span>] + step * delta[<span class="number">0</span>] <= <span class="number">1.0</span>) <span class="keyword">or</span> (xy[<span class="number">1</span>] + step * delta[<span class="number">1</span>] <= <span class="number">1.0</span>):
-                step *= <span class="number">0.5</span>
-
-            <span class="comment"># Armijo condition</span>
-            <span class="keyword">while</span> barrier_phi(xy + step * delta, t) > barrier_phi(xy, t) + <span class="number">1e-4</span> * step * np.dot(g, delta):
-                step *= <span class="number">0.5</span>
-                <span class="keyword">if</span> step < <span class="number">1e-12</span>:
-                    <span class="keyword">break</span>
-
-            xy = xy + step * delta
-            history.append((outer, inner, t, xy[<span class="number">0</span>], xy[<span class="number">1</span>], f(xy), np.linalg.norm(g, ord=<span class="number">2</span>)))
-
-        <span class="keyword">if</span> m / t < eps:
-            <span class="keyword">break</span>
-
-        t *= mu
-
-    <span class="keyword">return</span> xy, f(xy), history
-
-
-<span class="comment"># Given input parameters</span>
-xy0 = np.array([<span class="number">2.0</span>, <span class="number">2.0</span>])
-t0 = <span class="number">1.0</span>
+<span class="comment"># Initial values</span>
+x, y = <span class="number">2.0</span>, <span class="number">2.0</span>
+t = <span class="number">1.0</span>
 mu = <span class="number">10.0</span>
 eps = <span class="number">1e-6</span>
 
-xy_star, f_star, steps = interior_point_2d(xy0=xy0, t0=t0, mu=mu, eps=eps)
+<span class="comment"># Loop</span>
+<span class="keyword">while</span> <span class="number">2</span>/t &gt; eps:   <span class="comment"># m = 2 constraints</span>
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: minimize f(x, y) = x + y"</span>)
-print(<span class="string">"Constraints: x >= 1, y >= 1"</span>)
-print(<span class="function">f</span><span class="string">"Initial point (x0, y0): (</span>{xy0[<span class="number">0</span>]}<span class="string">, </span>{xy0[<span class="number">1</span>]}<span class="string">)"</span>)
-print(<span class="function">f</span><span class="string">"Initial barrier parameter t0: </span>{t0}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Barrier update factor mu: </span>{mu}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Stopping epsilon: </span>{eps}<span class="string">"</span>)
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">30</span>):
+        <span class="comment"># Gradient</span>
+        gx = t - <span class="number">1</span>/(x - <span class="number">1</span>)
+        gy = t - <span class="number">1</span>/(y - <span class="number">1</span>)
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Optimal x*: </span>{xy_star[<span class="number">0</span>]:<span class="number">.8</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal y*: </span>{xy_star[<span class="number">1</span>]:<span class="number">.8</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum objective value f(x*, y*): </span>{f_star:<span class="number">.8</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Constraint check x* >= 1: </span>{xy_star[<span class="number">0</span>] >= <span class="number">1.0</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Constraint check y* >= 1: </span>{xy_star[<span class="number">1</span>] >= <span class="number">1.0</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Distance to boundary in x (x* - 1): </span>{xy_star[<span class="number">0</span>] - <span class="number">1.0</span>:<span class="number">.8</span>e}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Distance to boundary in y (y* - 1): </span>{xy_star[<span class="number">1</span>] - <span class="number">1.0</span>:<span class="number">.8</span>e}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+        <span class="comment"># Hessian (diagonal)</span>
+        hx = <span class="number">1</span>/((x - <span class="number">1</span>)**<span class="number">2</span>)
+        hy = <span class="number">1</span>/((y - <span class="number">1</span>)**<span class="number">2</span>)
+
+        <span class="comment"># Stop condition</span>
+        <span class="keyword">if</span> np.<span class="function">sqrt</span>(gx**<span class="number">2</span> + gy**<span class="number">2</span>) &lt; <span class="number">1e-10</span>:
+            break
+
+        <span class="comment"># Newton step (since H is diagonal -&gt; easy)</span>
+        dx = -gx / hx
+        dy = -gy / hy
+
+        <span class="comment"># Update with feasibility check</span>
+        step = <span class="number">1.0</span>
+        <span class="keyword">while</span> (x + step*dx &lt;= <span class="number">1</span>) <span class="keyword">or</span> (y + step*dy &lt;= <span class="number">1</span>):
+            step *= <span class="number">0.5</span>
+
+        x = x + step*dx
+        y = y + step*dy
+
+    <span class="comment"># Increase barrier parameter</span>
+    t = t * mu
+
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;Objective function: f(x,y) = x + y&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Constraint: x &gt;= 1, y &gt;= 1&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Optimal x:&quot;</span>, <span class="function">round</span>(x, <span class="number">8</span>))
+<span class="function">print</span>(<span class="string">&quot;Optimal y:&quot;</span>, <span class="function">round</span>(y, <span class="number">8</span>))
+<span class="function">print</span>(<span class="string">&quot;Minimum f(x,y):&quot;</span>, <span class="function">round</span>(x + y, <span class="number">8</span>))
+<span class="function">print</span>(<span class="string">&quot;Constraints satisfied:&quot;</span>, x &gt;= <span class="number">1</span> <span class="keyword">and</span> y &gt;= <span class="number">1</span>)</div>
                 <div class="output-block">
 INPUT
 Objective: minimize f(x, y) = x + y

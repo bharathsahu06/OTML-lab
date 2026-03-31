@@ -112,67 +112,52 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Dataset: (x1, x2, y)</span>
-X = np.array([
+<span class="comment"># Data</span>
+X = np.<span class="function">array</span>([
     [<span class="number">2.0</span>, <span class="number">3.0</span>],
     [<span class="number">1.0</span>, <span class="number">4.0</span>],
     [<span class="number">3.0</span>, <span class="number">2.0</span>],
 ])
-y = np.array([<span class="number">8.0</span>, <span class="number">7.0</span>, <span class="number">9.0</span>])
+y = np.<span class="function">array</span>([<span class="number">8.0</span>, <span class="number">7.0</span>, <span class="number">9.0</span>])
 
-
-<span class="keyword">def</span> <span class="function">regularized_loss</span>(X, y, w, lam):
-    y_pred = X @ w
-    mse = np.mean((y_pred - y) ** <span class="number">2</span>)
-    l1 = lam * np.sum(np.abs(w))
-    <span class="keyword">return</span> mse + l1
-
-
-<span class="keyword">def</span> <span class="function">subgradient_l1_regression</span>(X, y, alpha=<span class="number">0.01</span>, lam=<span class="number">0.1</span>, iterations=<span class="number">1000</span>):
-    n, d = X.shape
-    w = np.zeros(d)
-    loss_history = []
-
-    <span class="keyword">for</span> _ <span class="keyword">in</span> range(iterations):
-        y_pred = X @ w
-        error = y_pred - y
-
-        <span class="comment"># Sub-gradient of MSE + L1</span>
-        grad_mse = (<span class="number">2.0</span> / n) * (X.T @ error)
-        grad_l1 = lam * np.sign(w)
-        grad = grad_mse + grad_l1
-
-        w = w - alpha * grad
-        loss_history.append(regularized_loss(X, y, w, lam))
-
-    <span class="keyword">return</span> w, loss_history
-
-
+<span class="comment"># Parameters</span>
+w = np.<span class="function">zeros</span>(<span class="number">2</span>)
 alpha = <span class="number">0.01</span>
 lam = <span class="number">0.1</span>
 iterations = <span class="number">1000</span>
 
-w_opt, loss_history = subgradient_l1_regression(X, y, alpha=alpha, lam=lam, iterations=iterations)
-y_pred_final = X @ w_opt
-final_loss = regularized_loss(X, y, w_opt, lam)
+n = <span class="function">len</span>(y)
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Dataset (x1, x2, y):"</span>)
-<span class="keyword">for</span> row, target <span class="keyword">in</span> <span class="keyword">zip</span>(X, y):
-    print(<span class="function">f</span><span class="string">"(</span>{int(row[<span class="number">0</span>])}<span class="string">, </span>{int(row[<span class="number">1</span>])}<span class="string">, </span>{int(target)}<span class="string">)"</span>)
-print(<span class="function">f</span><span class="string">"Learning rate (alpha): </span>{alpha}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Regularization (lambda): </span>{lam}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Iterations: </span>{iterations}<span class="string">"</span>)
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(iterations):
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="function">f</span><span class="string">"Optimal w1: </span>{w_opt[<span class="number">0</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal w2: </span>{w_opt[<span class="number">1</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final regularized loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(y_pred_final, <span class="number">6</span>))
-print(<span class="string">"Program executed successfully."</span>)</div>
+    <span class="comment"># Prediction</span>
+    y_pred = X @ w
+    error = y_pred - y
+
+    <span class="comment"># MSE gradient</span>
+    grad_mse = (<span class="number">2</span>/n) * (X.T @ error)
+
+    <span class="comment"># L1 subgradient</span>
+    grad_l1 = lam * np.<span class="function">sign</span>(w)
+
+    <span class="comment"># Total gradient</span>
+    grad = grad_mse + grad_l1
+
+    <span class="comment"># Update</span>
+    w = w - alpha * grad
+
+<span class="comment"># Output</span>
+y_pred = X @ w
+loss = np.<span class="function">mean</span>((y_pred - y)**<span class="number">2</span>) + lam * np.<span class="function">sum</span>(np.<span class="function">abs</span>(w))
+
+<span class="function">print</span>(<span class="string">&quot;function: f(x) = wx + b&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;data points: (1,2,5), (2,1,6), (3,4,7)&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;w1 =&quot;</span>, <span class="function">round</span>(w[<span class="number">0</span>], <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;w2 =&quot;</span>, <span class="function">round</span>(w[<span class="number">1</span>], <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Final Loss =&quot;</span>, <span class="function">round</span>(loss, <span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Predictions =&quot;</span>, np.<span class="function">round</span>(y_pred, <span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
 Dataset (x1, x2, y):

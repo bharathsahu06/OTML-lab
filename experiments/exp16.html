@@ -129,99 +129,66 @@
 
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-<span class="comment"># Given input</span>
-x1 = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
-x2 = np.array([<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">3</span>], dtype=float)
-y = np.array([<span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">17</span>], dtype=float)
-
-X = np.column_stack([x1, x2])
-
-
-<span class="keyword">def</span> <span class="function">regularized_loss</span>(X, y, w, reg_type, lam=<span class="number">0.1</span>, lam1=<span class="number">0.05</span>, lam2=<span class="number">0.05</span>):
-    y_pred = X @ w
-    mse = np.mean((y_pred - y) ** <span class="number">2</span>)
-
-    <span class="keyword">if</span> reg_type == <span class="string">"l1"</span>:
-        reg = lam * np.sum(np.abs(w))
-    <span class="keyword">elif</span> reg_type == <span class="string">"l2"</span>:
-        reg = lam * np.sum(w ** <span class="number">2</span>)
-    <span class="keyword">elif</span> reg_type == <span class="string">"elastic"</span>:
-        reg = lam1 * np.sum(np.abs(w)) + lam2 * np.sum(w ** <span class="number">2</span>)
-    <span class="keyword">else</span>:
-        reg = <span class="number">0.0</span>
-
-    <span class="keyword">return</span> mse + reg
-
-
-<span class="keyword">def</span> <span class="function">train_regularized</span>(X, y, reg_type, alpha=<span class="number">0.01</span>, iterations=<span class="number">2000</span>, lam=<span class="number">0.1</span>, lam1=<span class="number">0.05</span>, lam2=<span class="number">0.05</span>):
-    n, d = X.shape
-    w = np.zeros(d)
-    loss_history = []
-
-    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="keyword">range</span>(iterations):
-        y_pred = X @ w
-        error = y_pred - y
-        grad = (<span class="number">2.0</span> / n) * (X.T @ error)
-
-        <span class="keyword">if</span> reg_type == <span class="string">"l1"</span>:
-            grad += lam * np.sign(w)
-        <span class="keyword">elif</span> reg_type == <span class="string">"l2"</span>:
-            grad += <span class="number">2.0</span> * lam * w
-        <span class="keyword">elif</span> reg_type == <span class="string">"elastic"</span>:
-            grad += lam1 * np.sign(w) + <span class="number">2.0</span> * lam2 * w
-
-        w = w - alpha * grad
-        loss_history.append(regularized_loss(X, y, w, reg_type, lam=lam, lam1=lam1, lam2=lam2))
-
-    <span class="keyword">return</span> w, loss_history
-
+<span class="comment"># Data</span>
+X = np.<span class="function">array</span>([
+    [<span class="number">1.0</span>, <span class="number">2.0</span>],
+    [<span class="number">2.0</span>, <span class="number">1.0</span>],
+    [<span class="number">3.0</span>, <span class="number">4.0</span>]
+])
+y = np.<span class="function">array</span>([<span class="number">5.0</span>, <span class="number">6.0</span>, <span class="number">7.0</span>])
 
 alpha = <span class="number">0.01</span>
 iterations = <span class="number">2000</span>
+
+<span class="comment"># Initialize</span>
+w_l1 = np.<span class="function">zeros</span>(<span class="number">2</span>)
+w_l2 = np.<span class="function">zeros</span>(<span class="number">2</span>)
+w_en = np.<span class="function">zeros</span>(<span class="number">2</span>)
+
 lam = <span class="number">0.1</span>
-lam1 = <span class="number">0.05</span>
-lam2 = <span class="number">0.05</span>
+lam1 = <span class="number">0.1</span>
+lam2 = <span class="number">0.2</span>
 
-w_l1, _ = train_regularized(X, y, <span class="string">"l1"</span>, alpha=alpha, iterations=iterations, lam=lam)
-w_l2, _ = train_regularized(X, y, <span class="string">"l2"</span>, alpha=alpha, iterations=iterations, lam=lam)
-w_en, _ = train_regularized(X, y, <span class="string">"elastic"</span>, alpha=alpha, iterations=iterations, lam1=lam1, lam2=lam2)
+n = <span class="function">len</span>(y)
 
+<span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(iterations):
+
+    <span class="comment"># Common prediction errors</span>
+    e_l1 = X @ w_l1 - y
+    e_l2 = X @ w_l2 - y
+    e_en = X @ w_en - y
+
+    <span class="comment"># ----- L1 -----</span>
+    grad_l1 = (<span class="number">2</span>/n) * (X.T @ e_l1) + lam * np.<span class="function">sign</span>(w_l1)
+    w_l1 -= alpha * grad_l1
+
+    <span class="comment"># ----- L2 -----</span>
+    grad_l2 = (<span class="number">2</span>/n) * (X.T @ e_l2) + <span class="number">2</span>*lam * w_l2
+    w_l2 -= alpha * grad_l2
+
+    <span class="comment"># ----- Elastic -----</span>
+    grad_en = (<span class="number">2</span>/n) * (X.T @ e_en) + lam1*np.<span class="function">sign</span>(w_en) + <span class="number">2</span>*lam2*w_en
+    w_en -= alpha * grad_en
+
+
+<span class="comment"># Predictions</span>
 pred_l1 = X @ w_l1
 pred_l2 = X @ w_l2
 pred_en = X @ w_en
 
-loss_l1 = regularized_loss(X, y, w_l1, <span class="string">"l1"</span>, lam=lam)
-loss_l2 = regularized_loss(X, y, w_l2, <span class="string">"l2"</span>, lam=lam)
-loss_en = regularized_loss(X, y, w_en, <span class="string">"elastic"</span>, lam1=lam1, lam2=lam2)
+<span class="comment"># Losses</span>
+loss_l1 = np.<span class="function">mean</span>((pred_l1 - y)**<span class="number">2</span>) + lam*np.<span class="function">sum</span>(np.<span class="function">abs</span>(w_l1))
+loss_l2 = np.<span class="function">mean</span>((pred_l2 - y)**<span class="number">2</span>) + lam*np.<span class="function">sum</span>(w_l2**<span class="number">2</span>)
+loss_en = np.<span class="function">mean</span>((pred_en - y)**<span class="number">2</span>) + lam1*np.<span class="function">sum</span>(np.<span class="function">abs</span>(w_en)) + lam2*np.<span class="function">sum</span>(w_en**<span class="number">2</span>)
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"x1 ="</span>, x1)
-print(<span class="string">"x2 ="</span>, x2)
-print(<span class="string">"y  ="</span>, y)
-print(<span class="function">f</span><span class="string">"L1 lambda = </span>{lam}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"L2 lambda = </span>{lam}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Elastic lambda1 = </span>{lam1}<span class="string">, lambda2 = </span>{lam2}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"learning rate = </span>{alpha}<span class="string">, iterations = </span>{iterations}<span class="string">"</span>)
-
-print(<span class="string">"\nOUTPUT - L1 REGULARIZATION"</span>)
-print(<span class="function">f</span><span class="string">"w1 = </span>{w_l1[<span class="number">0</span>]:<span class="number">.6</span>f}<span class="string">, w2 = </span>{w_l1[<span class="number">1</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final Loss = </span>{loss_l1:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(pred_l1, <span class="number">6</span>))
-
-print(<span class="string">"\nOUTPUT - L2 REGULARIZATION"</span>)
-print(<span class="function">f</span><span class="string">"w1 = </span>{w_l2[<span class="number">0</span>]:<span class="number">.6</span>f}<span class="string">, w2 = </span>{w_l2[<span class="number">1</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final Loss = </span>{loss_l2:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(pred_l2, <span class="number">6</span>))
-
-print(<span class="string">"\nOUTPUT - ELASTIC NET"</span>)
-print(<span class="function">f</span><span class="string">"w1 = </span>{w_en[<span class="number">0</span>]:<span class="number">.6</span>f}<span class="string">, w2 = </span>{w_en[<span class="number">1</span>]:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final Loss = </span>{loss_en:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Predicted y:"</span>, np.round(pred_en, <span class="number">6</span>))
-
-print(<span class="string">"Program executed successfully."</span>)</div>
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;function: f(x) = w1*x1 + w2*x2&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;data points: (1,2,5), (2,1,6), (3,4,7)&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;L1 -&gt; w:&quot;</span>, np.<span class="function">round</span>(w_l1,<span class="number">6</span>), <span class="string">&quot; Loss:&quot;</span>, <span class="function">round</span>(loss_l1,<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;L2 -&gt; w:&quot;</span>, np.<span class="function">round</span>(w_l2,<span class="number">6</span>), <span class="string">&quot; Loss:&quot;</span>, <span class="function">round</span>(loss_l2,<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">&quot;Elastic -&gt; w:&quot;</span>, np.<span class="function">round</span>(w_en,<span class="number">6</span>), <span class="string">&quot; Loss:&quot;</span>, <span class="function">round</span>(loss_en,<span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
 x1 = [1. 2. 3. 4.]

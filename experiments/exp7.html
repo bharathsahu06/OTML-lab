@@ -98,139 +98,86 @@
             </div>
 
             <div class="section">
-                <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> itertools
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+                <div class="section-title">8A) Experiment 7A - Using PuLP</div>
+                <div class="code-block"><span class="keyword">import</span> pulp
 
-<span class="comment"># -----------------------------</span>
-<span class="comment"># Problem definition</span>
-<span class="comment"># -----------------------------</span>
-<span class="comment"># Minimize Z = 3x + 2y</span>
-<span class="comment"># Subject to: x + y >= 4, x >= 0, y >= 0</span>
+<span class="comment"># Create model</span>
+model = pulp.<span class="function">LpProblem</span>(<span class="string">&quot;LP_Problem&quot;</span>, pulp.LpMinimize)
 
+<span class="comment"># Variables</span>
+x = pulp.<span class="function">LpVariable</span>(<span class="string">&quot;x&quot;</span>, lowBound=<span class="number">0</span>)
+y = pulp.<span class="function">LpVariable</span>(<span class="string">&quot;y&quot;</span>, lowBound=<span class="number">0</span>)
 
-<span class="keyword">def</span> <span class="function">objective</span>(x, y):
-    <span class="keyword">return</span> <span class="number">3</span> * x + <span class="number">2</span> * y
+<span class="comment"># Objective function</span>
+model += <span class="number">3</span>*x + <span class="number">2</span>*y
 
+<span class="comment"># Constraint</span>
+model += x + y &gt;= <span class="number">4</span>
 
-<span class="keyword">def</span> <span class="function">is_feasible</span>(x, y, tol=<span class="number">1e-9</span>):
-    <span class="keyword">return</span> (x + y >= <span class="number">4</span> - tol) <span class="keyword">and</span> (x >= -tol) <span class="keyword">and</span> (y >= -tol)
+<span class="comment"># Solve</span>
+model.<span class="function">solve</span>(pulp.<span class="function">PULP_CBC_CMD</span>(msg=<span class="number">0</span>))
 
-
-<span class="comment"># -----------------------------</span>
-<span class="comment"># Part A: Using PuLP</span>
-<span class="comment"># -----------------------------</span>
-<span class="keyword">def</span> <span class="function">solve_with_pulp</span>():
-    <span class="keyword">import</span> pulp
-
-    model = pulp.LpProblem(<span class="string">"LP_Using_PuLP"</span>, pulp.LpMinimize)
-    x = pulp.LpVariable(<span class="string">"x"</span>, lowBound=<span class="number">0</span>)
-    y = pulp.LpVariable(<span class="string">"y"</span>, lowBound=<span class="number">0</span>)
-
-    model += <span class="number">3</span> * x + <span class="number">2</span> * y
-    model += x + y >= <span class="number">4</span>
-
-    model.solve(pulp.PULP_CBC_CMD(msg=<span class="keyword">False</span>))
-
-    x_opt = pulp.value(x)
-    y_opt = pulp.value(y)
-    z_opt = pulp.value(model.objective)
-    status = pulp.LpStatus[model.status]
-
-    <span class="keyword">return</span> status, x_opt, y_opt, z_opt
-
-
-<span class="comment"># -----------------------------</span>
-<span class="comment"># Part B: Without PuLP</span>
-<span class="comment"># Vertex/intersection method for 2 variables</span>
-<span class="comment"># -----------------------------</span>
-<span class="keyword">def</span> <span class="function">solve_without_pulp</span>():
-    <span class="comment"># Boundary lines in the form a*x + b*y = c</span>
-    lines = [
-        (<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),  <span class="comment"># x = 0</span>
-        (<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>),  <span class="comment"># y = 0</span>
-        (<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">4.0</span>),  <span class="comment"># x + y = 4</span>
-    ]
-
-    candidate_points = []
-
-    <span class="keyword">for</span> (a1, b1, c1), (a2, b2, c2) <span class="keyword">in</span> itertools.combinations(lines, <span class="number">2</span>):
-        A = np.array([[a1, b1], [a2, b2]], dtype=float)
-        b = np.array([c1, c2], dtype=float)
-
-        <span class="keyword">if</span> abs(np.linalg.det(A)) < <span class="number">1e-12</span>:
-            <span class="keyword">continue</span>
-
-        x_pt, y_pt = np.linalg.solve(A, b)
-        <span class="keyword">if</span> is_feasible(x_pt, y_pt):
-            candidate_points.append((float(x_pt), float(y_pt)))
-
-    <span class="keyword">if</span> <span class="keyword">not</span> candidate_points:
-        <span class="keyword">raise</span> ValueError(<span class="string">"No feasible corner points found."</span>)
-
-    <span class="comment"># Remove duplicates due to numerical precision</span>
-    unique_points = []
-    <span class="keyword">for</span> p <span class="keyword">in</span> candidate_points:
-        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">any</span>(np.allclose(p, q, atol=<span class="number">1e-9</span>) <span class="keyword">for</span> q <span class="keyword">in</span> unique_points):
-            unique_points.append(p)
-
-    best_point = <span class="keyword">min</span>(unique_points, key=<span class="keyword">lambda</span> p: objective(p[<span class="number">0</span>], p[<span class="number">1</span>]))
-    best_value = objective(best_point[<span class="number">0</span>], best_point[<span class="number">1</span>])
-
-    <span class="keyword">return</span> unique_points, best_point, best_value
-
-
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: Minimize Z = 3x + 2y"</span>)
-print(<span class="string">"Constraints: x + y >= 4, x >= 0, y >= 0"</span>)
-
-print(<span class="string">"\nPART A: USING PULP"</span>)
-<span class="keyword">try</span>:
-    status, x1, y1, z1 = solve_with_pulp()
-    print(<span class="string">"Status:"</span>, status)
-    print(<span class="function">f</span><span class="string">"Optimal x: </span>{x1:<span class="number">.6</span>f}<span class="string">"</span>)
-    print(<span class="function">f</span><span class="string">"Optimal y: </span>{y1:<span class="number">.6</span>f}<span class="string">"</span>)
-    print(<span class="function">f</span><span class="string">"Minimum Z: </span>{z1:<span class="number">.6</span>f}<span class="string">"</span>)
-<span class="keyword">except</span> ModuleNotFoundError:
-    print(<span class="string">"PuLP is not installed in this kernel. Install it to run Part A."</span>)
-    x1 = y1 = z1 = <span class="keyword">None</span>
-
-print(<span class="string">"\nPART B: WITHOUT PULP (VERTEX METHOD)"</span>)
-points, (x2, y2), z2 = solve_without_pulp()
-formatted_points = [(round(px, <span class="number">6</span>), round(py, <span class="number">6</span>)) <span class="keyword">for</span> px, py <span class="keyword">in</span> points]
-print(<span class="string">"Feasible corner points:"</span>, formatted_points)
-print(<span class="function">f</span><span class="string">"Optimal x: </span>{x2:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal y: </span>{y2:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum Z: </span>{z2:<span class="number">.6</span>f}<span class="string">"</span>)
-
-print(<span class="string">"\nCOMPARISON"</span>)
-<span class="keyword">if</span> z1 <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
-    print(<span class="string">"Both methods produce the same optimum:"</span>, np.isclose(z1, z2))
-<span class="keyword">else</span>:
-    print(<span class="string">"Comparison skipped because PuLP result is unavailable."</span>)
-
-print(<span class="string">"Program executed successfully."</span>)</div>
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;model:&quot;</span>, model)
+<span class="function">print</span>(<span class="string">&quot;Status:&quot;</span>, pulp.LpStatus[model.status])
+<span class="function">print</span>(<span class="string">&quot;x =&quot;</span>, pulp.<span class="function">value</span>(x))
+<span class="function">print</span>(<span class="string">&quot;y =&quot;</span>, pulp.<span class="function">value</span>(y))
+<span class="function">print</span>(<span class="string">&quot;Minimum Z =&quot;</span>, pulp.<span class="function">value</span>(model.objective))</div>
                 <div class="output-block">
-INPUT
-Objective: Minimize Z = 3x + 2y
-Constraints: x + y >= 4, x >= 0, y >= 0
-
-PART A: USING PULP
 Status: Optimal
-Optimal x: 0.000000
-Optimal y: 4.000000
-Minimum Z: 8.000000
+x = 0.0
+y = 4.0
+Minimum Z = 8.0
+                </div>
+            </div>
 
-PART B: WITHOUT PULP (VERTEX METHOD)
-Feasible corner points: [(0.0, 4.0), (4.0, 0.0)]
-Optimal x: 0.000000
-Optimal y: 4.000000
-Minimum Z: 8.000000
+            <div class="section">
+                <div class="section-title">8B) Experiment 7B - Without PuLP (Vertex Method)</div>
+                <div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
-COMPARISON
-Both methods produce the same optimum: True
-Program executed successfully.
+<span class="comment"># Objective function</span>
+<span class="keyword">def</span> <span class="function">Z</span>(x, y):
+    <span class="keyword">return</span> <span class="number">3</span>*x + <span class="number">2</span>*y
+
+<span class="comment"># Step 1: Define boundary equations</span>
+<span class="comment"># x = 0, y = 0, x + y = 4</span>
+
+<span class="comment"># Step 2: Find intersection points manually</span>
+points = []
+
+<span class="comment"># Intersection of x=0 and y=0</span>
+points.<span class="function">append</span>((<span class="number">0</span>, <span class="number">0</span>))
+
+<span class="comment"># Intersection of x=0 and x+y=4 → y=4</span>
+points.<span class="function">append</span>((<span class="number">0</span>, <span class="number">4</span>))
+
+<span class="comment"># Intersection of y=0 and x+y=4 → x=4</span>
+points.<span class="function">append</span>((<span class="number">4</span>, <span class="number">0</span>))
+
+<span class="comment"># Step 3: Check feasibility (x+y >= 4)</span>
+feasible_points = []
+<span class="keyword">for</span> x, y <span class="keyword">in</span> points:
+    <span class="keyword">if</span> x + y &gt;= <span class="number">4</span> <span class="keyword">and</span> x &gt;= <span class="number">0</span> <span class="keyword">and</span> y &gt;= <span class="number">0</span>:
+        feasible_points.<span class="function">append</span>((x, y))
+
+<span class="comment"># Step 4: Find minimum</span>
+best_point = <span class="function">min</span>(feasible_points, <span class="keyword">key</span>=<span class="keyword">lambda</span> p: Z(p[<span class="number">0</span>], p[<span class="number">1</span>]))
+min_value = Z(best_point[<span class="number">0</span>], best_point[<span class="number">1</span>])
+
+<span class="comment"># Output</span>
+<span class="function">print</span>(<span class="string">&quot;Objective function: Z = 3x + 2y&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Constraints: x + y &gt;= 4, x &gt;= 0, y &gt;= 0&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Feasible points:&quot;</span>, feasible_points)
+<span class="function">print</span>(<span class="string">&quot;Optimal x:&quot;</span>, best_point[<span class="number">0</span>])
+<span class="function">print</span>(<span class="string">&quot;Optimal y:&quot;</span>, best_point[<span class="number">1</span>])
+<span class="function">print</span>(<span class="string">&quot;Minimum Z:&quot;</span>, min_value)</div>
+                <div class="output-block">
+Objective function: Z = 3x + 2y
+Constraints: x + y >= 4, x >= 0, y >= 0
+Feasible points: [(0, 4), (4, 0)]
+Optimal x: 0
+Optimal y: 4
+Minimum Z: 8
                 </div>
             </div>
 
