@@ -25,67 +25,86 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p>A Convolutional Neural Network (CNN) is a deep learning architecture specifically designed to process and analyze image data by learning spatial patterns such as edges, textures, and object parts. Unlike traditional machine learning approaches that require manual feature engineering, CNNs automatically extract meaningful visual features directly from pixel values through trainable convolutional filters.</p>
-                    <p>In this experiment, the CIFAR-10 dataset, which contains 60,000 32×32 color images across 10 classes, is filtered to keep only two classes: cat (class 3) and dog (class 5), converting the task into binary classification. The input images are normalized by dividing by 255.0, ensuring pixel values fall in the range [0, 1], which makes training more stable and faster. The network architecture applies convolution operations to detect local patterns, max-pooling layers to reduce spatial dimensions while retaining important feature activations, and fully connected layers to combine extracted features for final decision making.</p>
-                    <p>The final output layer uses a sigmoid activation function, which produces a probability value between 0 and 1. A value closer to 1 indicates the image is likely a dog, while a value closer to 0 indicates a cat. During training, the model minimizes binary cross-entropy loss using the Adam optimizer, and performance is measured with accuracy on validation and test data. This architecture demonstrates the complete CNN workflow: data preprocessing, feature extraction, classification, evaluation, and single-image inference, making it ideal for beginners learning deep learning concepts.</p>
+                    <p>A Convolutional Neural Network (CNN) is a special type of artificial brain that is very good at understanding pictures. Just like humans look at pictures and recognize objects, CNNs learn to find patterns in images automatically without needing someone to tell them what to look for.</p>
+                    <p>In this experiment, we use a dataset called CIFAR-10, which contains thousands of small pictures (32-by-32 pixels) in color. We pick only the cat and dog pictures from this dataset. Before the CNN sees these pictures, we make them all the same brightness level so the learning process is easier and faster.</p>
+                    <p>The CNN works by passing images through several layers. First, it looks for simple patterns like lines and corners (convolution layer). Then it shrinks the image to keep only the most important information (pooling layer). After doing this a few times, it flattens the image information and uses regular brain-like layers to decide: "Is this a cat or a dog?" Finally, it gives a score between 0 and 1, where 0 means "definitely a cat" and 1 means "definitely a dog".</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">3) Network Architecture</div>
+                <div class="section-title">3) Network Architecture (Visual)</div>
                 <div class="section-content">
-                    <p><strong>CNN Model Structure:</strong></p>
-                    <ol style="margin-left: 20px;">
-                        <li><strong>Input Layer:</strong> 32×32×3 (height × width × channels for RGB images)</li>
-                        <li><strong>Conv2D Layer 1:</strong> 32 filters, 3×3 kernel with ReLU activation</li>
-                        <li><strong>MaxPooling2D Layer 1:</strong> 2×2 pool size for spatial dimension reduction</li>
-                        <li><strong>Conv2D Layer 2:</strong> 64 filters, 3×3 kernel with ReLU activation</li>
-                        <li><strong>MaxPooling2D Layer 2:</strong> 2×2 pool size</li>
-                        <li><strong>Flatten Layer:</strong> Converts 2D feature maps to 1D vector</li>
-                        <li><strong>Dense Layer 1:</strong> 64 neurons with ReLU activation</li>
-                        <li><strong>Dense Layer 2 (Output):</strong> 1 neuron with Sigmoid activation for binary classification</li>
-                    </ol>
-                    <p><strong>Compilation Details:</strong></p>
+                    <p><strong>How the CNN looks step-by-step:</strong></p>
+                    <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.85em; overflow-x: auto;">
+                        <pre>
+INPUT IMAGE (32 × 32 × 3 pixels - RGB Color)
+        ↓
+    [1st Convolution Layer - Find 32 Patterns]
+        ↓
+    [Shrink Layer - Keep Important Parts]
+        ↓
+    [2nd Convolution Layer - Find 64 Patterns]
+        ↓
+    [Shrink Layer - Make Smaller Again]
+        ↓
+    [Flatten - Convert to Single List]
+        ↓
+    [Brain Layer - 64 Neurons]
+        ↓
+    [Final Decision - Cat or Dog?]
+        ↓
+    OUTPUT SCORE (0 = Cat, 1 = Dog)
+                        </pre>
+                    </div>
+                    <p><strong>What Each Part Does:</strong></p>
                     <ul style="margin-left: 20px;">
-                        <li>Optimizer: Adam</li>
-                        <li>Loss Function: Binary Crossentropy</li>
-                        <li>Metrics: Accuracy</li>
+                        <li><strong>Input Image:</strong> A small 32-by-32 color picture (like a tiny thumbnail)</li>
+                        <li><strong>Convolution (Pattern Finder):</strong> Slides a small window over the image to find patterns. First layer finds 32 different patterns, second layer finds 64.</li>
+                        <li><strong>Pooling (Shrink Layer):</strong> Makes the image smaller by keeping only the brightest parts. This saves computer power and keeps important information.</li>
+                        <li><strong>Flatten (Convert Format):</strong> Takes all the 2D patterns and arranges them in a single line of numbers</li>
+                        <li><strong>Dense Layer (Brain Layer):</strong> A layer with 64 neurons that combines all the patterns to make decisions</li>
+                        <li><strong>Output Layer:</strong> Final layer with 1 neuron that gives a score from 0 to 1 (0=Cat, 1=Dog)</li>
+                    </ul>
+                    <p><strong>Settings Used:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Learning Method: Adam (helps the network learn better)</li>
+                        <li>Measurement: Accuracy (how many pictures it gets right)</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">4) Important Formulas</div>
+                <div class="section-title">4) How the Network Makes Decisions</div>
                 <div class="section-content">
-                    <p><strong>Sigmoid Activation (Output Layer):</strong></p>
-                    $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
-                    <p><strong>Binary Cross-Entropy Loss:</strong></p>
-                    $$L = -\frac{1}{n}\sum_{i=1}^{n} \left[ y_i \log(\hat{y}_i) + (1-y_i) \log(1-\hat{y}_i) \right]$$
-                    <p>where $y_i$ is the true label (0 for cat, 1 for dog) and $\hat{y}_i$ is the predicted probability.</p>
-                    <p><strong>ReLU Activation (Hidden Layers):</strong></p>
-                    $$\text{ReLU}(z) = \max(0, z)$$
-                    <p><strong>Prediction Rule:</strong></p>
-                    $$\text{Predicted Class} = \begin{cases} \text{Dog} & \text{if } \hat{y} \geq 0.5 \\ \text{Cat} & \text{if } \hat{y} < 0.5 \end{cases}$$
+                    <p><strong>Prediction Score:</strong> The final layer gives a number between 0 and 1. If the score is closer to 0.5 or below, the image is a cat. If it's above 0.5, the image is a dog.</p>
+                    <p><strong>How the Network Learns:</strong> During training, the network looks at many cat and dog pictures. For each picture, it makes a guess and then checks if the guess was right or wrong. If wrong, it adjusts itself a little bit to make better guesses next time. It repeats this process many times until it gets very good at recognizing cats and dogs.</p>
+                    <p><strong>What Each Layer Does:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Convolution Layer:</strong> Acts like a detective looking for clues. It moves a small window across the image to find patterns like whiskers, paws, ears, etc.</li>
+                        <li><strong>ReLU (Activation):</strong> A rule that says "if the pattern signal is negative, ignore it. If it's positive, keep it." This helps the network focus on useful patterns.</li>
+                        <li><strong>Pooling Layer:</strong> Like taking a photo from far away - you lose small details but keep the important shapes. This makes the network faster and stronger.</li>
+                        <li><strong>Dense Layer:</strong> All the patterns found are combined together with weights (importance scores) to make the final decision.</li>
+                        <li><strong>Sigmoid Output:</strong> The final answer: a number between 0 (definitely cat) and 1 (definitely dog).</li>
+                    </ul>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">5) Algorithm (Step by Step)</div>
+                <div class="section-title">5) Simple Steps (How It Works)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li><strong>Load Data:</strong> Load CIFAR-10 dataset and extract cat and dog images. Normalize by scaling pixel values to [0, 1].</li>
-                        <li><strong>Convert Labels:</strong> Create binary labels where 0 = cat and 1 = dog.</li>
-                        <li><strong>Build Model:</strong> Construct the CNN with specified layers and architecture.</li>
-                        <li><strong>Compile Model:</strong> Configure optimizer (Adam), loss function (Binary Crossentropy), and metrics (Accuracy).</li>
-                        <li><strong>Train Model:</strong> Fit the model on training data with 20% validation split for 5 epochs, using batch size 64.</li>
-                        <li><strong>Evaluate Model:</strong> Test the trained model on test set to get final accuracy.</li>
-                        <li><strong>Single Image Inference:</strong> Load a user-provided image, preprocess it, and predict whether it is a cat or dog with confidence score.</li>
+                        <li><strong>Get the Pictures:</strong> Download the CIFAR-10 dataset which has thousands of small pictures. Pick only the cat and dog pictures.</li>
+                        <li><strong>Prepare Pictures:</strong> Make all pictures the same brightness level (0 to 1) so learning is easier.</li>
+                        <li><strong>Build the Brain:</strong> Create the CNN with all its layers as described above.</li>
+                        <li><strong>Start Learning:</strong> Show the network 5 batches of pictures. For each batch, it makes guesses and fixes mistakes.</li>
+                        <li><strong>Check the Score:</strong> After training, test the network on pictures it has never seen before to see how accurate it is.</li>
+                        <li><strong>Use It!</strong> Give the network a new picture of a cat or dog and it will tell you what it is.</li>
                     </ol>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">6) Implementation Overview</div>
+                <div class="section-title">6) Code Overview</div>
                 <div class="section-content">
                     <p><strong>Main Code Steps:</strong></p>
                     <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; overflow-x: auto;">
@@ -128,27 +147,6 @@ pred_label = "Dog" if prob_dog >= 0.5 else "Cat"
 print(f"Prediction: {pred_label} (Dog probability: {prob_dog:.4f})")
                         </pre>
                     </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">7) Results</div>
-                <div class="section-content">
-                    <p>The CNN model successfully performs binary classification of cat and dog images from the CIFAR-10 dataset:</p>
-                    <ul style="margin-left: 20px;">
-                        <li><strong>Data Split:</strong> Training set (with validation subset) and test set containing only cat and dog images from CIFAR-10.</li>
-                        <li><strong>Training:</strong> Model trains for 5 epochs with 20% validation split, using batch size 64.</li>
-                        <li><strong>Test Performance:</strong> Model achieves a measurable accuracy on the held-out test set.</li>
-                        <li><strong>Inference:</strong> The notebook supports single-image prediction, allowing users to provide custom images and receive predictions with confidence scores.</li>
-                        <li><strong>Output Format:</strong> Predictions are presented as class labels (Cat or Dog) along with the probability score for the dog class.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">8) Conclusion</div>
-                <div class="section-content">
-                    <p>This experiment demonstrates the complete workflow of a Convolutional Neural Network for image classification. The lightweight architecture is specifically designed for educational purposes while still capturing the essential components of modern deep learning: convolutional feature extraction, spatial pooling, fully connected decision layers, and practical inference on new images. The model successfully learns to distinguish between cat and dog images, showcasing how CNNs automatically discover visual patterns without manual feature engineering. The implementation is well-suited for learners new to deep learning and can serve as a foundation for building more sophisticated image classification models.</p>
                 </div>
             </div>
 
