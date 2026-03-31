@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 20 - Implementing CNN (Cat vs Dog) | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co6">CO6</a> / Experiment 20
+        </div>
+
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 20: Implementing CNN (Cat vs Dog)</h1>
+            
+            <div class="section">
+                <div class="section-title">1) Aim</div>
+                <div class="section-content">
+                    To build a simple Convolutional Neural Network (CNN) for binary classification of cat and dog images from the CIFAR-10 dataset.
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2) Description</div>
+                <div class="section-content">
+                    <p>A Convolutional Neural Network (CNN) is a deep learning architecture specifically designed to process and analyze image data by learning spatial patterns such as edges, textures, and object parts. Unlike traditional machine learning approaches that require manual feature engineering, CNNs automatically extract meaningful visual features directly from pixel values through trainable convolutional filters.</p>
+                    <p>In this experiment, the CIFAR-10 dataset, which contains 60,000 32×32 color images across 10 classes, is filtered to keep only two classes: cat (class 3) and dog (class 5), converting the task into binary classification. The input images are normalized by dividing by 255.0, ensuring pixel values fall in the range [0, 1], which makes training more stable and faster. The network architecture applies convolution operations to detect local patterns, max-pooling layers to reduce spatial dimensions while retaining important feature activations, and fully connected layers to combine extracted features for final decision making.</p>
+                    <p>The final output layer uses a sigmoid activation function, which produces a probability value between 0 and 1. A value closer to 1 indicates the image is likely a dog, while a value closer to 0 indicates a cat. During training, the model minimizes binary cross-entropy loss using the Adam optimizer, and performance is measured with accuracy on validation and test data. This architecture demonstrates the complete CNN workflow: data preprocessing, feature extraction, classification, evaluation, and single-image inference, making it ideal for beginners learning deep learning concepts.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Network Architecture</div>
+                <div class="section-content">
+                    <p><strong>CNN Model Structure:</strong></p>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Input Layer:</strong> 32×32×3 (height × width × channels for RGB images)</li>
+                        <li><strong>Conv2D Layer 1:</strong> 32 filters, 3×3 kernel with ReLU activation</li>
+                        <li><strong>MaxPooling2D Layer 1:</strong> 2×2 pool size for spatial dimension reduction</li>
+                        <li><strong>Conv2D Layer 2:</strong> 64 filters, 3×3 kernel with ReLU activation</li>
+                        <li><strong>MaxPooling2D Layer 2:</strong> 2×2 pool size</li>
+                        <li><strong>Flatten Layer:</strong> Converts 2D feature maps to 1D vector</li>
+                        <li><strong>Dense Layer 1:</strong> 64 neurons with ReLU activation</li>
+                        <li><strong>Dense Layer 2 (Output):</strong> 1 neuron with Sigmoid activation for binary classification</li>
+                    </ol>
+                    <p><strong>Compilation Details:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Optimizer: Adam</li>
+                        <li>Loss Function: Binary Crossentropy</li>
+                        <li>Metrics: Accuracy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Important Formulas</div>
+                <div class="section-content">
+                    <p><strong>Sigmoid Activation (Output Layer):</strong></p>
+                    $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+                    <p><strong>Binary Cross-Entropy Loss:</strong></p>
+                    $$L = -\frac{1}{n}\sum_{i=1}^{n} \left[ y_i \log(\hat{y}_i) + (1-y_i) \log(1-\hat{y}_i) \right]$$
+                    <p>where $y_i$ is the true label (0 for cat, 1 for dog) and $\hat{y}_i$ is the predicted probability.</p>
+                    <p><strong>ReLU Activation (Hidden Layers):</strong></p>
+                    $$\text{ReLU}(z) = \max(0, z)$$
+                    <p><strong>Prediction Rule:</strong></p>
+                    $$\text{Predicted Class} = \begin{cases} \text{Dog} & \text{if } \hat{y} \geq 0.5 \\ \text{Cat} & \text{if } \hat{y} < 0.5 \end{cases}$$
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">5) Algorithm (Step by Step)</div>
+                <div class="section-content">
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Load Data:</strong> Load CIFAR-10 dataset and extract cat and dog images. Normalize by scaling pixel values to [0, 1].</li>
+                        <li><strong>Convert Labels:</strong> Create binary labels where 0 = cat and 1 = dog.</li>
+                        <li><strong>Build Model:</strong> Construct the CNN with specified layers and architecture.</li>
+                        <li><strong>Compile Model:</strong> Configure optimizer (Adam), loss function (Binary Crossentropy), and metrics (Accuracy).</li>
+                        <li><strong>Train Model:</strong> Fit the model on training data with 20% validation split for 5 epochs, using batch size 64.</li>
+                        <li><strong>Evaluate Model:</strong> Test the trained model on test set to get final accuracy.</li>
+                        <li><strong>Single Image Inference:</strong> Load a user-provided image, preprocess it, and predict whether it is a cat or dog with confidence score.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">6) Implementation Overview</div>
+                <div class="section-content">
+                    <p><strong>Main Code Steps:</strong></p>
+                    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; overflow-x: auto;">
+                        <pre>
+# 1. Load and prepare CIFAR-10 data (cat and dog only)
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
+keep_train = np.isin(y_train, [3, 5]).ravel()
+keep_test = np.isin(y_test, [3, 5]).ravel()
+x_train, x_test = x_train[keep_train] / 255.0, x_test[keep_test] / 255.0
+y_train, y_test = (y_train[keep_train] == 5).astype("int32"), 
+                  (y_test[keep_test] == 5).astype("int32")
+
+# 2. Build CNN model
+model = Sequential([
+    layers.Input((32, 32, 3)),
+    layers.Conv2D(32, 3, activation="relu"), 
+    layers.MaxPooling2D(),
+    layers.Conv2D(64, 3, activation="relu"), 
+    layers.MaxPooling2D(),
+    layers.Flatten(), 
+    layers.Dense(64, activation="relu"),
+    layers.Dense(1, activation="sigmoid")
+])
+
+# 3. Compile and train
+model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
+history = model.fit(x_train, y_train, epochs=5, batch_size=64, 
+                    validation_split=0.2, verbose=1)
+
+# 4. Evaluate on test set
+loss, acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"Test Accuracy: {acc:.4f}")
+
+# 5. Predict on custom image
+img = load_img(image_path, target_size=(32, 32))
+arr = img_to_array(img) / 255.0
+arr = np.expand_dims(arr, axis=0)
+prob_dog = float(model.predict(arr, verbose=0)[0][0])
+pred_label = "Dog" if prob_dog >= 0.5 else "Cat"
+print(f"Prediction: {pred_label} (Dog probability: {prob_dog:.4f})")
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">7) Results</div>
+                <div class="section-content">
+                    <p>The CNN model successfully performs binary classification of cat and dog images from the CIFAR-10 dataset:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Data Split:</strong> Training set (with validation subset) and test set containing only cat and dog images from CIFAR-10.</li>
+                        <li><strong>Training:</strong> Model trains for 5 epochs with 20% validation split, using batch size 64.</li>
+                        <li><strong>Test Performance:</strong> Model achieves a measurable accuracy on the held-out test set.</li>
+                        <li><strong>Inference:</strong> The notebook supports single-image prediction, allowing users to provide custom images and receive predictions with confidence scores.</li>
+                        <li><strong>Output Format:</strong> Predictions are presented as class labels (Cat or Dog) along with the probability score for the dog class.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">8) Conclusion</div>
+                <div class="section-content">
+                    <p>This experiment demonstrates the complete workflow of a Convolutional Neural Network for image classification. The lightweight architecture is specifically designed for educational purposes while still capturing the essential components of modern deep learning: convolutional feature extraction, spatial pooling, fully connected decision layers, and practical inference on new images. The model successfully learns to distinguish between cat and dog images, showcasing how CNNs automatically discover visual patterns without manual feature engineering. The implementation is well-suited for learners new to deep learning and can serve as a foundation for building more sophisticated image classification models.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
