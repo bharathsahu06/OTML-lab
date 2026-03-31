@@ -18,7 +18,7 @@
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Understand and implement Gradient Descent for the given data:
+                    Understand and implement Gradient Descent to learn $w$ in $f(x)=w x^2$ for the given data:
                     <ul style="margin-top: 10px; margin-left: 20px;">
                         <li>Input $x=[1,2,3,4]$</li>
                         <li>Target $y=[1,4,9,16]$</li>
@@ -39,11 +39,13 @@
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
                     <p>Model:</p>
-                    $$\hat{y}_i=x_i^2$$
+                    $$\hat{y}_i=w x_i^2$$
                     <p>Loss (Mean Squared Error):</p>
-                    $$J=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$
-                    <p>In this case, the function is already defined, so there are no parameters to optimize with Gradient Descent. However, we can analyze the loss:</p>
-                    $$J=\frac{1}{4}[(1-1)^2+(4-4)^2+(9-9)^2+(16-16)^2]$$
+                    $$J(w)=\frac{1}{n}\sum_{i=1}^{n}(w x_i^2-y_i)^2$$
+                    <p>Gradient w.r.t. $w$:</p>
+                    $$\frac{dJ}{dw}=\frac{2}{n}\sum_{i=1}^{n}(w x_i^2-y_i)\,x_i^2$$
+                    <p>Update rule:</p>
+                    $$w\leftarrow w-\alpha\frac{dJ}{dw}$$
                 </div>
             </div>
 
@@ -51,11 +53,11 @@
                 <div class="section-title">4) Algorithm (Step by Step)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li>Initialize input values $x=[1,2,3,4]$ and target $y=[1,4,9,16]$.</li>
-                        <li>Compute predictions using $\hat{y}=x^2$ for each input.</li>
-                        <li>Compute loss $J$ (Mean Squared Error).</li>
-                        <li>Compare predicted and actual values to understand the fit.</li>
-                        <li>Report predictions, loss, and analysis.</li>
+                        <li>Read an initial value for $w$ and set hyperparameters ($\alpha$, tolerance, max iterations).</li>
+                        <li>Compute predictions $\hat{y}=w x^2$.</li>
+                        <li>Compute loss $J(w)$ (Mean Squared Error).</li>
+                        <li>Compute gradient $\frac{dJ}{dw}$.</li>
+                        <li>Update $w\leftarrow w-\alpha\frac{dJ}{dw}$ and repeat until convergence.</li>
                     </ol>
                 </div>
             </div>
@@ -63,20 +65,23 @@
             <div class="section">
                 <div class="section-title">5) Mathematical Procedure (Complete Step-by-Step)</div>
                 <div class="section-content">
-                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, function $f(x)=x^2$</p>
+                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, model $\hat{y}=w x^2$</p>
                     <div class="step">
-                        <strong>1. Compute predictions using $\hat{y}=x^2$:</strong>
-                        $$\hat{y}=[1^2, 2^2, 3^2, 4^2]=[1,4,9,16]$$
+                        <strong>1. Compute predictions:</strong>
+                        $$\hat{y}_i=w x_i^2$$
                     </div>
                     <div class="step">
                         <strong>2. Compute errors:</strong>
-                        $$e=\hat{y}-y=[1-1, 4-4, 9-9, 16-16]=[0,0,0,0]$$
+                        $$e_i=\hat{y}_i-y_i$$
                     </div>
                     <div class="step">
                         <strong>3. Compute loss (Mean Squared Error):</strong>
-                        $$J=\frac{1}{4}(0^2+0^2+0^2+0^2)=0$$
+                        $$J(w)=\frac{1}{n}\sum_{i=1}^{n}(e_i)^2$$
                     </div>
-                    <p>4. The function $f(x)=x^2$ perfectly fits the data, resulting in zero loss.</p>
+                    <div class="step">
+                        <strong>4. Compute gradient and update:</strong>
+                        $$\frac{dJ}{dw}=\frac{2}{n}\sum_{i=1}^{n}(w x_i^2-y_i)\,x_i^2,\qquad w\leftarrow w-\alpha\frac{dJ}{dw}$$
+                    </div>
                 </div>
             </div>
 
@@ -86,6 +91,10 @@
                     <ul style="margin-left: 20px;">
                         <li>$x=[1,2,3,4]$</li>
                         <li>$y=[1,4,9,16]$</li>
+                        <li>Initial $w$ (user input)</li>
+                        <li>Learning rate $\alpha=0.01$</li>
+                        <li>Tolerance $=10^{-6}$</li>
+                        <li>Max iterations $=100$</li>
                     </ul>
                 </div>
             </div>
@@ -93,48 +102,58 @@
             <div class="section">
                 <div class="section-title">7) Python Implementation & Output</div>
                 <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+import numpy as np
 
-<span class="comment"># Given input</span>
-x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
-y = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>], dtype=float)
+# Data
+x = np.array([1, 2, 3, 4], dtype=float)
+y = np.array([1, 4, 9, 16], dtype=float)
 
-<span class="comment"># Function f(x) = x^2</span>
-<span class="keyword">def</span> <span class="function">f</span>(x):
-    <span class="keyword">return</span> x ** <span class="number">2</span>
+# Initial weight
+w = float(input("Enter initial w: "))
 
-<span class="comment"># Compute predictions using f(x) = x^2</span>
-y_pred = f(x)
-error = y_pred - y
+# Hyperparameters
+lr = 0.01
+tol = 1e-6
+max_iter = 100
 
-<span class="comment"># Compute loss</span>
-n = len(x)
-loss = (<span class="number">1</span> / n) * np.sum(error ** <span class="number">2</span>)
+print("\nIter\t w\t\t Loss")
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"x ="</span>, x)
-print(<span class="string">"y ="</span>, y)
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Function: f(x) = x^2"</span>)
-print(<span class="function">f</span><span class="string">"Predicted y: </span>{np.round(y_pred, <span class="number">4</span>)}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Errors: </span>{np.round(error, <span class="number">4</span>)}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Mean Squared Error (MSE) Loss: </span>{loss:<span class="number">.6</span>f}<span class="string">"</span>)
+for i in range(1, max_iter + 1):
+    y_pred = w * x**2
+    error = y_pred - y
 
-print(<span class="string">"\nProgram"</span>)
-print(<span class="string">"Quadratic function evaluation completed successfully."</span>)</div>
+    loss = np.mean(error**2)
+
+    # Gradient (manually derived)
+    grad = 2 * np.mean(error * x**2)
+
+    w_new = w - lr * grad
+
+    print(f"{i}\t {w_new:.6f}\t {loss:.6f}")
+
+    if abs(w_new - w) < tol:
+        w = w_new
+        break
+
+    w = w_new
+
+print("f(x) = w * x^2")
+print("\nOptimal w =", round(w, 6))
+print("Final Loss =", round(loss, 6))
+</div>
                 <div class="output-block">
-INPUT
-x = [1. 2. 3. 4.]
-y = [ 1.  4.  9. 16.]
+Enter initial w: 0
 
-OUTPUT
-Function: f(x) = x^2
-Predicted y: [ 1.  4.  9. 16.]
-Errors: [0. 0. 0. 0.]
-Mean Squared Error (MSE) Loss: 0.000000
+Iter	 w		 Loss
+1	 1.770000	 88.500000
+2	 0.407100	 52.471650
+3	 1.456533	 31.110441
+...
 
-Program
-Quadratic function evaluation completed successfully.
+f(x) = w * x^2
+
+Optimal w = 1.0
+Final Loss = 0.0
                 </div>
             </div>
 

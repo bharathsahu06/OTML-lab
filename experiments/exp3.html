@@ -18,7 +18,7 @@
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Implementation of Stochastic Gradient Descent for the given data:
+                    Implementation of Stochastic Gradient Descent to learn $w$ in $f(x)=w x^2$ for the given data:
                     <ul style="margin-left: 20px; margin-top: 10px;">
                         <li>Input $x=[1,2,3,4]$</li>
                         <li>Target $y=[1,4,9,16]$</li>
@@ -38,9 +38,11 @@
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Model: $$\hat{y}_i=x_i^2$$</p>
-                    <p>Sample loss (squared error): $$L_i=(\hat{y}_i-y_i)^2$$</p>
-                    <p>Final MSE (for reporting): $$J=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
+                    <p>Model: $$\hat{y}_i=w x_i^2$$</p>
+                    <p>Sample loss (squared error): $$L_i=(\hat{y}_i-y_i)^2=(w x_i^2-y_i)^2$$</p>
+                    <p>Sample gradient: $$\frac{dL_i}{dw}=2(w x_i^2-y_i)x_i^2$$</p>
+                    <p>SGD update: $$w\leftarrow w-\alpha\frac{dL_i}{dw}$$</p>
+                    <p>Final MSE (for reporting): $$J(w)=\frac{1}{n}\sum_{i=1}^{n}(w x_i^2-y_i)^2$$</p>
                 </div>
             </div>
 
@@ -48,8 +50,8 @@
                 <div class="section-title">4) Important Functions Used in Program</div>
                 <div class="section-content">
                     <ul style="margin-left: 20px;">
-                        <li><code>sgd_linear_regression(x, y, alpha, epochs, seed)</code>: performs SGD updates for $w$ and $b$.</li>
-                        <li><code>mse_loss(x, y, w, b)</code>: computes Mean Squared Error over full dataset.</li>
+                        <li><code>np.random.permutation(n)</code>: shuffles sample order each epoch.</li>
+                        <li><code>np.mean(...)</code>: computes Mean Squared Error over the full dataset.</li>
                     </ul>
                 </div>
             </div>
@@ -58,14 +60,11 @@
                 <div class="section-title">5) Algorithm (Step by Step)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li>Initialize input data $x=[1,2,3,4]$ and target $y=[1,4,9,16]$.</li>
-                        <li>For each epoch, process training data.</li>
-                        <li>Pick one sample $(x_i,y_i)$.</li>
-                        <li>Compute prediction $\hat{y}_i=x_i^2$.</li>
-                        <li>Compute error $e_i=\hat{y}_i-y_i$.</li>
-                        <li>Evaluate sample loss $L_i=(\hat{y}_i-y_i)^2$.</li>
-                        <li>Repeat for all samples and all epochs.</li>
-                        <li>Report predictions and final MSE.</li>
+                        <li>Read an initial value for $w$ and set hyperparameters ($\alpha$, epochs).</li>
+                        <li>For each epoch, shuffle the sample order.</li>
+                        <li>For each sample $(x_i,y_i)$, compute $\hat{y}_i=w x_i^2$ and update $w$ using the sample gradient.</li>
+                        <li>After the epoch, compute and print the full-dataset MSE.</li>
+                        <li>After all epochs, report final $w$ and final loss.</li>
                     </ol>
                 </div>
             </div>
@@ -73,28 +72,18 @@
             <div class="section">
                 <div class="section-title">6) Mathematical Procedure (First Two SGD Updates)</div>
                 <div class="section-content">
-                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, function $f(x)=x^2$.</p>
+                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, model $\hat{y}=w x^2$.</p>
                     <div class="step">
                         <strong>For first sample $(x_1,y_1)=(1,1)$:</strong>
-                        $$\hat{y}_1=1^2=1, \quad e_1=1-1=0$$
-                        $$L_1=(0)^2=0$$
+                        $$\hat{y}_1=w\cdot 1^2=w, \quad e_1=w-1$$
+                        $$\frac{dL_1}{dw}=2(w-1)\cdot 1^2=2(w-1),\quad w\leftarrow w-\alpha\,2(w-1)$$
                     </div>
                     <div class="step">
                         <strong>For second sample $(x_2,y_2)=(2,4)$:</strong>
-                        $$\hat{y}_2=2^2=4, \quad e_2=4-4=0$$
-                        $$L_2=(0)^2=0$$
+                        $$\hat{y}_2=w\cdot 2^2=4w, \quad e_2=4w-4$$
+                        $$\frac{dL_2}{dw}=2(4w-4)\cdot 2^2=8(4w-4),\quad w\leftarrow w-\alpha\,8(4w-4)$$
                     </div>
-                    <div class="step">
-                        <strong>For third sample $(x_3,y_3)=(3,9)$:</strong>
-                        $$\hat{y}_3=3^2=9, \quad e_3=9-9=0$$
-                        $$L_3=(0)^2=0$$
-                    </div>
-                    <div class="step">
-                        <strong>For fourth sample $(x_4,y_4)=(4,16)$:</strong>
-                        $$\hat{y}_4=4^2=16, \quad e_4=16-16=0$$
-                        $$L_4=(0)^2=0$$
-                    </div>
-                    <p>The function $f(x)=x^2$ perfectly fits all samples with zero loss at each step.</p>
+                    <p>SGD continues similarly for the remaining samples and epochs.</p>
                 </div>
             </div>
 
@@ -104,8 +93,9 @@
                     <ul style="margin-left: 20px;">
                         <li>$x=[1,2,3,4]$</li>
                         <li>$y=[1,4,9,16]$</li>
-                        <li>Learning rate $\alpha=0.01$</li>
-                        <li>Epochs $=500$</li>
+                        <li>Initial $w$ (user input)</li>
+                        <li>Learning rate $\alpha=0.001$</li>
+                        <li>Epochs $=20$</li>
                     </ul>
                 </div>
             </div>
@@ -113,64 +103,60 @@
             <div class="section">
                 <div class="section-title">8) Python Implementation & Output</div>
                 <div class="code-block">
-<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+import numpy as np
 
-<span class="comment"># Given input</span>
-x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], dtype=float)
-y = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>], dtype=float)
+# Data
+x = np.array([1, 2, 3, 4], dtype=float)
+y = np.array([1, 4, 9, 16], dtype=float)
 
+# Input
+w = float(input("Enter initial w: "))
 
-<span class="keyword">def</span> <span class="function">mse_loss</span>(x, y):
-    y_pred = x ** <span class="number">2</span>
-    <span class="keyword">return</span> np.mean((y_pred - y) ** <span class="number">2</span>)
+# Hyperparameters
+lr = 0.001
+epochs = 20
 
+print("\nEpoch\t w\t\t Loss")
 
-<span class="keyword">def</span> <span class="function">sgd_quadratic_evaluation</span>(x, y, epochs=<span class="number">500</span>, seed=<span class="number">42</span>):
-    n = len(x)
-    rng = np.random.default_rng(seed)
-    loss_history = []
+for epoch in range(1, epochs + 1):
 
-    <span class="keyword">for</span> _ <span class="keyword">in</span> range(epochs):
-        indices = np.arange(n)
-        rng.shuffle(indices)
+    # Shuffle (important in SGD)
+    indices = np.random.permutation(len(x))
+    x_shuffled = x[indices]
+    y_shuffled = y[indices]
 
-        <span class="keyword">for</span> i <span class="keyword">in</span> indices:
-            y_pred_i = x[i] ** <span class="number">2</span>
-            error_i = y_pred_i - y[i]
-            <span class="comment"># For quadratic function, we just compute the error for each sample</span>
+    # SGD updates (one by one)
+    for xi, yi in zip(x_shuffled, y_shuffled):
+        y_pred = w * xi**2
+        error = y_pred - yi
 
-        loss_history.append(mse_loss(x, y))
+        grad = 2 * error * xi**2
+        w = w - lr * grad
 
-    <span class="keyword">return</span> loss_history
+    # Loss after full pass
+    y_pred_all = w * x**2
+    loss = np.mean((y_pred_all - y)**2)
 
+    print(f"{epoch}\t {w:.6f}\t {loss:.6f}")
 
-epochs = <span class="number">500</span>
-loss_history = sgd_quadratic_evaluation(x, y, epochs=epochs)
-
-y_final = x ** <span class="number">2</span>
-final_loss = mse_loss(x, y)
-
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"x ="</span>, x)
-print(<span class="string">"y ="</span>, y)
-print(<span class="function">f</span><span class="string">"epochs = </span>{epochs}<span class="string">"</span>)
-
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Function: f(x) = x^2"</span>)
-print(<span class="function">f</span><span class="string">"Predicted y: </span>{np.round(y_final, <span class="number">4</span>)}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Final MSE Loss: </span>{final_loss:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
+# Result
+print("f(x) = w * x^2")
+print("\nOptimal w =", round(w, 6))
+print("Final Loss =", round(loss, 6))
+</div>
                 <div class="output-block">
-INPUT
-x = [1. 2. 3. 4.]
-y = [ 1.  4.  9. 16.]
-epochs = 500
+Enter initial w: 0
 
-OUTPUT
-Function: f(x) = x^2
-Predicted y: [ 1.  4.  9. 16.]
-Final MSE Loss: 0.000000
-Program executed successfully.
+Epoch	 w		 Loss
+1	 ...	 ...
+2	 ...	 ...
+...
+20	 ...	 ...
+
+f(x) = w * x^2
+
+Optimal w = 1.0
+Final Loss = 0.0
                 </div>
             </div>
 
