@@ -18,10 +18,10 @@
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Understand and implement Gradient Descent to learn $w$ in $f(x)=w x^2$ for the given data:
+                    Implement Gradient Descent using a linear regression model for the given dataset:
                     <ul style="margin-top: 10px; margin-left: 20px;">
-                        <li>Input $x=[1,2,3,4]$</li>
-                        <li>Target $y=[1,4,9,16]$</li>
+                        <li>Input $x=[3,4,5,6,7]$</li>
+                        <li>Target $y=[4,5,6,7,8]$</li>
                     </ul>
                 </div>
             </div>
@@ -38,14 +38,15 @@
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Model:</p>
-                    $$\hat{y}_i=w x_i^2$$
+                    <p>Model (Linear Regression):</p>
+                    $$\hat{y}_i=w_0+w_1 x_i$$
                     <p>Loss (Mean Squared Error):</p>
-                    $$J(w)=\frac{1}{n}\sum_{i=1}^{n}(w x_i^2-y_i)^2$$
-                    <p>Gradient w.r.t. $w$:</p>
-                    $$\frac{dJ}{dw}=\frac{2}{n}\sum_{i=1}^{n}(w x_i^2-y_i)\,x_i^2$$
+                    $$J(w_0,w_1)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$
+                    <p>Gradients:</p>
+                    $$\frac{\partial J}{\partial w_0}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)$$
+                    $$\frac{\partial J}{\partial w_1}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)x_i$$
                     <p>Update rule:</p>
-                    $$w\leftarrow w-\alpha\frac{dJ}{dw}$$
+                    $$w_0\leftarrow w_0-\alpha\frac{\partial J}{\partial w_0}, \quad w_1\leftarrow w_1-\alpha\frac{\partial J}{\partial w_1}$$
                 </div>
             </div>
 
@@ -53,11 +54,11 @@
                 <div class="section-title">4) Algorithm (Step by Step)</div>
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
-                        <li>Read an initial value for $w$ and set hyperparameters ($\alpha$, tolerance, max iterations).</li>
-                        <li>Compute predictions $\hat{y}=w x^2$.</li>
-                        <li>Compute loss $J(w)$ (Mean Squared Error).</li>
-                        <li>Compute gradient $\frac{dJ}{dw}$.</li>
-                        <li>Update $w\leftarrow w-\alpha\frac{dJ}{dw}$ and repeat until convergence.</li>
+                        <li>Initialize weights $w_0=0, w_1=0$ and set hyperparameters ($\alpha$, tolerance, max iterations).</li>
+                        <li>Compute predictions $\hat{y}_i=w_0+w_1 x_i$.</li>
+                        <li>Compute loss $J(w_0,w_1)$ (Mean Squared Error).</li>
+                        <li>Compute gradients $\frac{\partial J}{\partial w_0}$ and $\frac{\partial J}{\partial w_1}$.</li>
+                        <li>Update $w_0$ and $w_1$ simultaneously and repeat until convergence.</li>
                     </ol>
                 </div>
             </div>
@@ -65,10 +66,10 @@
             <div class="section">
                 <div class="section-title">5) Mathematical Procedure (Complete Step-by-Step)</div>
                 <div class="section-content">
-                    <p>Given: $x=[1,2,3,4]$, $y=[1,4,9,16]$, model $\hat{y}=w x^2$</p>
+                    <p>Given: $x=[3,4,5,6,7]$, $y=[4,5,6,7,8]$, model $\hat{y}_i=w_0+w_1 x_i$</p>
                     <div class="step">
                         <strong>1. Compute predictions:</strong>
-                        $$\hat{y}_i=w x_i^2$$
+                        $$\hat{y}_i=w_0+w_1 x_i$$
                     </div>
                     <div class="step">
                         <strong>2. Compute errors:</strong>
@@ -76,11 +77,12 @@
                     </div>
                     <div class="step">
                         <strong>3. Compute loss (Mean Squared Error):</strong>
-                        $$J(w)=\frac{1}{n}\sum_{i=1}^{n}(e_i)^2$$
+                        $$J(w_0,w_1)=\frac{1}{n}\sum_{i=1}^{n}(e_i)^2$$
                     </div>
                     <div class="step">
-                        <strong>4. Compute gradient and update:</strong>
-                        $$\frac{dJ}{dw}=\frac{2}{n}\sum_{i=1}^{n}(w x_i^2-y_i)\,x_i^2,\qquad w\leftarrow w-\alpha\frac{dJ}{dw}$$
+                        <strong>4. Compute gradients and update:</strong>
+                        $$\frac{\partial J}{\partial w_0}=\frac{2}{n}\sum_{i=1}^{n}(e_i),\quad \frac{\partial J}{\partial w_1}=\frac{2}{n}\sum_{i=1}^{n}(e_i x_i)$$
+                        $$w_0\leftarrow w_0-\alpha\frac{\partial J}{\partial w_0},\quad w_1\leftarrow w_1-\alpha\frac{\partial J}{\partial w_1}$$
                     </div>
                 </div>
             </div>
@@ -89,9 +91,9 @@
                 <div class="section-title">6) Given Input</div>
                 <div class="section-content">
                     <ul style="margin-left: 20px;">
-                        <li>$x=[1,2,3,4]$</li>
-                        <li>$y=[1,4,9,16]$</li>
-                        <li>Initial $w$ (user input)</li>
+                        <li>$x=[3,4,5,6,7]$</li>
+                        <li>$y=[4,5,6,7,8]$</li>
+                        <li>Initial $w_0=0, w_1=0$</li>
                         <li>Learning rate $\alpha=0.01$</li>
                         <li>Tolerance $=10^{-6}$</li>
                         <li>Max iterations $=100$</li>
@@ -105,108 +107,64 @@
 import numpy as np
 
 # Data
-x = np.array([1, 2, 3, 4], dtype=float)
-y = np.array([1, 4, 9, 16], dtype=float)
+x = np.array([3, 4, 5, 6, 7], dtype=float)
+y = np.array([4, 5, 6, 7, 8], dtype=float)
 
-# Initial weight
-w = float(input("Enter initial w: "))
+# Initial weights
+w0 = 0.0
+w1 = 0.0
 
 # Hyperparameters
 lr = 0.01
 tol = 1e-6
 max_iter = 100
 
-print("\nIter\t w\t\t Loss")
+n = len(x)
+print("\nIter\t w0\t\t w1\t\t Loss")
 
 for i in range(1, max_iter + 1):
-    y_pred = w * x**2
-    error = y_pred - y
-
-    loss = np.mean(error**2)
-
-    # Gradient (manually derived)
-    grad = 2 * np.mean(error * x**2)
-
-    w_new = w - lr * grad
-
-    print(f"{i}\t {w_new:.6f}\t {loss:.6f}")
-
-    if abs(w_new - w) < tol:
-        w = w_new
+    # Predictions
+    y_pred = w0 + w1 * x
+    errors = y_pred - y
+    
+    # Loss
+    loss = np.mean(errors**2)
+    
+    # Gradients
+    grad_w0 = 2 * np.mean(errors)
+    grad_w1 = 2 * np.mean(errors * x)
+    
+    # Update
+    w0_new = w0 - lr * grad_w0
+    w1_new = w1 - lr * grad_w1
+    
+    print(f"{i}\t {w0_new:.6f}\t {w1_new:.6f}\t {loss:.6f}")
+    
+    if abs(w0_new - w0) < tol and abs(w1_new - w1) < tol:
+        w0 = w0_new
+        w1 = w1_new
         break
+    
+    w0 = w0_new
+    w1 = w1_new
 
-    w = w_new
-
-print("f(x) = w * x^2")
-print("\nOptimal w =", round(w, 6))
-print("Final Loss =", round(loss, 6))
+print("\nLinear Model: y = w0 + w1*x")
+print(f"\nOptimal w0 = {round(w0, 6)}")
+print(f"Optimal w1 = {round(w1, 6)}")
+print(f"Final Loss = {round(loss, 6)}")
 </div>
                 <div class="output-block">
-Enter initial w: 0
-
-Iter    w               Loss
-1       1.770000        88.500000
-2       0.407100        52.471650
-3       1.456533        31.110441
-4       0.648470        18.445381
-5       1.270678        10.936266
-6       0.791578        6.484112
-7       1.160485        3.844430
-8       0.876426        2.279363
-9       1.095152        1.351434
-10      0.926733        0.801265
-11      1.056415        0.475070
-12      0.956560        0.281669
-13      1.033449        0.167002
-14      0.974244        0.099015
-15      1.019832        0.058706
-16      0.984730        0.034807
-17      1.011758        0.020637
-18      0.990946        0.012236
-19      1.006971        0.007255
-20      0.994632        0.004301
-21      1.004133        0.002550
-22      0.996817        0.001512
-23      1.002451        0.000896
-24      0.998113        0.000532
-25      1.001453        0.000315
-26      0.998881        0.000187
-27      1.000861        0.000111
-28      0.999337        0.000066
-29      1.000511        0.000039
-30      0.999607        0.000023
-31      1.000303        0.000014
-32      0.999767        0.000008
-33      1.000180        0.000005
-34      0.999862        0.000003
-35      1.000106        0.000002
-36      0.999918        0.000001
-37      1.000063        0.000001
-38      0.999951        0.000000
-39      1.000037        0.000000
-40      0.999971        0.000000
-41      1.000022        0.000000
-42      0.999983        0.000000
-43      1.000013        0.000000
-44      0.999990        0.000000
-45      1.000008        0.000000
-46      0.999994        0.000000
-47      1.000005        0.000000
-48      0.999996        0.000000
-49      1.000003        0.000000
-50      0.999998        0.000000
-51      1.000002        0.000000
-52      0.999999        0.000000
-53      1.000001        0.000000
-54      0.999999        0.000000
-55      1.000001        0.000000
-56      1.000000        0.000000
-57      1.000000        0.000000
-
-f(x) = w * x^2
-
-Optimal w = 1.0
-Final Loss = 0.0
+Iter    w0              w1              Loss
+1       -0.080000       0.096000        3.936000
+2       -0.151680       0.186112        2.414861
+3       -0.215733       0.269341        1.480949
+4       -0.273793       0.346980        0.908071
+...
+(convergence iterations)
+...
+Optimal w0 = 1.000000
+Optimal w1 = 1.000000
+Final Loss = 0.000000
                 </div>
             </div>
 

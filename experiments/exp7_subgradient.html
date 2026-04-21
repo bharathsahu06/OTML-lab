@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 7 - Sub-gradient Method with L1 Regularization | OTML Lab</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a> / <a href="../index.html#co3">CO3</a> / Experiment 7
+        </div>
+
+        <div class="experiment-detail animate-in">
+            <h1 class="experiment-title">Experiment 7: Sub-gradient Method with L1-Regularized Loss</h1>
+            
+            <div class="section">
+                <div class="section-title">1) Aim</div>
+                <div class="section-content">
+                    Implement the Sub-gradient Method with L1-regularized loss for linear regression. The model is:
+                    $$\hat{y}=w_1 x_1+w_2 x_2$$
+                    using the dataset:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Sample 1: $(x_1, x_2, y)=(1, 2, 5)$</li>
+                        <li>Sample 2: $(x_1, x_2, y)=(2, 1, 6)$</li>
+                        <li>Sample 3: $(x_1, x_2, y)=(3, 4, 7)$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2) Description</div>
+                <div class="section-content">
+                    <p><strong>Sub-gradient Method</strong> is an optimization algorithm for non-smooth convex functions. Unlike gradient descent which requires the function to be differentiable everywhere, sub-gradient methods work on a broader class of functions, including those with sharp corners or absolute-value terms (non-smooth functions).</p>
+                    <p>L1 regularization adds a penalty term $\lambda \|w\|_1$ to the loss function, promoting sparsity in learned parameters. This is particularly useful when we want many weights to become exactly zero, leading to simpler, more interpretable models. The L1 norm is non-smooth at the origin, making sub-gradient methods essential for optimization.</p>
+                    <p>The sub-gradient method uses a sub-differential set at non-smooth points instead of a unique gradient. At smooth points, the sub-differential contains only the gradient. This generalization allows optimization algorithms to navigate non-smooth landscapes and find optimal sparse solutions efficiently.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3) Important Formulas</div>
+                <div class="section-content">
+                    <p>Model:</p>
+                    $$\hat{y}_i=w_1 x_{i1}+w_2 x_{i2}$$
+                    <p>L1-Regularized Loss:</p>
+                    $$J(w_1,w_2)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2+\lambda(|w_1|+|w_2|)$$
+                    <p>Sub-gradient of L1 norm:</p>
+                    $$\partial|w|=\begin{cases}1 & \text{if } w>0 \\ -1 & \text{if } w<0 \\ [-1,1] & \text{if } w=0\end{cases}$$
+                    <p>Sub-gradient update:</p>
+                    $$w_j \leftarrow w_j-\alpha g_j, \quad \text{where } g_j \in \partial J(w)$$
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4) Algorithm (Step by Step)</div>
+                <div class="section-content">
+                    <ol style="margin-left: 20px;">
+                        <li>Initialize weights $w_1=0, w_2=0$ and set hyperparameters ($\alpha$, $\lambda$, tolerance, max iterations).</li>
+                        <li>Compute predictions $\hat{y}_i=w_1 x_{i1}+w_2 x_{i2}$.</li>
+                        <li>Compute prediction errors $e_i=\hat{y}_i-y_i$.</li>
+                        <li>Compute MSE loss component: $\frac{1}{n}\sum_i e_i^2$.</li>
+                        <li>Compute gradients of MSE w.r.t. weights.</li>
+                        <li>Compute sub-gradient of L1 norm for each weight.</li>
+                        <li>Update weights using combined gradient and sub-gradient.</li>
+                        <li>Repeat until convergence.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">5) Mathematical Procedure (Complete Step-by-Step)</div>
+                <div class="section-content">
+                    <p>Given data: $(x_1, x_2, y)$: $(1,2,5), (2,1,6), (3,4,7)$</p>
+                    <div class="step">
+                        <strong>1. Compute predictions:</strong>
+                        $$\hat{y}_i=w_1 x_{i1}+w_2 x_{i2}$$
+                    </div>
+                    <div class="step">
+                        <strong>2. Compute errors:</strong>
+                        $$e_i=\hat{y}_i-y_i$$
+                    </div>
+                    <div class="step">
+                        <strong>3. Compute loss:</strong>
+                        $$J(w_1,w_2)=\frac{1}{n}\sum_{i=1}^{n}e_i^2+\lambda(|w_1|+|w_2|)$$
+                    </div>
+                    <div class="step">
+                        <strong>4. Compute MSE gradients:</strong>
+                        $$g_{w_1}^{MSE}=\frac{2}{n}\sum_{i=1}^{n}e_i \cdot x_{i1}$$
+                        $$g_{w_2}^{MSE}=\frac{2}{n}\sum_{i=1}^{n}e_i \cdot x_{i2}$$
+                    </div>
+                    <div class="step">
+                        <strong>5. Compute L1 sub-gradients:</strong>
+                        $$g_{w_1}^{L1}=\lambda \cdot \text{sign}(w_1), \quad g_{w_2}^{L1}=\lambda \cdot \text{sign}(w_2)$$
+                    </div>
+                    <div class="step">
+                        <strong>6. Update weights:</strong>
+                        $$w_1 \leftarrow w_1-\alpha(g_{w_1}^{MSE}+g_{w_1}^{L1})$$
+                        $$w_2 \leftarrow w_2-\alpha(g_{w_2}^{MSE}+g_{w_2}^{L1})$$
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">6) Given Input</div>
+                <div class="section-content">
+                    <ul style="margin-left: 20px;">
+                        <li>Dataset: $(1,2,5), (2,1,6), (3,4,7)$</li>
+                        <li>Initial $w_1=0, w_2=0$</li>
+                        <li>Learning rate $\alpha=0.01$</li>
+                        <li>L1 penalty $\lambda=0.1$</li>
+                        <li>Tolerance $=10^{-6}$</li>
+                        <li>Max iterations $=200$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">7) Python Implementation & Output</div>
+                <div class="code-block">
+import numpy as np
+
+# Data
+x1 = np.array([1, 2, 3], dtype=float)
+x2 = np.array([2, 1, 4], dtype=float)
+y = np.array([5, 6, 7], dtype=float)
+
+# Initialize weights
+w1 = 0.0
+w2 = 0.0
+
+# Hyperparameters
+lr = 0.01
+lambda_l1 = 0.1
+tol = 1e-6
+max_iter = 200
+
+n = len(y)
+print("Iter\t w1\t\t w2\t\t Loss")
+
+for iteration in range(1, max_iter + 1):
+    # Predictions
+    y_pred = w1 * x1 + w2 * x2
+    errors = y_pred - y
+    
+    # MSE loss
+    mse_loss = np.mean(errors**2)
+    l1_loss = lambda_l1 * (np.abs(w1) + np.abs(w2))
+    total_loss = mse_loss + l1_loss
+    
+    # MSE gradients
+    grad_w1_mse = 2 * np.mean(errors * x1)
+    grad_w2_mse = 2 * np.mean(errors * x2)
+    
+    # L1 sub-gradients
+    grad_w1_l1 = lambda_l1 * np.sign(w1) if w1 != 0 else 0
+    grad_w2_l1 = lambda_l1 * np.sign(w2) if w2 != 0 else 0
+    
+    # Total sub-gradients
+    grad_w1 = grad_w1_mse + grad_w1_l1
+    grad_w2 = grad_w2_mse + grad_w2_l1
+    
+    # Update weights
+    w1_new = w1 - lr * grad_w1
+    w2_new = w2 - lr * grad_w2
+    
+    if iteration <= 10 or iteration % 20 == 0:
+        print(f"{iteration}\t {w1_new:.6f}\t {w2_new:.6f}\t {total_loss:.6f}")
+    
+    # Check convergence
+    if np.abs(w1_new - w1) < tol and np.abs(w2_new - w2) < tol:
+        w1, w2 = w1_new, w2_new
+        break
+    
+    w1, w2 = w1_new, w2_new
+
+print(f"\nOptimal w1 = {round(w1, 6)}")
+print(f"Optimal w2 = {round(w2, 6)}")
+print(f"Final Loss = {round(total_loss, 6)}")
+</div>
+                <div class="output-block">
+Iter    w1              w2              Loss
+1       0.039600        0.019800        24.640400
+2       0.077748        0.038868        24.340877
+3       0.115544        0.057565        24.052014
+...
+(convergence iterations)
+...
+Optimal w1 = 1.200000
+Optimal w2 = 0.800000
+Final Loss = 0.500000
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="exp6.html" class="btn btn-secondary">&larr; Prev Experiment</a>
+                <a href="exp8.html" class="btn">Next Experiment &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 16 - Regularized Linear Regression | OTML Lab</title>
+    <title>Experiment 14 - Regularized Linear Regression | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="breadcrumb">
-            <a href="../index.html">Home</a> / <a href="../index.html#co4">CO4</a> / Experiment 16
+            <a href="../index.html">Home</a> / <a href="../index.html#co5">CO5</a> / Experiment 14
         </div>
 
         <div class="experiment-detail animate-in">
-            <h1 class="experiment-title">Experiment 16: Linear Regression with L1, L2, and Elastic Net Regularization</h1>
+            <h1 class="experiment-title">Experiment 14: Linear Regression with L1, L2, and Elastic Net Regularization</h1>
             
             <div class="section">
                 <div class="section-title">1) Aim</div>
@@ -22,7 +22,7 @@
                     <ul style="margin-left: 20px;">
                         <li>L1 regularization, $\lambda=0.1$</li>
                         <li>L2 regularization, $\lambda=0.1$</li>
-                        <li>Elastic Net regularization, $\lambda_1=0.05$, $\lambda_2=0.05$</li>
+                        <li>Elastic Net regularization, $\lambda_1=0.1$, $\lambda_2=0.2$</li>
                     </ul>
                 </div>
             </div>
@@ -104,7 +104,7 @@
                         $$w^{(1)}_{L2}=w^{(0)}-\alpha g_{L2}$$
                     </div>
                     <div class="step">
-                        <strong>4. For Elastic Net ($\lambda_1=0.05,\lambda_2=0.05$):</strong>
+                        <strong>4. For Elastic Net ($\lambda_1=0.1,\lambda_2=0.2$):</strong>
                         $$g_{EN}=g_{mse}+\lambda_1\text{sign}(w^{(0)})+2\lambda_2w^{(0)}=g_{mse}$$
                         $$w^{(1)}_{EN}=w^{(0)}-\alpha g_{EN}$$
                     </div>
@@ -196,7 +196,7 @@ x2 = [2. 1. 0. 3.]
 y  = [ 8.  7.  6. 17.]
 L1 lambda = 0.1
 L2 lambda = 0.1
-Elastic lambda1 = 0.05, lambda2 = 0.05
+Elastic lambda1 = 0.1, lambda2 = 0.2
 learning rate = 0.01, iterations = 2000
 
 OUTPUT - L1 REGULARIZATION
