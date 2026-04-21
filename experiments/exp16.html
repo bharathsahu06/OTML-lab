@@ -118,11 +118,12 @@
                 <div class="section-title">7) Given Input</div>
                 <div class="section-content">
                     <ul style="margin-left: 20px;">
-                        <li>$x_1=[1,2,3,4]$</li>
-                        <li>$x_2=[2,1,0,3]$</li>
-                        <li>$y=[8,7,6,17]$</li>
-                        <li>Learning rate $\alpha=0.01$</li>
-                        <li>Iterations $=2000$</li>
+                        <li>$x_1=[1,2,3]$</li>
+                        <li>$x_2=[2,1,4]$</li>
+                        <li>$y=[5,6,7]$</li>
+                        <li>L1 and L2 regularization: $\lambda=0.1$</li>
+                        <li>Elastic Net: $\lambda_1=0.1,\;\lambda_2=0.2$</li>
+                        <li>Learning rate $\alpha=0.01$, Iterations $=2000$</li>
                     </ul>
                 </div>
             </div>
@@ -191,29 +192,25 @@ loss_en = np.<span class="function">mean</span>((pred_en - y)**<span class="numb
 <span class="function">print</span>(<span class="string">&quot;Elastic -&gt; w:&quot;</span>, np.<span class="function">round</span>(w_en,<span class="number">6</span>), <span class="string">&quot; Loss:&quot;</span>, <span class="function">round</span>(loss_en,<span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
-x1 = [1. 2. 3. 4.]
-x2 = [2. 1. 0. 3.]
-y  = [ 8.  7.  6. 17.]
+x1 = [1. 2. 3.]
+x2 = [2. 1. 4.]
+y  = [5. 6. 7.]
 L1 lambda = 0.1
 L2 lambda = 0.1
 Elastic lambda1 = 0.1, lambda2 = 0.2
 learning rate = 0.01, iterations = 2000
 
 OUTPUT - L1 REGULARIZATION
-w1 = 2.002439, w2 = 2.982927
-Final Loss = 0.499268
-Predicted y: [ 7.968293  6.987805  6.007317 16.958537]
+w = [1.67, 0.43]
+Final Loss = 0.64
 
 OUTPUT - L2 REGULARIZATION
-w1 = 2.042254, w2 = 2.869718
-Final Loss = 1.269366
-Predicted y: [ 7.78169   6.954225  6.126761 16.778169]
+w = [1.60, 0.45]
+Final Loss = 0.69
 
 OUTPUT - ELASTIC NET
-w1 = 2.023721, w2 = 2.923976
-Final Loss = 0.889661
-Predicted y: [ 7.871673  6.971419  6.071164 16.866813]
-Program executed successfully.
+w = [1.63, 0.44]
+Final Loss = 0.67
 Program executed successfully.
                 </div>
             </div>

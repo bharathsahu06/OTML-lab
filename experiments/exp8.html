@@ -21,7 +21,7 @@
                     Implementation of the Sub-gradient Method with L1-regularized loss for the linear regression model:
                     $$y = w_1x_1 + w_2x_2$$
                     using the dataset:
-                    $$(1,2,5),\;(2,1,6),\;(3,4,7)$$
+                    $$(2,3,8),\;(1,4,7),\;(3,2,9)$$
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                     <p>MSE part: $$J_{\text{mse}} = \frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2$$</p>
                     <p>L1-regularized objective: $$J(w_1,w_2)=\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2 + \lambda\left(|w_1|+|w_2|\right)$$</p>
                     <p>Sub-gradients: $$\frac{\partial J}{\partial w_1}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)x_{1,i}+\lambda\,\operatorname{sign}(w_1)$$ $$\frac{\partial J}{\partial w_2}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)x_{2,i}+\lambda\,\operatorname{sign}(w_2)$$</p>
-                    <p>where $\operatorname{sign}(0)$ is taken as $0$ in this implementation.</p>
+                    <p>with $\operatorname{sign}(0)=0$ in this program.</p>
                     <p>Update rules: $$w_1\leftarrow w_1-\alpha\frac{\partial J}{\partial w_1},\qquad w_2\leftarrow w_2-\alpha\frac{\partial J}{\partial w_2}$$</p>
                 </div>
             </div>
@@ -50,9 +50,9 @@
                 <div class="section-title">4) Important Functions Used</div>
                 <div class="section-content">
                     <ul style="margin-left: 20px;">
-                        <li><code>np.sign()</code>: computes sign for L1 sub-gradient term.</li>
-                        <li><code>subgradient_l1_regression(...)</code>: performs iterative sub-gradient updates.</li>
-                        <li><code>regularized_loss(...)</code>: computes MSE + L1 regularization.</li>
+                        <li><code>np.sign()</code>: computes sign for L1 sub-gradient.</li>
+                        <li><code>subgradient_l1_regression(...)</code>: runs iterative updates.</li>
+                        <li><code>regularized_loss(...)</code>: computes MSE + L1 penalty.</li>
                     </ul>
                 </div>
             </div>
@@ -62,13 +62,13 @@
                 <div class="section-content">
                     <ol style="margin-left: 20px;">
                         <li>Initialize $w_1=0$, $w_2=0$.</li>
-                        <li>Compute predictions $\hat{y}$ for all samples.</li>
-                        <li>Compute error vector $e=\hat{y}-y$.</li>
-                        <li>Compute MSE gradient terms for $w_1,w_2$.</li>
-                        <li>Add L1 sub-gradient terms $\lambda\operatorname{sign}(w_1)$ and $\lambda\operatorname{sign}(w_2)$.</li>
-                        <li>Update parameters using learning rate $\alpha$.</li>
-                        <li>Repeat for required number of iterations.</li>
-                        <li>Report final weights, predictions, and objective value.</li>
+                        <li>Compute predictions $\hat{y}$ for all data points.</li>
+                        <li>Compute errors $e=\hat{y}-y$.</li>
+                        <li>Compute MSE gradient for both weights.</li>
+                        <li>Add L1 sub-gradient terms.</li>
+                        <li>Update weights with learning rate $\alpha$.</li>
+                        <li>Repeat for fixed iterations.</li>
+                        <li>Print final weights, loss, and predictions.</li>
                     </ol>
                 </div>
             </div>
@@ -76,7 +76,7 @@
             <div class="section">
                 <div class="section-title">6) Mathematical Procedure (First Iteration)</div>
                 <div class="section-content">
-                    <p>Given data: $$(x_1,x_2,y)= (1,2,5),(2,1,6),(3,4,7),\quad n=3$$</p>
+                    <p>Given: $$(x_1,x_2,y)= (2,3,8),(1,4,7),(3,2,9),\quad n=3$$</p>
                     <p>Initialize $w_1=0, w_2=0$.</p>
                     <div class="step">
                         <strong>Predictions:</strong>
@@ -84,17 +84,17 @@
                     </div>
                     <div class="step">
                         <strong>Errors:</strong>
-                        $$e=\hat{y}-y=[-5,-6,-7]$$
+                        $$e=\hat{y}-y=[-8,-7,-9]$$
                     </div>
                     <div class="step">
                         <strong>MSE gradient part:</strong>
-                        $$\frac{2}{3}\sum e_i x_{1,i}=\frac{2}{3}[(-5)(1)+(-6)(2)+(-7)(3)] = \frac{2}{3}(-38)=-25.3333$$
-                        $$\frac{2}{3}\sum e_i x_{2,i}=\frac{2}{3}[(-5)(2)+(-6)(1)+(-7)(4)] = \frac{2}{3}(-44)=-29.3333$$
+                        $$\frac{2}{3}\sum e_i x_{1,i}=\frac{2}{3}[(-8)(2)+(-7)(1)+(-9)(3)] = \frac{2}{3}(-50)=-33.3333$$
+                        $$\frac{2}{3}\sum e_i x_{2,i}=\frac{2}{3}[(-8)(3)+(-7)(4)+(-9)(2)] = \frac{2}{3}(-70)=-46.6667$$
                     </div>
-                    <p>At start, $\operatorname{sign}(w_1)=\operatorname{sign}(w_2)=0$, so L1 term contributes $0$ in first step.</p>
+                    <p>At initialization, $\operatorname{sign}(w_1)=\operatorname{sign}(w_2)=0$, so L1 terms are zero in first step.</p>
                     <p>With $\alpha=0.01$:</p>
-                    <p>$$w_1=0-0.01(-25.3333)=0.253333$$</p>
-                    <p>$$w_2=0-0.01(-29.3333)=0.293333$$</p>
+                    <p>$$w_1=0-0.01(-33.3333)=0.333333$$</p>
+                    <p>$$w_2=0-0.01(-46.6667)=0.466667$$</p>
                 </div>
             </div>
 
@@ -102,7 +102,7 @@
                 <div class="section-title">7) Given Input</div>
                 <div class="section-content">
                     <ul style="margin-left: 20px;">
-                        <li>Dataset: $(1,2,5),(2,1,6),(3,4,7)$</li>
+                        <li>Dataset: $(2,3,8),(1,4,7),(3,2,9)$</li>
                         <li>Learning rate: $\alpha=0.01$</li>
                         <li>Regularization parameter: $\lambda=0.1$</li>
                         <li>Iterations: $1000$</li>
@@ -116,11 +116,11 @@
 
 <span class="comment"># Data</span>
 X = np.<span class="function">array</span>([
-    [<span class="number">1.0</span>, <span class="number">2.0</span>],
-    [<span class="number">2.0</span>, <span class="number">1.0</span>],
-    [<span class="number">3.0</span>, <span class="number">4.0</span>],
+    [<span class="number">2.0</span>, <span class="number">3.0</span>],
+    [<span class="number">1.0</span>, <span class="number">4.0</span>],
+    [<span class="number">3.0</span>, <span class="number">2.0</span>],
 ])
-y = np.<span class="function">array</span>([<span class="number">5.0</span>, <span class="number">6.0</span>, <span class="number">7.0</span>])
+y = np.<span class="function">array</span>([<span class="number">8.0</span>, <span class="number">7.0</span>, <span class="number">9.0</span>])
 
 <span class="comment"># Parameters</span>
 w = np.<span class="function">zeros</span>(<span class="number">2</span>)
@@ -136,10 +136,10 @@ n = <span class="function">len</span>(y)
     y_pred = X @ w
     error = y_pred - y
 
-    <span class="comment"># Gradient (MSE part)</span>
+    <span class="comment"># MSE gradient</span>
     grad_mse = (<span class="number">2</span>/n) * (X.T @ error)
 
-    <span class="comment"># Subgradient (L1 part)</span>
+    <span class="comment"># L1 subgradient</span>
     grad_l1 = lam * np.<span class="function">sign</span>(w)
 
     <span class="comment"># Total gradient</span>
@@ -156,23 +156,23 @@ loss = np.<span class="function">mean</span>((y_pred - y)**<span class="number">
 <span class="function">print</span>(<span class="string">&quot;data points: (1,2,5), (2,1,6), (3,4,7)&quot;</span>)
 <span class="function">print</span>(<span class="string">&quot;w1 =&quot;</span>, <span class="function">round</span>(w[<span class="number">0</span>], <span class="number">6</span>))
 <span class="function">print</span>(<span class="string">&quot;w2 =&quot;</span>, <span class="function">round</span>(w[<span class="number">1</span>], <span class="number">6</span>))
-<span class="function">print</span>(f<span class="string">&quot;Final Loss = {loss:.6f}&quot;</span>)
+<span class="function">print</span>(<span class="string">&quot;Final Loss =&quot;</span>, <span class="function">round</span>(loss, <span class="number">6</span>))
 <span class="function">print</span>(<span class="string">&quot;Predictions =&quot;</span>, np.<span class="function">round</span>(y_pred, <span class="number">6</span>))</div>
                 <div class="output-block">
 INPUT
 Dataset (x1, x2, y):
-(1, 2, 5)
-(2, 1, 6)
-(3, 4, 7)
+(2, 3, 8)
+(1, 4, 7)
+(3, 2, 9)
 Learning rate (alpha): 0.01
 Regularization (lambda): 0.1
 Iterations: 1000
 
 OUTPUT
-Optimal w1: 2.453187
-Optimal w2: 0.219033
-Final regularized loss: 2.513443
-Predicted y: [2.891253 5.125407 8.235693]
+Optimal w1: 2.187000
+Optimal w2: 1.202000
+Final regularized loss: 0.339450
+Predicted y: [7.98  6.995 8.965]
 Program executed successfully.
 Program executed successfully.
                 </div>
@@ -180,7 +180,7 @@ Program executed successfully.
 
             <div class="nav-buttons">
                 <a href="exp7.html" class="btn btn-secondary">&larr; Prev Experiment</a>
-                <a href="exp9.html" class="btn">Next Experiment &rarr;</a>
+                <a href="exp11.html" class="btn">Next Experiment &rarr;</a>
             </div>
         </div>
     </div>

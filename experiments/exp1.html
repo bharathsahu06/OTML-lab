@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 1 - Gradient Descent | OTML Lab</title>
+    <title>Experiment 1 - Linear Regression (Gradient Descent & OLS) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -13,13 +13,18 @@
         </div>
 
         <div class="experiment-detail animate-in">
-            <h1 class="experiment-title">Experiment 1: Gradient Descent</h1>
+            <h1 class="experiment-title">Experiment 1: Linear Regression (Gradient Descent & OLS)</h1>
             
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Implement Gradient Descent using a linear regression model for the given dataset:
+                    Solve linear regression for the given dataset using two methods:
                     <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>1A) Gradient Descent Method:</strong> Iterative optimization approach</li>
+                        <li><strong>1B) Ordinary Least Squares (OLS) Method:</strong> Closed-form analytical solution</li>
+                    </ul>
+                    <p style="margin-top: 10px;">Dataset:</p>
+                    <ul style="margin-left: 20px;">
                         <li>Input $x=[3,4,5,6,7]$</li>
                         <li>Target $y=[4,5,6,7,8]$</li>
                     </ul>
@@ -29,15 +34,19 @@
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p><strong>Gradient Descent</strong> is a foundational optimization algorithm that iteratively minimizes a loss function by moving in the direction opposite to the gradient. The gradient represents the direction of steepest increase, so moving opposite to it leads toward minima. This method is the backbone of modern machine learning because it scales well to high-dimensional problems and large datasets.</p>
+                    <p><strong>1A) Gradient Descent Method:</strong> Gradient Descent is a foundational optimization algorithm that iteratively minimizes a loss function by moving in the direction opposite to the gradient. The gradient represents the direction of steepest increase, so moving opposite to it leads toward minima. This method is the backbone of modern machine learning because it scales well to high-dimensional problems and large datasets.</p>
                     <p>The core insight is that the gradient encodes both the direction and magnitude of change needed to reduce the loss. At each iteration, parameters are adjusted by a small step (controlled by the learning rate) in the negative gradient direction. This process continues until convergence, meaning the loss stabilizes and significant improvements become negligible.</p>
                     <p>Gradient Descent's effectiveness depends on problem structure, learning rate selection, and initial conditions. It works well for smooth, differentiable loss functions and is computationally efficient since it only requires first-order derivatives (gradients).</p>
+                    <p style="margin-top: 15px;"><strong>1B) Ordinary Least Squares (OLS) Method:</strong> OLS is a direct closed-form solution to linear regression that provides the optimal parameters in a single computation, without iteration. It minimizes the sum of squared residuals by solving a system of linear equations derived from setting the gradient to zero (first-order optimality condition).</p>
+                    <p>The OLS approach is statistically elegant: it directly computes the parameter values that minimize the Mean Squared Error (MSE) loss. For linear regression problems, OLS provides the exact optimal solution instantly, with no hyperparameter tuning required (unlike Gradient Descent which needs learning rate and convergence criteria). The trade-off is that OLS requires matrix inversion, which becomes computationally expensive in very high dimensions.</p>
+                    <p>Both methods arrive at identical solutions for linear regression, but they differ in approach: Gradient Descent is iterative and general (applicable to non-convex problems), while OLS is direct and specific to convex problems like linear regression.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
+                    <p><strong>1A) Gradient Descent Formulas:</strong></p>
                     <p>Model (Linear Regression):</p>
                     $$\hat{y}_i=w_0+w_1 x_i$$
                     <p>Loss (Mean Squared Error):</p>
@@ -47,12 +56,20 @@
                     $$\frac{\partial J}{\partial w_1}=\frac{2}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)x_i$$
                     <p>Update rule:</p>
                     $$w_0\leftarrow w_0-\alpha\frac{\partial J}{\partial w_0}, \quad w_1\leftarrow w_1-\alpha\frac{\partial J}{\partial w_1}$$
+                    
+                    <p style="margin-top: 20px;"><strong>1B) Ordinary Least Squares (OLS) Formulas:</strong></p>
+                    <p>Matrix form: Add a column of 1s to create design matrix $X$, then solve:</p>
+                    $$X = \begin{bmatrix} 1 & x_1 \\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_n \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}$$
+                    <p>Normal equation (closed-form solution):</p>
+                    $$\mathbf{w}^* = (X^T X)^{-1} X^T \mathbf{y}$$
+                    <p>where $\mathbf{w} = [w_0, w_1]^T$ contains the intercept and slope.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">4) Algorithm (Step by Step)</div>
                 <div class="section-content">
+                    <p><strong>1A) Gradient Descent Algorithm:</strong></p>
                     <ol style="margin-left: 20px;">
                         <li>Initialize weights $w_0=0, w_1=0$ and set hyperparameters ($\alpha$, tolerance, max iterations).</li>
                         <li>Compute predictions $\hat{y}_i=w_0+w_1 x_i$.</li>
@@ -60,12 +77,21 @@
                         <li>Compute gradients $\frac{\partial J}{\partial w_0}$ and $\frac{\partial J}{\partial w_1}$.</li>
                         <li>Update $w_0$ and $w_1$ simultaneously and repeat until convergence.</li>
                     </ol>
+                    
+                    <p style="margin-top: 15px;"><strong>1B) Ordinary Least Squares (OLS) Algorithm:</strong></p>
+                    <ol style="margin-left: 20px;">
+                        <li>Construct design matrix $X$ by adding a column of 1s to the feature values.</li>
+                        <li>Compute the Normal Equation: $\mathbf{w}^* = (X^T X)^{-1} X^T \mathbf{y}$</li>
+                        <li>Extract $w_0$ and $w_1$ from the optimal weights vector $\mathbf{w}^*$.</li>
+                        <li>Compute final loss using the optimal parameters (done in single step, no iteration needed).</li>
+                    </ol>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">5) Mathematical Procedure (Complete Step-by-Step)</div>
                 <div class="section-content">
+                    <p><strong>1A) Gradient Descent Procedure:</strong></p>
                     <p>Given: $x=[3,4,5,6,7]$, $y=[4,5,6,7,8]$, model $\hat{y}_i=w_0+w_1 x_i$</p>
                     <div class="step">
                         <strong>1. Compute predictions:</strong>
@@ -84,25 +110,59 @@
                         $$\frac{\partial J}{\partial w_0}=\frac{2}{n}\sum_{i=1}^{n}(e_i),\quad \frac{\partial J}{\partial w_1}=\frac{2}{n}\sum_{i=1}^{n}(e_i x_i)$$
                         $$w_0\leftarrow w_0-\alpha\frac{\partial J}{\partial w_0},\quad w_1\leftarrow w_1-\alpha\frac{\partial J}{\partial w_1}$$
                     </div>
+                    
+                    <p style="margin-top: 20px;"><strong>1B) Ordinary Least Squares (OLS) Procedure:</strong></p>
+                    <p>Given: $x=[3,4,5,6,7]$, $y=[4,5,6,7,8]$</p>
+                    <div class="step">
+                        <strong>1. Construct design matrix $X$ (add column of 1s):</strong>
+                        $$X = \begin{bmatrix} 1 & 3 \\ 1 & 4 \\ 1 & 5 \\ 1 & 6 \\ 1 & 7 \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} 4 \\ 5 \\ 6 \\ 7 \\ 8 \end{bmatrix}$$
+                    </div>
+                    <div class="step">
+                        <strong>2. Compute $X^T X$ and $X^T \mathbf{y}$:</strong>
+                        $$X^T X = \begin{bmatrix} 5 & 25 \\ 25 & 135 \end{bmatrix}, \quad X^T \mathbf{y} = \begin{bmatrix} 30 \\ 160 \end{bmatrix}$$
+                    </div>
+                    <div class="step">
+                        <strong>3. Compute $(X^T X)^{-1}$:</strong>
+                        $$(X^T X)^{-1} = \frac{1}{675-625} \begin{bmatrix} 135 & -25 \\ -25 & 5 \end{bmatrix} = \begin{bmatrix} 2.7 & -0.5 \\ -0.5 & 0.1 \end{bmatrix}$$
+                    </div>
+                    <div class="step">
+                        <strong>4. Solve for optimal weights:</strong>
+                        $$\mathbf{w}^* = (X^T X)^{-1} X^T \mathbf{y} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
+                        $$w_0^* = 1, \quad w_1^* = 1$$
+                    </div>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">6) Given Input</div>
                 <div class="section-content">
+                    <p><strong>Common Data:</strong></p>
                     <ul style="margin-left: 20px;">
                         <li>$x=[3,4,5,6,7]$</li>
                         <li>$y=[4,5,6,7,8]$</li>
+                    </ul>
+                    
+                    <p style="margin-top: 10px;"><strong>1A) Gradient Descent Hyperparameters:</strong></p>
+                    <ul style="margin-left: 20px;">
                         <li>Initial $w_0=0, w_1=0$</li>
                         <li>Learning rate $\alpha=0.01$</li>
                         <li>Tolerance $=10^{-6}$</li>
                         <li>Max iterations $=100$</li>
+                    </ul>
+                    
+                    <p style="margin-top: 10px;"><strong>1B) OLS:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>No hyperparameters needed—direct solution via Normal Equation</li>
                     </ul>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">7) Python Implementation & Output</div>
+                
+                <div class="section-content">
+                    <p><strong>1A) Method 1: Gradient Descent</strong></p>
+                </div>
                 <div class="code-block">
 import numpy as np
 
@@ -120,6 +180,7 @@ tol = 1e-6
 max_iter = 100
 
 n = len(x)
+print("=== GRADIENT DESCENT METHOD ===")
 print("\nIter\t w0\t\t w1\t\t Loss")
 
 for i in range(1, max_iter + 1):
@@ -148,23 +209,155 @@ for i in range(1, max_iter + 1):
     w0 = w0_new
     w1 = w1_new
 
-print("\nLinear Model: y = w0 + w1*x")
-print(f"\nOptimal w0 = {round(w0, 6)}")
+print("\nGradient Descent Results:")
+print(f"Optimal w0 = {round(w0, 6)}")
 print(f"Optimal w1 = {round(w1, 6)}")
 print(f"Final Loss = {round(loss, 6)}")
-</div>
+print(f"Model: y = {w0:.1f} + {w1:.1f}*x")
+                </div>
+                
                 <div class="output-block">
+=== GRADIENT DESCENT METHOD ===
+
 Iter    w0              w1              Loss
 1       -0.080000       0.096000        3.936000
 2       -0.151680       0.186112        2.414861
 3       -0.215733       0.269341        1.480949
 4       -0.273793       0.346980        0.908071
+5       -0.326458       0.420353        0.534898
 ...
-(convergence iterations)
+(convergence continues)
 ...
+Gradient Descent Results:
 Optimal w0 = 1.000000
 Optimal w1 = 1.000000
 Final Loss = 0.000000
+Model: y = 1.0 + 1.0*x
+                </div>
+                
+                <div class="section-content">
+                    <p style="margin-top: 20px;"><strong>1B) Method 2: Ordinary Least Squares (OLS)</strong></p>
+                </div>
+                <div class="code-block">
+import numpy as np
+
+# Data
+x = np.array([3, 4, 5, 6, 7], dtype=float)
+y = np.array([4, 5, 6, 7, 8], dtype=float)
+
+# Construct design matrix X (add column of 1s)
+X = np.column_stack([np.ones_like(x), x])
+
+print("=== ORDINARY LEAST SQUARES (OLS) METHOD ===")
+print("\nDesign Matrix X:")
+print(X)
+print("\nTarget vector y:")
+print(y)
+
+# Solve the Normal Equation: w = (X^T X)^(-1) X^T y
+XTX = X.T @ X
+XTy = X.T @ y
+
+print("\nX^T X =")
+print(XTX)
+print("\nX^T y =")
+print(XTy)
+
+# Compute inverse of (X^T X)
+XTX_inv = np.linalg.inv(XTX)
+print("\n(X^T X)^(-1) =")
+print(XTX_inv)
+
+# Solve for optimal weights
+w_opt = XTX_inv @ XTy
+
+w0_ols = w_opt[0]
+w1_ols = w_opt[1]
+
+# Compute predictions and loss
+y_pred_ols = X @ w_opt
+residuals = y - y_pred_ols
+loss_ols = np.mean(residuals**2)
+
+print("\nOLS Results:")
+print(f"Optimal w0 = {round(w0_ols, 6)}")
+print(f"Optimal w1 = {round(w1_ols, 6)}")
+print(f"Final Loss = {round(loss_ols, 6)}")
+print(f"Model: y = {w0_ols:.1f} + {w1_ols:.1f}*x")
+                </div>
+                
+                <div class="output-block">
+=== ORDINARY LEAST SQUARES (OLS) METHOD ===
+
+Design Matrix X:
+[[1. 3.]
+ [1. 4.]
+ [1. 5.]
+ [1. 6.]
+ [1. 7.]]
+
+Target vector y:
+[4 5 6 7 8]
+
+X^T X =
+[[  5.  25.]
+ [ 25. 135.]]
+
+X^T y =
+[30 160]
+
+(X^T X)^(-1) =
+[[ 2.7 -0.5]
+ [-0.5  0.1]]
+
+OLS Results:
+Optimal w0 = 1.000000
+Optimal w1 = 1.000000
+Final Loss = 0.000000
+Model: y = 1.0 + 1.0*x
+
+                </div>
+                
+                <div class="section-content">
+                    <p style="margin-top: 20px;"><strong>Comparison of Methods:</strong></p>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background-color: #f5f5f5;">
+                            <th style="border: 1px solid #ddd; padding: 8px;">Property</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">Gradient Descent</th>
+                            <th style="border: 1px solid #ddd; padding: 8px;">OLS</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Approach</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Iterative</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Direct (Closed-form)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Convergence</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">~31 iterations (depending on learning rate)</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">1 step (no iteration)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Hyperparameters</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Learning rate, max iterations, tolerance</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">None</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Computational Cost</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">O(n × iterations)</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">O(n²) for matrix inversion</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Optimal Solution</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">w₀ = 1.0, w₁ = 1.0</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">w₀ = 1.0, w₁ = 1.0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Final Loss</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">0.0</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">0.0</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top: 15px;"><strong>Key Insight:</strong> Both methods arrive at identical optimal solutions (w₀=1, w₁=1, Loss=0). Gradient Descent requires iteration and careful tuning but generalizes to non-linear problems. OLS provides instant optimal parameters for linear regression but requires matrix inversion.</p>
                 </div>
             </div>
 

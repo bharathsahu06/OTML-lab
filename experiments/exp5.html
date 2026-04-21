@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 5 - Linear Optimization | OTML Lab</title>
+    <title>Experiment 5 - Linear Objective (With and Without PuLP) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -13,137 +13,70 @@
         </div>
 
         <div class="experiment-detail animate-in">
-            <h1 class="experiment-title">Experiment 5: Linear Objective with Linear Constraints Using CVXPY</h1>
-            
+            <h1 class="experiment-title">Experiment 5: Minimize f(x,y)=3x+2y (Using PuLP and Without PuLP)</h1>
+
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Minimize the linear objective function
-                    $$f(x,y)=3x+2y$$
-                    subject to constraints:
-                    $$x+y\ge 4,\quad x\ge 0,\quad y\ge 0$$
-                    using CVXPY.
+                    <p>a) Minimize $$f(x,y)=3x+2y$$ subject to $$x+y\ge 4,\;x\ge0,\;y\ge0$$ using PuLP.</p>
+                    <p>b) Minimize the same problem without PuLP.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p><strong>Linear Programming (LP)</strong> is the foundational class of optimization problems where both the objective function and all constraints are linear. LP problems are ubiquitous in operations research, supply chain management, resource allocation, and business planning. Their power comes from a combination of practical importance and computational tractability—LP can be solved efficiently even with millions of variables.</p>
-                    <p>The geometry of LP is elegant: the feasible region is a convex polytope, and the optimal solution always occurs at a vertex (corner point) of this region. This insight enables the Simplex Method, which navigates vertices efficiently. Since the objective is linear, moving in any direction strictly decreases it, so boundary points (especially vertices) are always optimal—the interior never contains the optimum.</p>
-                    <p>LP has rich theory about sensitivity analysis, duality, and shadow prices, making it not just a tool for finding answers but for understanding trade-offs in constrained decisions. Extensions like Integer Programming and Mixed-Integer Programming handle discrete decisions, though at increased computational cost.</p>
+                    <p>This is a linear programming problem. With PuLP, we model variables, objective, and constraints and solve automatically with the LP solver.</p>
+                    <p>Without PuLP, we solve by corner-point analysis: evaluate objective at feasible vertices and choose the minimum.</p>
+                    <p>For this problem, the optimum is at $(x,y)=(0,4)$ with minimum objective value $8$.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Objective: $$\min_{x,y}\; 3x+2y$$</p>
-                    <p>Constraints: $$x+y\ge 4, \quad x\ge 0, \quad y\ge 0$$</p>
-                    <p>CVXPY form: $$\text{Minimize}(3x+2y)\quad \text{subject to}\quad [x+y\ge4,\;x\ge0,\;y\ge0]$$</p>
+                    <p>Objective: $$\min\;3x+2y$$</p>
+                    <p>Constraints: $$x+y\ge4,\;x\ge0,\;y\ge0$$</p>
+                    <p>Boundary: $$y=4-x,\;0\le x\le4$$</p>
+                    <p>Reduced objective on boundary: $$3x+2(4-x)=x+8$$</p>
+                    <p>Minimum at smallest feasible $x$: $$x=0,\;y=4$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">4) Important Functions Used</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li><code>cp.Variable()</code>: creates optimization variables.</li>
-                        <li><code>cp.Minimize(expr)</code>: defines minimization objective.</li>
-                        <li><code>cp.Problem(objective, constraints)</code>: creates optimization problem.</li>
-                        <li><code>problem.solve()</code>: solves problem using available solver.</li>
-                        <li><code>problem.status</code>, <code>problem.value</code>: solution status and optimal value.</li>
-                    </ul>
-                </div>
+                <div class="section-title">4A) Python Implementation Using PuLP</div>
+                <div class="code-block">import pulp
+
+model = pulp.LpProblem("LP_Q5", pulp.LpMinimize)
+x = pulp.LpVariable("x", lowBound=0)
+y = pulp.LpVariable("y", lowBound=0)
+
+model += 3*x + 2*y
+model += x + y >= 4
+
+model.solve(pulp.PULP_CBC_CMD(msg=0))
+
+print("Status:", pulp.LpStatus[model.status])
+print("x* =", pulp.value(x))
+print("y* =", pulp.value(y))
+print("f(x*,y*) =", pulp.value(model.objective))</div>
             </div>
 
             <div class="section">
-                <div class="section-title">5) Algorithm (Step by Step)</div>
-                <div class="section-content">
-                    <ol style="margin-left: 20px;">
-                        <li>Import CVXPY library.</li>
-                        <li>Create decision variables $x$ and $y$.</li>
-                        <li>Define linear objective $3x+2y$.</li>
-                        <li>Add constraints $x+y\ge4$, $x\ge0$, $y\ge0$.</li>
-                        <li>Build optimization problem.</li>
-                        <li>Solve using <code>problem.solve()</code>.</li>
-                        <li>Read optimal $x$, $y$, and minimum objective.</li>
-                        <li>Verify constraints and print results.</li>
-                    </ol>
-                </div>
-            </div>
+                <div class="section-title">4B) Python Implementation Without PuLP</div>
+                <div class="code-block"># Corner-point method
+candidates = [(0, 4), (4, 0)]  # feasible boundary corners in first quadrant
 
-            <div class="section">
-                <div class="section-title">6) Mathematical Procedure</div>
-                <div class="section-content">
-                    <p>Given: $$\min 3x+2y\quad \text{s.t.}\quad x+y\ge4,\;x\ge0,\;y\ge0$$</p>
-                    <p>From $x+y\ge4$, write $y=4-x$ on boundary (candidate optimum line), with $0\le x\le4$.</p>
-                    <p>Substitute into objective: $$f(x)=3x+2(4-x)=x+8$$</p>
-                    <p>Since $f(x)=x+8$ increases with $x$, minimum occurs at smallest feasible $x$, i.e. $x=0$.</p>
-                    <p>Then: $$y=4$$</p>
-                    <p>Minimum value: $$f(0,4)=3(0)+2(4)=8$$</p>
-                </div>
-            </div>
+def f(x, y):
+    return 3*x + 2*y
 
-            <div class="section">
-                <div class="section-title">7) Given Input</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li>Objective: $f(x,y)=3x+2y$</li>
-                        <li>Constraints: $x+y\ge4$, $x\ge0$, $y\ge0$</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
-
-<span class="comment"># Decision variables</span>
-x = cp.Variable()
-y = cp.Variable()
-
-<span class="comment"># Objective and constraints</span>
-objective = cp.Minimize(<span class="number">3</span> * x + <span class="number">2</span> * y)
-constraints = [x + y >= <span class="number">4</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
-
-<span class="comment"># Build and solve optimization problem</span>
-problem = cp.Problem(objective, constraints)
-optimal_value = problem.solve()
-
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: minimize f(x, y) = 3x + 2y"</span>)
-print(<span class="string">"Constraints: x + y >= 4, x >= 0, y >= 0"</span>)
-
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Status:"</span>, problem.status)
-print(<span class="function">f</span><span class="string">"Optimal x: </span>{x.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal y: </span>{y.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum objective value: </span>{optimal_value:<span class="number">.6</span>f}<span class="string">"</span>)
-
-print(<span class="string">"\nConstraint Check"</span>)
-print(<span class="function">f</span><span class="string">"x + y = </span>{(x.value + y.value):<span class="number">.6</span>f}<span class="string"> (>= 4)"</span>)
-print(<span class="function">f</span><span class="string">"x >= 0 -> </span>{x.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"y >= 0 -> </span>{y.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
-                <div class="output-block">
-INPUT
-Objective: minimize f(x, y) = 3x + 2y
-Constraints: x + y >= 4, x >= 0, y >= 0
-
-OUTPUT
-Status: optimal
-Optimal x: 0.000000
-Optimal y: 4.000000
-Minimum objective value: 8.000000
-
-Constraint Check
-x + y = 4.000000 (>= 4)
-x >= 0 -> True
-y >= 0 -> True
-Program executed successfully.
-                </div>
+best = min(candidates, key=lambda p: f(p[0], p[1]))
+print("x* =", best[0])
+print("y* =", best[1])
+print("f(x*,y*) =", f(best[0], best[1]))</div>
+                <div class="output-block">x* = 0
+y* = 4
+f(x*,y*) = 8</div>
             </div>
 
             <div class="nav-buttons">
@@ -154,7 +87,7 @@ Program executed successfully.
     </div>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script>
+    <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],

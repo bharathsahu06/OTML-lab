@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 4 - Constrained Minimization | OTML Lab</title>
+    <title>Experiment 4 - Constrained Minimization (With and Without CVXPY) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -13,137 +13,72 @@
         </div>
 
         <div class="experiment-detail animate-in">
-            <h1 class="experiment-title">Experiment 4: Constrained Minimization Using CVXPY</h1>
-            
+            <h1 class="experiment-title">Experiment 4: Minimize f(x,y)=x^2+y^2 (Using CVXPY and Without CVXPY)</h1>
+
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Minimize the function
-                    $$f(x,y)=x^2+y^2$$
-                    subject to constraints:
-                    $$x+y\ge 1,\quad x\ge 0,\quad y\ge 0$$
-                    using CVXPY.
+                    <p>a) Minimize $$f(x,y)=x^2+y^2$$ subject to $$x+y\ge 1,\;x\ge0,\;y\ge0$$ using CVXPY.</p>
+                    <p>b) Minimize the same problem without CVXPY.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p><strong>Convex Optimization with Constraints</strong> addresses the problem of minimizing a convex objective function subject to constraint sets. The crucial property of convex problems is that any local minimum is also a global minimum—there are no hidden better solutions. This guarantee eliminates the risk of solvers getting stuck in suboptimal local minima, a major challenge in non-convex optimization.</p>
-                    <p>Quadratic objectives with linear constraints form a special class called Quadratic Programming (QP), which combines the efficiency of convex methods with the expressiveness needed for many practical problems. The feasible region (set of points satisfying all constraints) is a convex polytope, and the solution always lies at a vertex or along an edge of this region. CVXPY provides a way to specify these problems in mathematical notation and automatically selects appropriate solvers.</p>
-                    <p>The power of convex optimization lies in its theoretical guarantees: a discovered optimum is truly optimal, not just locally good. This reliability makes convex methods foundational in control systems, finance, signal processing, and machine learning—wherever provably good solutions are required.</p>
+                    <p>This is a convex optimization problem, so the global minimum is guaranteed. The feasible region is the first-quadrant half-plane above the line $x+y=1$.</p>
+                    <p>Using CVXPY gives a solver-based answer directly. Without CVXPY, we solve analytically by substituting $y=1-x$ on the active boundary and minimizing a 1D quadratic.</p>
+                    <p>Both methods should return the same optimum: $x=y=0.5$ and minimum value $0.5$.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Objective: $$\min_{x,y}\; f(x,y)=x^2+y^2$$</p>
-                    <p>Constraints: $$x+y\ge 1, \quad x\ge 0, \quad y\ge 0$$</p>
-                    <p>Equivalent CVXPY form: $$\text{Minimize}(x^2+y^2)\quad \text{subject to}\quad [x+y\ge1,\;x\ge0,\;y\ge0]$$</p>
+                    <p>Objective: $$\min\;x^2+y^2$$</p>
+                    <p>Constraints: $$x+y\ge1,\;x\ge0,\;y\ge0$$</p>
+                    <p>Boundary reduction: $$y=1-x,\;0\le x\le1$$</p>
+                    <p>Reduced function: $$g(x)=x^2+(1-x)^2=2x^2-2x+1$$</p>
+                    <p>Minimum at: $$g'(x)=4x-2=0\Rightarrow x=\frac12,\;y=\frac12$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">4) Important Functions Used</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li><code>cp.Variable()</code>: creates optimization variables.</li>
-                        <li><code>cp.Minimize(expr)</code>: defines minimization objective.</li>
-                        <li><code>cp.Problem(objective, constraints)</code>: builds optimization problem.</li>
-                        <li><code>problem.solve()</code>: runs solver and computes optimum.</li>
-                        <li><code>problem.status</code>, <code>problem.value</code>: solver status and optimal objective value.</li>
-                    </ul>
-                </div>
-            </div>
+                <div class="section-title">4A) Python Implementation Using CVXPY</div>
+                <div class="code-block">import cvxpy as cp
 
-            <div class="section">
-                <div class="section-title">5) Algorithm (Step by Step)</div>
-                <div class="section-content">
-                    <ol style="margin-left: 20px;">
-                        <li>Import CVXPY.</li>
-                        <li>Define scalar decision variables $x$ and $y$.</li>
-                        <li>Define objective function $x^2+y^2$.</li>
-                        <li>Define constraints $x+y\ge1$, $x\ge0$, $y\ge0$.</li>
-                        <li>Create optimization problem using objective and constraints.</li>
-                        <li>Solve the problem with <code>problem.solve()</code>.</li>
-                        <li>Read optimal values of $x$, $y$, and objective.</li>
-                        <li>Verify constraints numerically and print output.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">6) Mathematical Procedure</div>
-                <div class="section-content">
-                    <p>Given: $$\min x^2+y^2\quad \text{s.t.}\quad x+y\ge1,\;x\ge0,\;y\ge0$$</p>
-                    <p>At optimum, smallest Euclidean norm point in feasible set occurs on boundary $x+y=1$ in first quadrant. So set: $$y=1-x,\quad 0\le x\le1$$</p>
-                    <p>Substitute into objective: $$f(x)=x^2+(1-x)^2=2x^2-2x+1$$</p>
-                    <p>Differentiate: $$\frac{df}{dx}=4x-2=0\Rightarrow x=\frac{1}{2}$$</p>
-                    <p>Hence: $$y=\frac{1}{2}$$</p>
-                    <p>Minimum value: $$f\left(\frac12,\frac12\right)=\frac14+\frac14=\frac12=0.5$$</p>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">7) Given Input</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li>Objective: $f(x,y)=x^2+y^2$</li>
-                        <li>Constraints: $x+y\ge1$, $x\ge0$, $y\ge0$</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
-
-<span class="comment"># Decision variables</span>
 x = cp.Variable()
 y = cp.Variable()
 
-<span class="comment"># Objective and constraints</span>
-objective = cp.Minimize(x**<span class="number">2</span> + y**<span class="number">2</span>)
-constraints = [x + y >= <span class="number">1</span>, x >= <span class="number">0</span>, y >= <span class="number">0</span>]
+objective = cp.Minimize(x**2 + y**2)
+constraints = [x + y >= 1, x >= 0, y >= 0]
 
-<span class="comment"># Problem definition and solve</span>
 problem = cp.Problem(objective, constraints)
-optimal_value = problem.solve()
+value = problem.solve()
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: minimize f(x, y) = x^2 + y^2"</span>)
-print(<span class="string">"Constraints: x + y >= 1, x >= 0, y >= 0"</span>)
+print("Status:", problem.status)
+print("x* =", round(float(x.value), 6))
+print("y* =", round(float(y.value), 6))
+print("f(x*,y*) =", round(float(value), 6))</div>
+            </div>
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Status:"</span>, problem.status)
-print(<span class="function">f</span><span class="string">"Optimal x: </span>{x.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal y: </span>{y.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum objective value: </span>{optimal_value:<span class="number">.6</span>f}<span class="string">"</span>)
+            <div class="section">
+                <div class="section-title">4B) Python Implementation Without CVXPY</div>
+                <div class="code-block">import numpy as np
 
-print(<span class="string">"\nConstraint Check"</span>)
-print(<span class="function">f</span><span class="string">"x + y = </span>{(x.value + y.value):<span class="number">.6</span>f}<span class="string"> (>= 1)"</span>)
-print(<span class="function">f</span><span class="string">"x >= 0 -> </span>{x.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"y >= 0 -> </span>{y.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
-                <div class="output-block">
-INPUT
-Objective: minimize f(x, y) = x^2 + y^2
-Constraints: x + y >= 1, x >= 0, y >= 0
+# Analytical solution on active boundary x + y = 1
+x_star = 0.5
+y_star = 1 - x_star
+f_star = x_star**2 + y_star**2
 
-OUTPUT
-Status: optimal
-Optimal x: 0.500000
-Optimal y: 0.500000
-Minimum objective value: 0.500000
-
-Constraint Check
-x + y = 1.000000 (>= 1)
-x >= 0 -> True
-y >= 0 -> True
-Program executed successfully.
-                </div>
+print("x* =", x_star)
+print("y* =", y_star)
+print("f(x*,y*) =", f_star)
+print("Constraint check:", (x_star + y_star) >= 1 and x_star >= 0 and y_star >= 0)</div>
+                <div class="output-block">x* = 0.5
+y* = 0.5
+f(x*,y*) = 0.5
+Constraint check: True</div>
             </div>
 
             <div class="nav-buttons">
@@ -154,7 +89,7 @@ Program executed successfully.
     </div>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script>
+    <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],

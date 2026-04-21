@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment 6 - Quadratic Optimization | OTML Lab</title>
+    <title>Experiment 6 - Quadratic Optimization (With and Without CVXPY) | OTML Lab</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -13,139 +13,70 @@
         </div>
 
         <div class="experiment-detail animate-in">
-            <h1 class="experiment-title">Experiment 6: Quadratic Objective with Linear Constraints Using CVXPY</h1>
-            
+            <h1 class="experiment-title">Experiment 6: Minimize f(x1,x2)=x1^2+x2^2 (Using CVXPY and Without CVXPY)</h1>
+
             <div class="section">
                 <div class="section-title">1) Aim</div>
                 <div class="section-content">
-                    Minimize the quadratic objective function
-                    $$f(x_1,x_2)=x_1^2+x_2^2$$
-                    subject to linear constraints:
-                    $$x_1+x_2\ge1,\quad x_1\ge0,\quad x_2\ge0$$
-                    using CVXPY.
+                    <p>a) Minimize $$f(x_1,x_2)=x_1^2+x_2^2$$ subject to $$x_1+x_2\ge1,\;x_1\ge0,\;x_2\ge0$$ using CVXPY.</p>
+                    <p>b) Minimize the same problem without CVXPY.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">2) Description</div>
                 <div class="section-content">
-                    <p><strong>Quadratic Programming (QP)</strong> combines quadratic objective functions with linear constraints, forming a special but important class of convex optimization problems. The quadratic term provides curvature that captures non-linear relationships while remaining computationally tractable. QP arises naturally in portfolio optimization (minimize risk given constraints on allocation), robotics, signal processing, and machine learning applications like support vector machines.</p>
-                    <p>The structure of QP ensures uniqueness and global optimality: the quadratic objective is strictly convex (curved upward), and constraints form a convex polytope. The optimal solution lies at a point where the gradient of the objective aligns with the constraint normals. Efficient specialized algorithms exploit this structure to solve QP problems faster than general nonlinear methods.</p>
-                    <p>QP generalizes linear programming (when the quadratic term disappears) and provides a bridge toward more complex optimization. Understanding QP principles helps build intuition for broader convex optimization and machine learning algorithms that minimize quadratic loss functions.</p>
+                    <p>This is a convex quadratic programming problem. Since the objective is strictly convex and constraints are linear, the solution is unique and global.</p>
+                    <p>Using CVXPY gives the numerical optimum directly. Without CVXPY, we solve analytically by reducing to the active boundary $x_1+x_2=1$ and minimizing a single-variable quadratic.</p>
+                    <p>Both methods return $x_1=x_2=0.5$ with minimum value $0.5$.</p>
                 </div>
             </div>
 
             <div class="section">
                 <div class="section-title">3) Important Formulas</div>
                 <div class="section-content">
-                    <p>Objective: $$\min_{x_1,x_2}\; x_1^2+x_2^2$$</p>
-                    <p>Constraints: $$x_1+x_2\ge1, \quad x_1\ge0, \quad x_2\ge0$$</p>
-                    <p>Equivalent CVXPY form: $$\text{Minimize}(x_1^2+x_2^2)\quad \text{subject to}\quad [x_1+x_2\ge1,\;x_1\ge0,\;x_2\ge0]$$</p>
+                    <p>Objective: $$\min\;x_1^2+x_2^2$$</p>
+                    <p>Constraints: $$x_1+x_2\ge1,\;x_1\ge0,\;x_2\ge0$$</p>
+                    <p>Boundary: $$x_2=1-x_1,\;0\le x_1\le1$$</p>
+                    <p>Reduced objective: $$g(x_1)=x_1^2+(1-x_1)^2$$</p>
+                    <p>Minimum: $$g'(x_1)=4x_1-2=0\Rightarrow x_1=0.5,\;x_2=0.5$$</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">4) Important Functions Used</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li><code>cp.Variable()</code>: creates decision variables.</li>
-                        <li><code>cp.Minimize(expr)</code>: defines objective for minimization.</li>
-                        <li><code>cp.Problem(objective, constraints)</code>: builds optimization model.</li>
-                        <li><code>problem.solve()</code>: solves the optimization problem.</li>
-                        <li><code>problem.status</code>, <code>problem.value</code>: returns solver status and optimum value.</li>
-                    </ul>
-                </div>
-            </div>
+                <div class="section-title">4A) Python Implementation Using CVXPY</div>
+                <div class="code-block">import cvxpy as cp
 
-            <div class="section">
-                <div class="section-title">5) Algorithm (Step by Step)</div>
-                <div class="section-content">
-                    <ol style="margin-left: 20px;">
-                        <li>Import CVXPY.</li>
-                        <li>Define scalar variables $x_1$ and $x_2$.</li>
-                        <li>Define objective function $x_1^2+x_2^2$.</li>
-                        <li>Add constraints $x_1+x_2\ge1$, $x_1\ge0$, $x_2\ge0$.</li>
-                        <li>Build <code>Problem(objective, constraints)</code>.</li>
-                        <li>Solve with <code>problem.solve()</code>.</li>
-                        <li>Read optimal $x_1$, $x_2$, and objective value.</li>
-                        <li>Check constraint satisfaction and print results.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">6) Mathematical Procedure</div>
-                <div class="section-content">
-                    <p>Given: $$\min x_1^2+x_2^2\quad \text{s.t.}\quad x_1+x_2\ge1,\;x_1\ge0,\;x_2\ge0$$</p>
-                    <p>At optimum, closest feasible point to origin lies on boundary $x_1+x_2=1$ in first quadrant.</p>
-                    <p>Let: $$x_2=1-x_1,\quad 0\le x_1\le1$$</p>
-                    <p>Substitute into objective: $$f(x_1)=x_1^2+(1-x_1)^2=2x_1^2-2x_1+1$$</p>
-                    <p>Differentiate and set to zero: $$\frac{df}{dx_1}=4x_1-2=0\Rightarrow x_1=\frac12$$</p>
-                    <p>Hence: $$x_2=\frac12$$</p>
-                    <p>Minimum value: $$f\left(\frac12,\frac12\right)=\frac14+\frac14=\frac12=0.5$$</p>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">7) Given Input</div>
-                <div class="section-content">
-                    <ul style="margin-left: 20px;">
-                        <li>Objective: $f(x_1,x_2)=x_1^2+x_2^2$</li>
-                        <li>Constraints: $x_1+x_2\ge1$, $x_1\ge0$, $x_2\ge0$</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">8) Python Implementation & Output</div>
-                <div class="code-block">
-<span class="keyword">import</span> cvxpy <span class="keyword">as</span> cp
-
-<span class="comment"># Decision variables</span>
 x1 = cp.Variable()
 x2 = cp.Variable()
 
-<span class="comment"># Objective and constraints</span>
-objective = cp.Minimize(x1**<span class="number">2</span> + x2**<span class="number">2</span>)
-constraints = [x1 + x2 >= <span class="number">1</span>, x1 >= <span class="number">0</span>, x2 >= <span class="number">0</span>]
+objective = cp.Minimize(x1**2 + x2**2)
+constraints = [x1 + x2 >= 1, x1 >= 0, x2 >= 0]
 
-<span class="comment"># Build and solve problem</span>
 problem = cp.Problem(objective, constraints)
-optimal_value = problem.solve()
+value = problem.solve()
 
-print(<span class="string">"INPUT"</span>)
-print(<span class="string">"Objective: minimize f(x1, x2) = x1^2 + x2^2"</span>)
-print(<span class="string">"Constraints: x1 + x2 >= 1, x1 >= 0, x2 >= 0"</span>)
+print("Status:", problem.status)
+print("x1* =", round(float(x1.value), 6))
+print("x2* =", round(float(x2.value), 6))
+print("f(x1*,x2*) =", round(float(value), 6))</div>
+            </div>
 
-print(<span class="string">"\nOUTPUT"</span>)
-print(<span class="string">"Status:"</span>, problem.status)
-print(<span class="function">f</span><span class="string">"Optimal x1: </span>{x1.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Optimal x2: </span>{x2.value:<span class="number">.6</span>f}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"Minimum objective value: </span>{optimal_value:<span class="number">.6</span>f}<span class="string">"</span>)
+            <div class="section">
+                <div class="section-title">4B) Python Implementation Without CVXPY</div>
+                <div class="code-block"># Analytical solution
+x1_star = 0.5
+x2_star = 1 - x1_star
+f_star = x1_star**2 + x2_star**2
 
-print(<span class="string">"\nConstraint Check"</span>)
-print(<span class="function">f</span><span class="string">"x1 + x2 = </span>{(x1.value + x2.value):<span class="number">.6</span>f}<span class="string"> (>= 1)"</span>)
-print(<span class="function">f</span><span class="string">"x1 >= 0 -> </span>{x1.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="function">f</span><span class="string">"x2 >= 0 -> </span>{x2.value >= <span class="number">-1e-8</span>}<span class="string">"</span>)
-print(<span class="string">"Program executed successfully."</span>)</div>
-                <div class="output-block">
-INPUT
-Objective: minimize f(x1, x2) = x1^2 + x2^2
-Constraints: x1 + x2 >= 1, x1 >= 0, x2 >= 0
-
-OUTPUT
-Status: optimal
-Optimal x1: 0.500000
-Optimal x2: 0.500000
-Minimum objective value: 0.500000
-
-Constraint Check
-x1 + x2 = 1.000000 (>= 1)
-x1 >= 0 -> True
-x2 >= 0 -> True
-Program executed successfully.
-Program executed successfully.
-                </div>
+print("x1* =", x1_star)
+print("x2* =", x2_star)
+print("f(x1*,x2*) =", f_star)
+print("Constraint check:", (x1_star + x2_star) >= 1 and x1_star >= 0 and x2_star >= 0)</div>
+                <div class="output-block">x1* = 0.5
+x2* = 0.5
+f(x1*,x2*) = 0.5
+Constraint check: True</div>
             </div>
 
             <div class="nav-buttons">
@@ -156,7 +87,7 @@ Program executed successfully.
     </div>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script>
+    <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
