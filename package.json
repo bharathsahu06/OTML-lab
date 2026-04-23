@@ -1,0 +1,23 @@
+{
+  "name": "otml-lab",
+  "version": "1.0.0",
+  "description": "OTML Lab - Optimization & Machine Learning Experiments - A comprehensive educational resource for understanding optimization algorithms",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bharathsahu06/OTML-lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bharathsahu06/OTML-lab/issues"
+  },
+  "homepage": "https://github.com/bharathsahu06/OTML-lab#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
